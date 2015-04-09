@@ -1,24 +1,24 @@
-using System.Text.RegularExpressions;
+﻿using System.Text.RegularExpressions;
 
 namespace Validaciones
 {
-    public class Validador
+    public static class ValidadorHelper
     {
-        Regex regexSoloNumeros = new Regex(@"^[0-9]+$");
-        Regex regexSoloLetras = new Regex(@"^[a-zA-Záéíóú]+$");
-        Regex regexMail = new Regex(@"^[-0-9a-zA-Z.+_]+@[-0-9a-zA-Z.+_]+\.[a-zA-Z]{2,4}$");
+        static Regex regexSoloNumeros = new Regex(@"^[0-9]+$");
+        static Regex regexSoloLetras = new Regex(@"^[a-zA-Záéíóú]+$");
+        static Regex regexMail = new Regex(@"^[-0-9a-zA-Z.+_]+@[-0-9a-zA-Z.+_]+\.[a-zA-Z]{2,4}$");
 
-        public bool validarSoloNumeros(string numero)
+        public static bool validarSoloNumeros(string numero)
         {
             return regexSoloNumeros.IsMatch(numero);
         }
 
-        public bool validarSoloLetras(string nombre)
+        public static bool validarSoloLetras(string nombre)
         {
             return regexSoloLetras.IsMatch(nombre);
         }
 
-        public bool validarMail(string mail)
+        public static bool validarMail(string mail)
         {
             return regexMail.IsMatch(mail);
         }
