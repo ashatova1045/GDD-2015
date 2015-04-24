@@ -1,6 +1,6 @@
 ﻿using System.Text.RegularExpressions;
 
-namespace Validaciones
+namespace PagoElectronico
 {
     public static class ValidadorHelper
     {
