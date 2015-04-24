@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
+using OperacionesDB.ConexionDB;
 
 namespace PagoElectronico
 {
@@ -15,6 +16,15 @@ namespace PagoElectronico
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
+
+            System.IO.StreamReader file = new System.IO.StreamReader("\\config.txt");
+            string sqlcon = file.ReadLine();
+            string fechaF = file.ReadLine(); 
+            file.Close();
+
+            Sesion.conexion = ConexionDB.ConectarDB(sqlcon);
+            Sesion.fecha = DateTime.Parse(fechaF);
+
             Application.Run(new Form1());
         }
     }

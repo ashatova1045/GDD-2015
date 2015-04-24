@@ -90,6 +90,9 @@
     <Compile Include="Facturacion\Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
+    <Compile Include="OperacionesDB\Cifrado\Cifrador.cs" />
+    <Compile Include="OperacionesDB\ConexionDB\ConexionDB.cs" />
+    <Compile Include="Sesion.cs" />
     <Compile Include="Transferencias\Form1.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -140,6 +143,10 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <Compile Include="validaciones.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="config.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
