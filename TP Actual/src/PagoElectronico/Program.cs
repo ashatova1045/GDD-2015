@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
 using OperacionesDB.ConexionDB;
+using System.IO;
 
 namespace PagoElectronico
 {
@@ -17,9 +18,10 @@ namespace PagoElectronico
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
-            System.IO.StreamReader file = new System.IO.StreamReader("\\config.txt");
+            string direccionDeLaSolu = Directory.GetParent(Directory.GetCurrentDirectory()).Parent.Parent.FullName;
+            System.IO.StreamReader file = new StreamReader(Path.Combine(direccionDeLaSolu,"config.txt"));
             string sqlcon = file.ReadLine();
-            string fechaF = file.ReadLine(); 
+            string fechaF = file.ReadLine();
             file.Close();
 
             Sesion.conexion = ConexionDB.ConectarDB(sqlcon);
