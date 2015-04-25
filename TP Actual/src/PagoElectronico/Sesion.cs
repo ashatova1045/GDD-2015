@@ -10,5 +10,7 @@ namespace PagoElectronico
     {
         public static SqlConnection conexion;
         public static DateTime fecha;
+
+        public static int user_id;
     }
 }

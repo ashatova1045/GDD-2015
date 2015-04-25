@@ -10,65 +10,54 @@ namespace OperacionesDB.ConexionDB
 {
     static class ConexionDB // Clase que maneja el acceso a DB
     {
-        public static SqlConnection  ConectarDB(string connectionString) //método para conectar a la DB
+        public static SqlConnection ConectarDB(string connectionString) //metodo para conectar a la DB
         {
             SqlConnection conexionDB = new SqlConnection(connectionString);
             if (conexionDB.State != System.Data.ConnectionState.Open)
             {
                 conexionDB.Open();
             }
-            return conexionDB; 
+            return conexionDB;
         }
 
-        public static void DesconectarDB(SqlConnection conexionDB) //método para desconectarse de la DB
+        public static void DesconectarDB(SqlConnection conexionDB) //metodo para desconectarse de la DB
         {
-            if(conexionDB.State != System.Data.ConnectionState.Closed)
+            if (conexionDB.State != System.Data.ConnectionState.Closed)
             {
                 conexionDB.Close();
             }
         }
 
-        public static object InvocarStoreProcedure(SqlConnection conexionDB, string nombre, int resultadoEsperado, List<SqlParameter> parametros)
-        {
-            SqlCommand comandoSQL = new SqlCommand();
-            comandoSQL.CommandText = nombre;
+        //lo dejo en 2 metodos separados para evitar confusion de si se esta corriendo un stopro o una query y que nombre se le debe pasar
 
-            // comandoSQL.Connection = conexionDB;
-            comandoSQL.Connection = conexionDB;
+        //invocar storeProcedures en la DB
+        public static SqlDataReader invocarStoreProcedure(SqlConnection conexionDB, string nombreProcedure, List<SqlParameter> parametros)
+        {
+            SqlCommand comandoSQL = new SqlCommand(nombreProcedure, conexionDB);
             comandoSQL.CommandType = CommandType.StoredProcedure;
 
-            object resultadoStoreProcedure = null; 
-
-            if (parametros!=null && parametros.Exists(x => x!=null)) {        
-                 foreach(SqlParameter parametro in parametros)
-                 {
-                    comandoSQL.Parameters.Add(parametro);              
-                 }
-            }
-
-            switch (resultadoEsperado)
-            {
-                //NONQUERY
-                case 1:
-                    resultadoStoreProcedure = comandoSQL.ExecuteNonQuery();
-                    break;
-                    
-                //READER    
-                case 2:
-                   
-                    resultadoStoreProcedure = comandoSQL.ExecuteReader();
-                    break;
-                    
-                    //SCALAR
-                case 3:
-                    resultadoStoreProcedure = comandoSQL.ExecuteScalar();
-                    break;
-             }
-            
-            comandoSQL.Dispose();
-
-            return resultadoStoreProcedure;
+            return correrSQL(comandoSQL, parametros);
         }
 
+        //correrQuery
+        public static SqlDataReader correrQuery(SqlConnection conexionDB, string query, List<SqlParameter> parametros)
+        {
+            SqlCommand comandoSQL = new SqlCommand(query, conexionDB);
+
+            return correrSQL(comandoSQL, parametros);
+
+        }
+
+        private static SqlDataReader correrSQL(SqlCommand comando, List<SqlParameter> parametros)
+        {
+            if (parametros != null && parametros.Exists(x => x != null))
+            {
+                foreach (SqlParameter parametro in parametros)
+                {
+                    comando.Parameters.Add(parametro);
+                }
+            }
+            return comando.ExecuteReader();
+        }
     }
 }
