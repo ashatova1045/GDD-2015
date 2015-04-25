@@ -28,36 +28,30 @@ namespace OperacionesDB.ConexionDB
             }
         }
 
-        //lo dejo en 2 metodos separados para evitar confusion de si se esta corriendo un stopro o una query y que nombre se le debe pasar
-
         //invocar storeProcedures en la DB
         public static SqlDataReader invocarStoreProcedure(SqlConnection conexionDB, string nombreProcedure, List<SqlParameter> parametros)
         {
             SqlCommand comandoSQL = new SqlCommand(nombreProcedure, conexionDB);
             comandoSQL.CommandType = CommandType.StoredProcedure;
 
-            return correrSQL(comandoSQL, parametros);
-        }
-
-        //correrQuery
-        public static SqlDataReader correrQuery(SqlConnection conexionDB, string query, List<SqlParameter> parametros)
-        {
-            SqlCommand comandoSQL = new SqlCommand(query, conexionDB);
-
-            return correrSQL(comandoSQL, parametros);
-
-        }
-
-        private static SqlDataReader correrSQL(SqlCommand comando, List<SqlParameter> parametros)
-        {
             if (parametros != null && parametros.Exists(x => x != null))
             {
                 foreach (SqlParameter parametro in parametros)
                 {
-                    comando.Parameters.Add(parametro);
+                    comandoSQL.Parameters.Add(parametro);
                 }
             }
-            return comando.ExecuteReader();
+
+            return comandoSQL.ExecuteReader();
         }
-    }
+
+        //correrQuery
+        public static SqlDataReader correrQuery(SqlConnection conexionDB, string query)
+        {
+            SqlCommand comandoSQL = new SqlCommand(query, conexionDB);
+
+            return comandoSQL.ExecuteReader();
+        }
+
+   }
 }
