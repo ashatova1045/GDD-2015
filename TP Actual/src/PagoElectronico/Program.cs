@@ -27,7 +27,7 @@ namespace PagoElectronico
             Sesion.conexion = ConexionDB.ConectarDB(sqlcon);
             Sesion.fecha = DateTime.Parse(fechaF);
 
-            Application.Run(new Form1());
+            Application.Run(new Login.Login());
 
             ConexionDB.DesconectarDB(Sesion.conexion);
         }
