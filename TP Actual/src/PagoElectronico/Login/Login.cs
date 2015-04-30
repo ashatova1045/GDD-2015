@@ -19,36 +19,25 @@ namespace PagoElectronico.Login
 
         private void btnIngresar_Click(object sender, EventArgs e)
         {
-            bool loginExitoso =false;
-            SqlDataReader DRUsuario = ConexionDB.correrQuery(Sesion.conexion,"SELECT id_usuario FROM usuarios WHERE user =" + txtUsuario.Text + "AND contra =" + txtContrasena.Text);
-            if (DRUsuario.HasRows)
-            {
-                DRUsuario.Read();
-                Sesion.user_id = DRUsuario.GetInt32(0);
-                DRUsuario.Close();
+            List<SqlParameter> listaDeParametros = new List<SqlParameter>();
+            listaDeParametros.Add(new SqlParameter("@usu",txtUsuario.Text));
+            listaDeParametros.Add(new SqlParameter("@contra",txtContrasena.Text));
 
-                loginExitoso = true;
+            try
+            {
+                SqlDataReader DRUsuario = ConexionDB.invocarStoreProcedure(Sesion.conexion, "loginProc", listaDeParametros);
             }
-            else
+            catch(SqlException ex)
             {
-                MessageBox.Show("Error de login");
-                SqlDataReader cantfall = ConexionDB.correrQuery(Sesion.conexion, "SELECT cantdeloginsfallidosdeesteuser");
-                if (cantfall.HasRows && cantfall.GetInt32(0) >= 2) 
-                { 
-                    //bloquear el user
-                }
-
-                cantfall.Close();
+                MessageBox.Show(ex.Message);
+                return;
             }
 
-            ConexionDB.correrQuery(Sesion.conexion, "INSERT datosdellogin INTO login").Close();
-
-            if (loginExitoso)
-            {
-                SeleccionarRol selecRol = new SeleccionarRol();
-                selecRol.Show(this);
-                this.Hide();
-            }
-        }
-    }
+            SeleccionarRol selecRol = new SeleccionarRol();
+            selecRol.Show(this);
+            this.Hide();
+         }
+     }
 }
+
+
