@@ -22,16 +22,19 @@ namespace PagoElectronico.Login
             List<SqlParameter> listaDeParametros = new List<SqlParameter>();
             listaDeParametros.Add(new SqlParameter("@usu",txtUsuario.Text));
             listaDeParametros.Add(new SqlParameter("@contra",txtContrasena.Text));
-
+            SqlDataReader DRUsuario;
             try
             {
-                SqlDataReader DRUsuario = ConexionDB.invocarStoreProcedure(Sesion.conexion, "loginProc", listaDeParametros);
+                DRUsuario = ConexionDB.invocarStoreProcedure(Sesion.conexion, "loginProc", listaDeParametros);
             }
             catch(SqlException ex)
             {
                 MessageBox.Show(ex.Message);
                 return;
             }
+            DRUsuario.Read();
+            Sesion.user_id = DRUsuario.GetInt32(0);
+            DRUsuario.Close();
 
             SeleccionarRol selecRol = new SeleccionarRol();
             selecRol.Show(this);
@@ -39,5 +42,3 @@ namespace PagoElectronico.Login
          }
      }
 }
-
-
