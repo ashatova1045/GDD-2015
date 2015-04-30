@@ -1,11 +1,14 @@
-drop table logins
-drop table usuarios
-drop procedure loginProc
+IF EXISTS (SELECT 1 FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = 'logins')
+	DROP TABLE logins;
+IF EXISTS (SELECT 1 FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = 'usuarios')
+	DROP TABLE usuarios;
+IF EXISTS (SELECT 1 FROM sys.sysobjects WHERE name='loginProc')
+		DROP PROCEDURE loginProc;
 
 CREATE TABLE usuarios(
 	id_usuario INT IDENTITY(1,1) PRIMARY KEY,
 	usuario NVARCHAR(30) UNIQUE,
-	contrasena NVARCHAR(30),
+	contrasena NVARCHAR(30) NOT NULL,
 	baja BIT DEFAULT 0,
 	habilitado BIT DEFAULT 1
 )
