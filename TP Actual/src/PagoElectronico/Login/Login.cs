@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using OperacionesDB.Cifrado;
 using OperacionesDB.ConexionDB;
 
 namespace PagoElectronico.Login
@@ -21,8 +22,9 @@ namespace PagoElectronico.Login
         {
             List<SqlParameter> listaDeParametros = new List<SqlParameter>();
             listaDeParametros.Add(new SqlParameter("@usu",txtUsuario.Text));
-            listaDeParametros.Add(new SqlParameter("@contra",txtContrasena.Text));
+            listaDeParametros.Add(new SqlParameter("@contra",Cifrador.Cifrar(txtContrasena.Text))); //enctrìpto la contrasena para pasarsela a la db
             SqlDataReader DRUsuario;
+
             try
             {
                 DRUsuario = ConexionDB.invocarStoreProcedure(Sesion.conexion, "loginProc", listaDeParametros);
@@ -33,7 +35,8 @@ namespace PagoElectronico.Login
                 return;
             }
             DRUsuario.Read();
-            Sesion.user_id = DRUsuario.GetInt32(0);
+            Sesion.user_id = DRUsuario.GetInt32(0);  //guardo el user en la sesion
+            Sesion.usuario = txtUsuario.Text;
             DRUsuario.Close();
 
             SeleccionarRol selecRol = new SeleccionarRol();
