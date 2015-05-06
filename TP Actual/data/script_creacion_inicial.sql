@@ -22,7 +22,43 @@ BEGIN /* *************** CREACION DE TABLAS *************** */
 		intentosFallidos INT DEFAULT 0,
 		estado NVARCHAR DEFAULT 'H' CHECK (estado IN ('H','I','B')) -- habilitado, inhabilitado, baja
 	)
-
+	
+	CREATE TABLE HHHH.paises(
+	Codigo numeric(18,0) Primary key,
+	Descripcion varchar(250) unique
+	)
+	
+	CREATE TABLE HHHH.clientes( 
+	Id_cliente int IDENTITY(1,1) primary key,
+	Id_usuario int,
+	Nombre varchar(255),
+	Apellido varchar(255),
+	Documento varchar(10) not null,
+	Id_tipo_documento int not null,
+	Mail varchar(255),
+	Id_pais numeric(18,0) not null,
+	Altura int,
+	Calle varchar(255),
+	Piso int,
+	Departamento varchar(10),
+	Id_localidad numeric(18,0),
+	Id_nacionalidad numeric(18,0),
+	Fecha_nacimiento datetime,
+	Estado char(1)
+	)
+	
+	CREATE TABLE HHHH.cuentas(
+	id_cuenta numeric(18,0) not null primary key,
+	id_pais numeric(18,0),
+	id_moneda numeric(18,0),
+	fecha_apertura datetime,
+	id_tipo_cuenta numeric(18,0),
+	id_cliente int not null,
+	id_estado char(1),
+	saldo numeric(18,0)
+	)
+	
+	
 	CREATE TABLE HHHH.logins(
 		id_usuario INT FOREIGN KEY REFERENCES HHHH.usuarios(id_usuario),
 		fecha DATETIME,
@@ -36,6 +72,28 @@ GO
 BEGIN /* *************** MIGRACION *************** */
 	INSERT INTO HHHH.usuarios (usuario,contrasena)
 		VALUES ('admin','5rhwUL/LgUP8uNsBcKTcntANkE3dPipK0bHo3A/cm+c=');
+		
+	INSERT INTO HHHH.paises(Codigo,Descripcion)
+		SELECT DISTINCT Cli_Pais_Codigo, Cli_Pais_Desc
+		FROM gd_esquema.Maestra
+	UNION
+		SELECT DISTINCT Cuenta_Pais_Codigo, Cuenta_Pais_Desc
+		FROM gd_esquema.Maestra
+		
+	INSERT INTO HHHH.clientes(Id_pais, Nombre, Apellido, Id_tipo_documento, Documento, Mail,
+				 Altura, Calle, Piso, Departamento, Fecha_nacimiento)
+		SELECT  DISTINCT Cli_Pais_Codigo, Cli_Nombre, Cli_Apellido, 
+			Cli_Tipo_Doc_Cod, Cli_Tipo_Doc_Desc, Cli_Mail,
+			Cli_Dom_Nro, Cli_Dom_Calle,
+			Cli_Dom_Piso, Cli_Dom_Depto, Cli_Fecha_Nac
+		FROM gd_esquema.Maestra
+
+	INSERT INTO Cuentas(id_cuenta, id_pais, fecha_apertura, id_cliente, id_estado)
+		SELECT DISTINCT M.Cuenta_Numero, M.Cuenta_Pais_Codigo, M.Cuenta_Fecha_Creacion, 
+				C.Id_cliente, M.Cuenta_Estado
+		FROM gd_esquema.Maestra M, HHHH.clientes C
+		WHERE C.Mail = M.Cli_Mail
+
 END
 GO
 
