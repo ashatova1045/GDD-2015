@@ -31,6 +31,12 @@ BEGIN /* *************** CREACION DE TABLAS *************** */
 END
 GO
 
+BEGIN /* *************** MIGRACION *************** */
+	INSERT INTO usuarios (usuario,contrasena)
+		VALUES ('admin','5rhwUL/LgUP8uNsBcKTcntANkE3dPipK0bHo3A/cm+c=');
+END
+GO
+
 BEGIN /* *************** BORRADO DE STORED PROCEDURES *************** */
 	IF EXISTS (SELECT 1 FROM sys.sysobjects WHERE name='loginProc')
 		DROP PROCEDURE loginProc;
@@ -86,10 +92,4 @@ AS
 				END
 			RETURN
 		END
-GO
-
-BEGIN /* *************** MIGRACION *************** */
-	INSERT INTO usuarios (usuario,contrasena)
-		VALUES ('admin','5rhwUL/LgUP8uNsBcKTcntANkE3dPipK0bHo3A/cm+c=');
-END
 GO
