@@ -17,6 +17,8 @@ BEGIN /* *************** BORRADO DE TABLAS *************** */
 		DROP TABLE HHHH.clientes;
 	IF EXISTS (SELECT 1 FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = 'HHHH' AND TABLE_NAME = 'cuentas')
 		DROP TABLE HHHH.cuentas;
+	IF EXISTS (SELECT 1 FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = 'HHHH' AND TABLE_NAME = 'depositos')
+		DROP TABLE HHHH.depositos;
 END
 GO
 
@@ -30,39 +32,49 @@ BEGIN /* *************** CREACION DE TABLAS *************** */
 	)
 	
 	CREATE TABLE HHHH.paises(
-	Codigo numeric(18,0) Primary key,
-	Descripcion varchar(250) unique
+		Codigo numeric(18,0) Primary key,
+		Descripcion varchar(250) unique
 	)
 	
 	CREATE TABLE HHHH.clientes( 
-	Id_cliente int IDENTITY(1,1) primary key,
-	Id_usuario int,
-	Nombre varchar(255),
-	Apellido varchar(255),
-	Documento varchar(10) not null,
-	Id_tipo_documento int not null,
-	Mail varchar(255),
-	Id_pais numeric(18,0) not null,
-	Altura int,
-	Calle varchar(255),
-	Piso int,
-	Departamento varchar(10),
-	Id_localidad numeric(18,0),
-	Id_nacionalidad numeric(18,0),
-	Fecha_nacimiento datetime,
-	Estado char(1)
+		Id_cliente int IDENTITY(1,1) primary key,
+		Id_usuario int,
+		Nombre varchar(255),
+		Apellido varchar(255),
+		Documento varchar(10) not null,
+		Id_tipo_documento int not null,
+		Mail varchar(255),
+		Id_pais numeric(18,0) not null,
+		Altura int,
+		Calle varchar(255),
+		Piso int,
+		Departamento varchar(10),
+		Id_localidad numeric(18,0),
+		Id_nacionalidad numeric(18,0),
+		Fecha_nacimiento datetime,
+		Estado char(1)
 	)
 	
 	CREATE TABLE HHHH.cuentas(
-	id_cuenta numeric(18,0) not null primary key,
-	id_pais numeric(18,0),
-	id_moneda numeric(18,0),
-	fecha_apertura datetime,
-	id_tipo_cuenta numeric(18,0),
-	id_cliente int not null,
-	id_estado char(1),
-	saldo numeric(18,0)
+		id_cuenta numeric(18,0) not null primary key,
+		id_pais numeric(18,0),
+		id_moneda numeric(18,0),
+		fecha_apertura datetime,
+		id_tipo_cuenta numeric(18,0),
+		id_cliente int not null,
+		id_estado char(1),
+		saldo numeric(18,0)
 	)
+	
+	CREATE TABLE HHHH.depositos(
+		Id_deposito numeric(18,0) primary key,
+		Cuenta numeric(18,0) not null,
+		Importe numeric(18,2),
+		Id_tipo_moneda int,
+		Id_tarjeta varchar(16),
+		Fecha_deposito datetime
+	)
+
 	
 	
 	CREATE TABLE HHHH.logins(
@@ -99,6 +111,12 @@ BEGIN /* *************** MIGRACION *************** */
 				C.Id_cliente, M.Cuenta_Estado
 		FROM gd_esquema.Maestra M, HHHH.clientes C
 		WHERE C.Mail = M.Cli_Mail
+		
+	INSERT INTO HHHH.depositos(Id_deposito, Cuenta, Importe, Id_tarjeta, Fecha_deposito )
+		SELECT DISTINCT Deposito_Codigo, Cuenta_Numero, Deposito_Importe, 
+				Tarjeta_Numero, Deposito_Fecha
+		FROM gd_esquema.Maestra
+		WHERE Deposito_Codigo is not null 
 
 END
 GO
