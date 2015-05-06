@@ -94,7 +94,7 @@ BEGIN /* *************** MIGRACION *************** */
 			Cli_Dom_Piso, Cli_Dom_Depto, Cli_Fecha_Nac
 		FROM gd_esquema.Maestra
 
-	INSERT INTO Cuentas(id_cuenta, id_pais, fecha_apertura, id_cliente, id_estado)
+	INSERT INTO HHHH.cuentas(id_cuenta, id_pais, fecha_apertura, id_cliente, id_estado)
 		SELECT DISTINCT M.Cuenta_Numero, M.Cuenta_Pais_Codigo, M.Cuenta_Fecha_Creacion, 
 				C.Id_cliente, M.Cuenta_Estado
 		FROM gd_esquema.Maestra M, HHHH.clientes C
