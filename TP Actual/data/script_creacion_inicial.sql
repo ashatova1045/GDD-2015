@@ -71,7 +71,7 @@ BEGIN /* *************** CREACION DE TABLAS *************** */
 		Cuenta numeric(18,0) not null,
 		Importe numeric(18,2),
 		Id_tipo_moneda int,
-		Id_tarjeta varchar(16),
+		Id_tarjeta varchar(16), --Hay que cambiar el numero de la tarjeta por su correspondiente ID
 		Fecha_deposito datetime
 	)
 
