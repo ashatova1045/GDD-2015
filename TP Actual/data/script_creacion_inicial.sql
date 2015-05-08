@@ -2,7 +2,7 @@ USE GD1C2015
 
 BEGIN /* *************** CREACION DEL SCHENMA *************** */
 	IF NOT EXISTS (SELECT [name] FROM [sys].[schemas] WHERE [name] = 'HHHH')
-		EXECUTE ('CREATE SCHEMA HHHH AUTHORIZATION gd;');		--nombre del grupo?
+		EXECUTE ('CREATE SCHEMA HHHH AUTHORIZATION gd;');
 END
 GO
 
@@ -41,7 +41,7 @@ BEGIN /* *************** CREACION DE TABLAS *************** */
 		Id_usuario int,
 		Nombre varchar(255),
 		Apellido varchar(255),
-		Documento varchar(10) not null,
+		Nro_Documento numeric(18,0),
 		Id_tipo_documento int not null,
 		Mail varchar(255),
 		Id_pais numeric(18,0) not null,
@@ -98,10 +98,10 @@ BEGIN /* *************** MIGRACION *************** */
 		SELECT DISTINCT Cuenta_Pais_Codigo, Cuenta_Pais_Desc
 		FROM gd_esquema.Maestra
 		
-	INSERT INTO HHHH.clientes(Id_pais, Nombre, Apellido, Id_tipo_documento, Documento, Mail,
+	INSERT INTO HHHH.clientes(Id_pais, Nombre, Apellido, Id_tipo_documento, Mail,
 				 Altura, Calle, Piso, Departamento, Fecha_nacimiento)
 		SELECT  DISTINCT Cli_Pais_Codigo, Cli_Nombre, Cli_Apellido, 
-			Cli_Tipo_Doc_Cod, Cli_Tipo_Doc_Desc, Cli_Mail,
+			Cli_Tipo_Doc_Cod, Cli_Mail,
 			Cli_Dom_Nro, Cli_Dom_Calle,
 			Cli_Dom_Piso, Cli_Dom_Depto, Cli_Fecha_Nac
 		FROM gd_esquema.Maestra
