@@ -39,9 +39,9 @@ BEGIN /* *************** CREACION DE TABLAS *************** */
 	CREATE TABLE HHHH.clientes( 
 		Id_cliente int IDENTITY(1,1) primary key,
 		Id_usuario int,
-		Nombre varchar(255),
-		Apellido varchar(255),
-		Nro_Documento numeric(18,0),
+		Nombre varchar(255)not null,
+		Apellido varchar(255)not null,
+		Nro_Documento numeric(18,0)not null,
 		Id_tipo_documento int not null,
 		Mail varchar(255),
 		Id_pais numeric(18,0) not null,
@@ -69,7 +69,7 @@ BEGIN /* *************** CREACION DE TABLAS *************** */
 	CREATE TABLE HHHH.depositos(
 		Id_deposito numeric(18,0) primary key,
 		Cuenta numeric(18,0) not null,
-		Importe numeric(18,2),
+		Importe numeric(18,2)not null,
 		Id_tipo_moneda int,
 		Id_tarjeta varchar(16), --Hay que cambiar el numero de la tarjeta por su correspondiente ID
 		Fecha_deposito datetime
@@ -99,11 +99,12 @@ BEGIN /* *************** MIGRACION *************** */
 		FROM gd_esquema.Maestra
 		
 	INSERT INTO HHHH.clientes(Id_pais, Nombre, Apellido, Id_tipo_documento, Mail,
-				 Altura, Calle, Piso, Departamento, Fecha_nacimiento)
+				 Altura, Calle, Piso, Departamento, Fecha_nacimiento, Nro_Documento)
 		SELECT  DISTINCT Cli_Pais_Codigo, Cli_Nombre, Cli_Apellido, 
 			Cli_Tipo_Doc_Cod, Cli_Mail,
 			Cli_Dom_Nro, Cli_Dom_Calle,
-			Cli_Dom_Piso, Cli_Dom_Depto, Cli_Fecha_Nac
+			Cli_Dom_Piso, Cli_Dom_Depto, Cli_Fecha_Nac, 
+			Cli_Nro_Doc 
 		FROM gd_esquema.Maestra
 
 	INSERT INTO HHHH.cuentas(id_cuenta, id_pais, fecha_apertura, id_cliente, id_estado)
