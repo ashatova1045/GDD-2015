@@ -17,6 +17,8 @@ BEGIN /* *************** BORRADO DE TABLAS *************** */
 		DROP TABLE HHHH.clientes;
 	IF EXISTS (SELECT 1 FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = 'HHHH' AND TABLE_NAME = 'cuentas')
 		DROP TABLE HHHH.cuentas;
+	IF EXISTS (SELECT 1 FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = 'HHHH' AND TABLE_NAME = 'tarjetas')
+		DROP TABLE HHHH.tarjetas;
 	IF EXISTS (SELECT 1 FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = 'HHHH' AND TABLE_NAME = 'depositos')
 		DROP TABLE HHHH.depositos;
 END
@@ -66,17 +68,25 @@ BEGIN /* *************** CREACION DE TABLAS *************** */
 		saldo numeric(18,0)
 	)
 	
+	CREATE TABLE HHHH.tarjetas(
+		Id_tarjeta numeric(18,0) identity(1,1) primary key,
+		Numero varchar(16) unique,
+		Id_banco numeric(18,0) default 1, --Colocar banco migracion
+		Fecha_emision datetime,
+		Fecha_vencimiento datetime,
+		Codigo_seguridad varchar(3),
+		Id_cliente numeric(18,0)
+	)
+	
 	CREATE TABLE HHHH.depositos(
 		Id_deposito numeric(18,0) primary key,
 		Cuenta numeric(18,0) not null,
 		Importe numeric(18,2)not null,
 		Id_tipo_moneda int,
-		Id_tarjeta varchar(16), --Hay que cambiar el numero de la tarjeta por su correspondiente ID
+		Id_tarjeta numeric(18,0),
 		Fecha_deposito datetime
 	)
 
-	
-	
 	CREATE TABLE HHHH.logins(
 		id_usuario INT FOREIGN KEY REFERENCES HHHH.usuarios(id_usuario),
 		fecha DATETIME,
@@ -84,6 +94,7 @@ BEGIN /* *************** CREACION DE TABLAS *************** */
 		numeroDeFallo INT,
 		PRIMARY KEY (id_usuario,fecha)
 	)
+ 
 END
 GO
 
@@ -113,11 +124,20 @@ BEGIN /* *************** MIGRACION *************** */
 		FROM gd_esquema.Maestra M, HHHH.clientes C
 		WHERE C.Mail = M.Cli_Mail
 		
+	INSERT INTO HHHH.tarjetas(Numero, Fecha_emision, Fecha_vencimiento, Codigo_seguridad, Id_cliente)
+		SELECT distinct T.Tarjeta_Numero, T.Tarjeta_Fecha_Emision, T.Tarjeta_Fecha_Vencimiento,
+			T.Tarjeta_Codigo_Seg, C.id_cliente
+		FROM (SELECT DISTINCT Tarjeta_Numero, Tarjeta_Fecha_Emision,
+							Tarjeta_Fecha_Vencimiento, Tarjeta_Codigo_Seg, Cuenta_Numero
+			  FROM gd_esquema.Maestra
+			  WHERE Tarjeta_Numero is not null) T , HHHH.cuentas C
+		WHERE T.Cuenta_Numero = C.id_cuenta
+		
 	INSERT INTO HHHH.depositos(Id_deposito, Cuenta, Importe, Id_tarjeta, Fecha_deposito )
 		SELECT DISTINCT Deposito_Codigo, Cuenta_Numero, Deposito_Importe, 
-				Tarjeta_Numero, Deposito_Fecha
-		FROM gd_esquema.Maestra
-		WHERE Deposito_Codigo is not null 
+				T.Id_tarjeta, Deposito_Fecha
+		FROM gd_esquema.Maestra M, HHHH.tarjetas T
+		WHERE Deposito_Codigo is not null and M.Tarjeta_Numero = T.Numero
 
 END
 GO
