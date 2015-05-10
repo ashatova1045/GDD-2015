@@ -6,27 +6,93 @@ BEGIN /* *************** CREACION DEL SCHENMA *************** */
 END
 GO
 
+BEGIN /* *************** BORRADO DE CONSTRAINTS *************** */
+
+	--Creamos una tabla temporal para las FOREIGN KEY
+	CREATE TABLE temporal(
+	ID int identity(1,1),
+	nombre sysname,
+	tabla sysname,
+	schem nvarchar(128)
+	)
+	--Insertamos las CONSTRAINT de tipo FOREIGN KEY en la tabla
+	INSERT INTO temporal(nombre,tabla,schem)
+		(SELECT CONSTRAINT_NAME, TABLE_NAME, TABLE_SCHEMA
+		FROM INFORMATION_SCHEMA.TABLE_CONSTRAINTS
+		WHERE CONSTRAINT_TYPE = 'FOREIGN KEY' and
+		TABLE_SCHEMA = 'HHHH')
+
+
+	DECLARE @Contador INT           -- Variable contador
+	SET @Contador = 1   
+	DECLARE @Regs INT               -- Variable para el Numero de Registros a procesar
+	SET @Regs = (SELECT COUNT(*) FROM temporal) --Obtenemos la cantidad de registros a procesar
+								
+	DECLARE @nombre VARCHAR(50)
+	DECLARE @tabla VARCHAR(50)
+	DECLARE @schemaa VARCHAR(50)
+ 
+	-- Hacemos el Loop
+	WHILE @Contador <= @Regs
+		BEGIN
+			SELECT @nombre= t.nombre, @tabla = t.tabla, @schemaa = t.schem
+			FROM temporal t
+			WHERE t.ID = @Contador
+ 
+			-- Borramos el CONSTRAINT de la tabla
+			PRINT 'Borrando la CONSTRAINT '+@nombre+' de la tabla '+@schemaa+'.'+@tabla
+			EXEC('ALTER TABLE '+@schemaa+'.'+@tabla+' DROP CONSTRAINT '+@nombre);
+			SET @Contador = @Contador + 1
+ 
+		END								
+	DROP TABLE temporal
+		
+END
+
 BEGIN /* *************** BORRADO DE TABLAS *************** */
-	IF EXISTS (SELECT 1 FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = 'HHHH' AND TABLE_NAME = 'logins')
-		DROP TABLE HHHH.logins;
-	IF EXISTS (SELECT 1 FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = 'HHHH' AND TABLE_NAME = 'usuarios')
-		DROP TABLE HHHH.usuarios;
-	IF EXISTS (SELECT 1 FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = 'HHHH' AND TABLE_NAME = 'paises')
-		DROP TABLE HHHH.paises;
-	IF EXISTS (SELECT 1 FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = 'HHHH' AND TABLE_NAME = 'clientes')
-		DROP TABLE HHHH.clientes;
-	IF EXISTS (SELECT 1 FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = 'HHHH' AND TABLE_NAME = 'cuentas')
-		DROP TABLE HHHH.cuentas;
-	IF EXISTS (SELECT 1 FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = 'HHHH' AND TABLE_NAME = 'tarjetas')
-		DROP TABLE HHHH.tarjetas;
-	IF EXISTS (SELECT 1 FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = 'HHHH' AND TABLE_NAME = 'depositos')
-		DROP TABLE HHHH.depositos;
+
+	--Creamos una tabla temporal para las tablas de nuestro schema
+	CREATE TABLE temporal(
+	ID int identity(1,1),
+	tabla sysname,
+	schem nvarchar(128)
+	)
+	
+	--Insertamos las tablas que contiene el schema
+	INSERT INTO temporal(tabla,schem)
+		(SELECT DISTINCT TABLE_NAME, TABLE_SCHEMA
+		FROM INFORMATION_SCHEMA.TABLE_CONSTRAINTS
+		WHERE TABLE_SCHEMA = 'HHHH')
+
+
+	--DECLARE @Contador INT           -- Variable contador
+	SET @Contador = 1   
+	--DECLARE @Regs INT               -- Variable para el Numero de Registros a procesar
+	SET @Regs = (SELECT COUNT(*) FROM temporal) --Obtenemos la cantidad de registros a procesar
+							
+	--DECLARE @tabla VARCHAR(50)
+	--DECLARE @schemaa VARCHAR(50)
+ 
+	-- Hacemos el Loop
+	WHILE @Contador <= @Regs
+		BEGIN
+			SELECT @tabla = t.tabla, @schemaa = t.schem
+			FROM temporal t
+			WHERE t.ID = @Contador
+ 
+			-- Borramos la tabla de schema
+			Print 'Borrando la tabla '+@schemaa+'.'+@tabla
+			EXEC('DROP TABLE '+@schemaa+'.'+@tabla);
+			SET @Contador = @Contador + 1
+		END
+										
+	DROP TABLE temporal
 END
 GO
 
 BEGIN /* *************** CREACION DE TABLAS *************** */
 	CREATE TABLE HHHH.usuarios(
-		id_usuario INT IDENTITY(1,1) PRIMARY KEY,
+		id_usuario numeric(18,0) IDENTITY(1,1) PRIMARY KEY,
 		usuario NVARCHAR(30) UNIQUE,
 		contrasena CHAR(44) NOT NULL,
 		intentosFallidos INT DEFAULT 0,
@@ -39,56 +105,56 @@ BEGIN /* *************** CREACION DE TABLAS *************** */
 	)
 	
 	CREATE TABLE HHHH.clientes( 
-		Id_cliente int IDENTITY(1,1) primary key,
-		Id_usuario int,
+		Id_cliente numeric(18,0) IDENTITY(1,1) primary key,
+		Id_usuario numeric(18,0) /*unique */CONSTRAINT FK_clientes_usuario FOREIGN KEY REFERENCES HHHH.usuarios(id_usuario),
 		Nombre varchar(255)not null,
 		Apellido varchar(255)not null,
 		Nro_Documento numeric(18,0)not null,
-		Id_tipo_documento int not null,
-		Mail varchar(255),
-		Id_pais numeric(18,0) not null,
+		Id_tipo_documento int not null, --tabla tipo documentos?
+		Mail varchar(255) not null,
+		Id_pais numeric(18,0) not null CONSTRAINT FK_clientes_pais FOREIGN KEY REFERENCES HHHH.paises (Codigo),
 		Altura int,
 		Calle varchar(255),
 		Piso int,
 		Departamento varchar(10),
-		Id_localidad numeric(18,0),
-		Id_nacionalidad numeric(18,0),
+		Localidad varchar(255),
+		Id_nacionalidad numeric(18,0) CONSTRAINT FK_clientes_nacionalidad FOREIGN KEY REFERENCES HHHH.paises (Codigo),
 		Fecha_nacimiento datetime,
-		Estado char(1)
+		Estado char(1),
 	)
-	
+
 	CREATE TABLE HHHH.cuentas(
-		id_cuenta numeric(18,0) not null primary key,
-		id_pais numeric(18,0),
-		id_moneda numeric(18,0),
-		fecha_apertura datetime,
-		id_tipo_cuenta numeric(18,0),
-		id_cliente int not null,
-		id_estado char(1),
-		saldo numeric(18,0)
+		Id_cuenta numeric(18,0) primary key,
+		Id_pais numeric(18,0) CONSTRAINT FK_cuentas_pais FOREIGN KEY REFERENCES HHHH.paises(Codigo),
+		Id_moneda numeric(18,0),
+		Fecha_apertura datetime,
+		Id_tipo_cuenta numeric(18,0),
+		Id_cliente numeric(18,0) not null CONSTRAINT FK_cuentas_cliente FOREIGN KEY REFERENCES HHHH.clientes(Id_cliente),
+		Id_estado char(1),
+		Saldo numeric(18,0)
 	)
 	
 	CREATE TABLE HHHH.tarjetas(
 		Id_tarjeta numeric(18,0) identity(1,1) primary key,
 		Numero varchar(16) unique,
-		Id_banco numeric(18,0) default 1, --Colocar banco migracion
+		Id_banco numeric(18,0) default 1 /*CONSTRAINT FK_tarjetas_banco FOREIGN KEY REFERENCES HHHH.bancos (Id_baco)*/, --Colocar banco migracion
 		Fecha_emision datetime,
 		Fecha_vencimiento datetime,
 		Codigo_seguridad varchar(3),
-		Id_cliente numeric(18,0)
+		Id_cliente numeric(18,0) CONSTRAINT FK_tarjetas_cliente FOREIGN KEY REFERENCES HHHH.clientes (Id_cliente)
 	)
 	
 	CREATE TABLE HHHH.depositos(
 		Id_deposito numeric(18,0) primary key,
-		Cuenta numeric(18,0) not null,
+		Id_cuenta numeric(18,0) not null CONSTRAINT FK_depositos_cuenta FOREIGN KEY REFERENCES HHHH.cuentas (Id_cuenta),
 		Importe numeric(18,2)not null,
 		Id_tipo_moneda int,
-		Id_tarjeta numeric(18,0),
+		Id_tarjeta numeric(18,0) CONSTRAINT FK_depositos_tarjeta FOREIGN KEY REFERENCES HHHH.tarjetas (Id_tarjeta),
 		Fecha_deposito datetime
 	)
 
 	CREATE TABLE HHHH.logins(
-		id_usuario INT FOREIGN KEY REFERENCES HHHH.usuarios(id_usuario),
+		id_usuario numeric(18,0) CONSTRAINT FK_logins_usuario FOREIGN KEY REFERENCES HHHH.usuarios(id_usuario),
 		fecha DATETIME,
 		exito BIT,
 		numeroDeFallo INT,
@@ -155,7 +221,7 @@ BEGIN /* *************** MIGRACION *************** */
 			Cli_Nro_Doc 
 		FROM gd_esquema.Maestra
 
-	INSERT INTO HHHH.cuentas(id_cuenta, id_pais, fecha_apertura, id_cliente, id_estado)
+	INSERT INTO HHHH.cuentas(Id_cuenta, Id_pais, Fecha_apertura, Id_cliente, Id_estado)
 		SELECT DISTINCT M.Cuenta_Numero, M.Cuenta_Pais_Codigo, M.Cuenta_Fecha_Creacion, 
 				C.Id_cliente, M.Cuenta_Estado
 		FROM gd_esquema.Maestra M, HHHH.clientes C
@@ -170,11 +236,11 @@ BEGIN /* *************** MIGRACION *************** */
 			  WHERE Tarjeta_Numero is not null) T , HHHH.cuentas C
 		WHERE T.Cuenta_Numero = C.id_cuenta
 		
-	INSERT INTO HHHH.depositos(Id_deposito, Cuenta, Importe, Id_tarjeta, Fecha_deposito )
+	INSERT INTO HHHH.depositos(Id_deposito, Id_cuenta, Importe, Id_tarjeta, Fecha_deposito )
 		SELECT DISTINCT Deposito_Codigo, Cuenta_Numero, Deposito_Importe, 
 				T.Id_tarjeta, Deposito_Fecha
 		FROM gd_esquema.Maestra M, HHHH.tarjetas T
-		WHERE Deposito_Codigo is not null and M.Tarjeta_Numero = T.Numero
+		WHERE M.Deposito_Codigo is not null and M.Tarjeta_Numero = T.Numero
 
 END
 GO
