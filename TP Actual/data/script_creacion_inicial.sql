@@ -61,7 +61,7 @@ BEGIN /* *************** BORRADO DE TABLAS *************** */
 	--Insertamos las tablas que contiene el schema
 	INSERT INTO temporal(tabla,schem)
 		(SELECT DISTINCT TABLE_NAME, TABLE_SCHEMA
-		FROM INFORMATION_SCHEMA.TABLE_CONSTRAINTS
+		FROM INFORMATION_SCHEMA.TABLES
 		WHERE TABLE_SCHEMA = 'HHHH')
 
 
@@ -120,7 +120,7 @@ BEGIN /* *************** CREACION DE TABLAS *************** */
 		Localidad varchar(255),
 		Id_nacionalidad numeric(18,0) CONSTRAINT FK_clientes_nacionalidad FOREIGN KEY REFERENCES HHHH.paises (Codigo),
 		Fecha_nacimiento datetime,
-		Estado char(1),
+		Estado NVARCHAR DEFAULT 'H' CHECK (estado IN ('H','I')) -- habilitado, inhabilitado
 	)
 
 	CREATE TABLE HHHH.cuentas(
@@ -130,7 +130,7 @@ BEGIN /* *************** CREACION DE TABLAS *************** */
 		Fecha_apertura datetime,
 		Id_tipo_cuenta numeric(18,0),
 		Id_cliente numeric(18,0) not null CONSTRAINT FK_cuentas_cliente FOREIGN KEY REFERENCES HHHH.clientes(Id_cliente),
-		Id_estado char(1),
+		Estado NVARCHAR DEFAULT 'P' CHECK (estado IN ('P','C','H','I')), -- pend act, cerrada, habilida, inhabilitada
 		Saldo numeric(18,0)
 	)
 	
@@ -221,9 +221,9 @@ BEGIN /* *************** MIGRACION *************** */
 			Cli_Nro_Doc 
 		FROM gd_esquema.Maestra
 
-	INSERT INTO HHHH.cuentas(Id_cuenta, Id_pais, Fecha_apertura, Id_cliente, Id_estado)
+	INSERT INTO HHHH.cuentas(Id_cuenta, Id_pais, Fecha_apertura, Id_cliente)
 		SELECT DISTINCT M.Cuenta_Numero, M.Cuenta_Pais_Codigo, M.Cuenta_Fecha_Creacion, 
-				C.Id_cliente, M.Cuenta_Estado
+				C.Id_cliente
 		FROM gd_esquema.Maestra M, HHHH.clientes C
 		WHERE C.Mail = M.Cli_Mail
 		
