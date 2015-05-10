@@ -94,7 +94,44 @@ BEGIN /* *************** CREACION DE TABLAS *************** */
 		numeroDeFallo INT,
 		PRIMARY KEY (id_usuario,fecha)
 	)
- 
+ --CREATE TABLE HHHH.roles(		--Ely
+	--)
+	
+	--CREATE TABLE HHHH.Retiros(	--Ely
+	--)
+	
+	--CREATE TABLE HHHH.Tipos_Documentos(	--Ely
+	--)
+	
+	--CREATE TABLE HHHH.Rel_Rol_Usuario)	--Ely
+	--)
+	
+	--CREATE TABLE HHHH.Bancos(	--Ely
+	--)
+	
+	--CREATE TABLE HHHH.Funcionalidades(		--Ana
+	--)
+
+	--CREATE TABLE HHHH.Transferencias(	--Ana
+	--)
+	
+	--CREATE TABLE HHHH.Cheques(	--Ana
+	--)
+	
+	--CREATE TABLE HHHH.Rel_Rol_Funcionalidad(	--Ana
+	--)
+	
+	--CREATE TABLE HHHH.Tipo_Cuenta(	--Ana
+	--)
+	
+	--CREATE TABLE HHHH.Facturas(	--Marian
+	--)
+	
+	--CREATE TABLE HHHH.Movimientos(	--Marian
+	--)
+	
+	--CREATE TABLE HHHH.Monedas(	--Marian
+	--)
 END
 GO
 
