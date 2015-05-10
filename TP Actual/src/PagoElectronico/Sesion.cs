@@ -12,5 +12,6 @@ namespace PagoElectronico
         public static DateTime fecha;
 
         public static int user_id;
+        public static string usuario;
     }
 }

@@ -8,6 +8,11 @@ namespace PagoElectronico
         static Regex regexSoloLetras = new Regex(@"^[a-zA-Záéíóú]+$");
         static Regex regexMail = new Regex(@"^[-0-9a-zA-Z.+_]+@[-0-9a-zA-Z.+_]+\.[a-zA-Z]{2,4}$");
 
+        public static bool validar16Numeros(string numero)
+        {
+            return validarSoloNumeros(numero) && numero.Length == 16;
+        }
+
         public static bool validarSoloNumeros(string numero)
         {
             return regexSoloNumeros.IsMatch(numero);
