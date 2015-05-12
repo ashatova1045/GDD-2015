@@ -31,7 +31,7 @@ namespace OperacionesDB.ConexionDB
         //invocar storeProcedures en la DB
         public static SqlDataReader invocarStoreProcedure(SqlConnection conexionDB, string nombreProcedure, List<SqlParameter> parametros)
         {
-            SqlCommand comandoSQL = new SqlCommand("HHHH"+nombreProcedure, conexionDB);
+            SqlCommand comandoSQL = new SqlCommand("HHHH."+nombreProcedure, conexionDB);
             comandoSQL.CommandType = CommandType.StoredProcedure;
 
             if (parametros != null && parametros.Exists(x => x != null))
