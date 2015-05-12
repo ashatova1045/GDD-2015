@@ -178,10 +178,10 @@ BEGIN /* *************** CREACION DE TABLAS *************** */
 	CREATE TABLE HHHH.Movimientos(
 		Id_movimiento numeric(18,0) identity(1,1) primary key,
 		Id_factura numeric(18,0) references HHHH.Facturas(Id_factura),
-		Tipo_movimiento char(1) not null,
+		Tipo_movimiento char(1) not null, -- T transferencia , C cambio de cuenta
 		Costo numeric(18,2) not null,
-		Id_cuenta numeric(18,0) references HHHH.Cuentas(Id_cuenta),
 		Id_moneda numeric(18,0) references HHHH.Monedas(Id_moneda),
+		Id_cuenta numeric(18,0) references HHHH.Cuentas(Id_cuenta),
 		Fecha datetime not null,
 		Id_transferencia numeric(18,0),-- references HHHH.Transferencias,
 		Dias_comprados numeric(18,0),
@@ -276,11 +276,17 @@ BEGIN /* *************** MIGRACION *************** */
 	
 	SET IDENTITY_INSERT HHHH.Facturas ON
 	INSERT INTO HHHH.Facturas(Id_factura,id_cliente,Fecha_factura,Monto_total,id_moneda,Pagado)
-		SELECT Factura_Numero,c.Id_cliente, Factura_Fecha,Item_Factura_Importe,1 ,1
+		SELECT Factura_Numero,c.Id_cliente, Factura_Fecha,Item_Factura_Importe,1 ,1		--cada factura de la tabla maestra tiene solo 1 item
 			FROM gd_esquema.Maestra m,HHHH.clientes c
 			WHERE m.Cli_Mail = c.Mail
 				AND Factura_Numero IS NOT NULL
 	SET IDENTITY_INSERT HHHH.Facturas OFF
+
+	INSERT INTO HHHH.Movimientos(Id_factura,Tipo_movimiento,Costo,Id_moneda,Id_cuenta,Fecha,Id_transferencia,Dias_comprados,Cambio_tipo_cuenta)
+		SELECT Factura_Numero,'T',Item_Factura_Importe,1,Cuenta_Numero,Transf_Fecha,null,null,null	--en la tabla maestra solo hay movimientos de comision
+			FROM gd_esquema.Maestra m,HHHH.clientes c --todavia no hay tabla de transferencias, por lo que falta el campo id_transferencia
+			WHERE m.Cli_Mail = c.Mail
+				AND Factura_Numero IS NOT NULL
 	
 END
 GO
