@@ -171,6 +171,7 @@ BEGIN /* *************** CREACION DE TABLAS *************** */
 		Fecha_factura datetime,
 		id_cliente numeric(18,0) references HHHH.clientes(Id_cliente),
 		Monto_total numeric(18,2),
+		id_moneda numeric(18,0) references HHHH.Monedas(Id_moneda),
 		Pagado BIT DEFAULT 0,
 	)
 	
@@ -272,7 +273,15 @@ BEGIN /* *************** MIGRACION *************** */
 				T.Id_tarjeta, Deposito_Fecha,1
 		FROM gd_esquema.Maestra M, HHHH.tarjetas T
 		WHERE M.Deposito_Codigo is not null and M.Tarjeta_Numero = T.Numero
-		
+	
+	SET IDENTITY_INSERT HHHH.Facturas ON
+	INSERT INTO HHHH.Facturas(Id_factura,id_cliente,Fecha_factura,Monto_total,id_moneda,Pagado)
+		SELECT Factura_Numero,c.Id_cliente, Factura_Fecha,Item_Factura_Importe,1 ,1
+			FROM gd_esquema.Maestra m,HHHH.clientes c
+			WHERE m.Cli_Mail = c.Mail
+				AND Factura_Numero IS NOT NULL
+	SET IDENTITY_INSERT HHHH.Facturas OFF
+	
 END
 GO
 
