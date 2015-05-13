@@ -40,7 +40,7 @@ BEGIN /* *************** BORRADO DE CONSTRAINTS *************** */
 			WHERE t.ID = @Contador
  
 			-- Borramos el CONSTRAINT de la tabla
-			PRINT 'Borrando la CONSTRAINT '+@nombre+' de la tabla '+@schemaa+'.'+@tabla
+--			PRINT 'Borrando la CONSTRAINT '+@nombre+' de la tabla '+@schemaa+'.'+@tabla
 			EXEC('ALTER TABLE '+@schemaa+'.'+@tabla+' DROP CONSTRAINT '+@nombre);
 			SET @Contador = @Contador + 1
  
@@ -81,7 +81,7 @@ BEGIN /* *************** BORRADO DE TABLAS *************** */
 			WHERE t.ID = @Contador
  
 			-- Borramos la tabla de schema
-			Print 'Borrando la tabla '+@schemaa+'.'+@tabla
+--			Print 'Borrando la tabla '+@schemaa+'.'+@tabla
 			EXEC('DROP TABLE '+@schemaa+'.'+@tabla);
 			SET @Contador = @Contador + 1
 		END
@@ -93,7 +93,7 @@ GO
 BEGIN /* *************** CREACION DE TABLAS *************** */
 	CREATE TABLE HHHH.usuarios(
 		id_usuario numeric(18,0) IDENTITY(1,1) PRIMARY KEY,
-		usuario NVARCHAR(30) UNIQUE,
+		usuario NVARCHAR(255) UNIQUE not null,
 		contrasena CHAR(44) NOT NULL,
 		intentosFallidos INT DEFAULT 0,
 		estado NVARCHAR DEFAULT 'H' CHECK (estado IN ('H','I','B')) -- habilitado, inhabilitado, baja
@@ -144,11 +144,16 @@ BEGIN /* *************** CREACION DE TABLAS *************** */
 		Id_cliente numeric(18,0) CONSTRAINT FK_tarjetas_cliente FOREIGN KEY REFERENCES HHHH.clientes (Id_cliente)
 	)
 	
+	CREATE TABLE HHHH.Monedas(
+		Id_moneda numeric(18,0) identity(1,1) primary key,
+		Descripcion nvarchar(30) not null
+	)
+	
 	CREATE TABLE HHHH.depositos(
 		Id_deposito numeric(18,0) primary key,
 		Id_cuenta numeric(18,0) not null CONSTRAINT FK_depositos_cuenta FOREIGN KEY REFERENCES HHHH.cuentas (Id_cuenta),
 		Importe numeric(18,2)not null,
-		Id_tipo_moneda int,
+		Id_tipo_moneda numeric(18,0) references HHHH.Monedas(Id_Moneda),
 		Id_tarjeta numeric(18,0) CONSTRAINT FK_depositos_tarjeta FOREIGN KEY REFERENCES HHHH.tarjetas (Id_tarjeta),
 		Fecha_deposito datetime
 	)
@@ -160,6 +165,29 @@ BEGIN /* *************** CREACION DE TABLAS *************** */
 		numeroDeFallo INT,
 		PRIMARY KEY (id_usuario,fecha)
 	)
+	
+	CREATE TABLE HHHH.Facturas(
+		Id_factura numeric(18,0) identity(1,1) primary key,
+		Fecha_factura datetime,
+		id_cliente numeric(18,0) references HHHH.clientes(Id_cliente),
+		Monto_total numeric(18,2),
+		id_moneda numeric(18,0) references HHHH.Monedas(Id_moneda),
+		Pagado BIT DEFAULT 0,
+	)
+	
+	CREATE TABLE HHHH.Movimientos(
+		Id_movimiento numeric(18,0) identity(1,1) primary key,
+		Id_factura numeric(18,0) references HHHH.Facturas(Id_factura),
+		Tipo_movimiento char(1) not null, -- T transferencia , C cambio de cuenta
+		Costo numeric(18,2) not null,
+		Id_moneda numeric(18,0) references HHHH.Monedas(Id_moneda),
+		Id_cuenta numeric(18,0) references HHHH.Cuentas(Id_cuenta),
+		Fecha datetime not null,
+		Id_transferencia numeric(18,0),-- references HHHH.Transferencias,
+		Dias_comprados numeric(18,0),
+		Cambio_tipo_cuenta numeric(18,0)-- references HHHH.Tipo_Cuenta,
+	)
+	
  --CREATE TABLE HHHH.roles(		--Ely
 	--)
 	
@@ -190,20 +218,12 @@ BEGIN /* *************** CREACION DE TABLAS *************** */
 	--CREATE TABLE HHHH.Tipo_Cuenta(	--Ana
 	--)
 	
-	--CREATE TABLE HHHH.Facturas(	--Marian
-	--)
-	
-	--CREATE TABLE HHHH.Movimientos(	--Marian
-	--)
-	
-	--CREATE TABLE HHHH.Monedas(	--Marian
-	--)
 END
 GO
 
 BEGIN /* *************** MIGRACION *************** */
-	INSERT INTO HHHH.usuarios (usuario,contrasena)
-		VALUES ('admin','5rhwUL/LgUP8uNsBcKTcntANkE3dPipK0bHo3A/cm+c=');
+	INSERT INTO HHHH.Monedas (Descripcion)
+		VALUES('USD');
 		
 	INSERT INTO HHHH.paises(Codigo,Descripcion)
 		SELECT DISTINCT Cli_Pais_Codigo, Cli_Pais_Desc
@@ -220,6 +240,18 @@ BEGIN /* *************** MIGRACION *************** */
 			Cli_Dom_Piso, Cli_Dom_Depto, Cli_Fecha_Nac, 
 			Cli_Nro_Doc 
 		FROM gd_esquema.Maestra
+		
+	INSERT INTO HHHH.usuarios (usuario,contrasena)
+		SELECT DISTINCT Mail,'10/w7o2juYBrGMh32/KbveULW9jk2tejpyUAD+uC6PE=' --contrasena: pass
+			FROM HHHH.clientes
+	
+	UPDATE HHHH.clientes
+		SET Id_usuario = usuarios.id_usuario
+		FROM HHHH.usuarios
+			where usuarios.usuario=clientes.Mail
+		
+	INSERT INTO HHHH.usuarios (usuario,contrasena)
+		VALUES ('admin','5rhwUL/LgUP8uNsBcKTcntANkE3dPipK0bHo3A/cm+c=');
 
 	INSERT INTO HHHH.cuentas(Id_cuenta, Id_pais, Fecha_apertura, Id_cliente)
 		SELECT DISTINCT M.Cuenta_Numero, M.Cuenta_Pais_Codigo, M.Cuenta_Fecha_Creacion, 
@@ -236,12 +268,26 @@ BEGIN /* *************** MIGRACION *************** */
 			  WHERE Tarjeta_Numero is not null) T , HHHH.cuentas C
 		WHERE T.Cuenta_Numero = C.id_cuenta
 		
-	INSERT INTO HHHH.depositos(Id_deposito, Id_cuenta, Importe, Id_tarjeta, Fecha_deposito )
+	INSERT INTO HHHH.depositos(Id_deposito, Id_cuenta, Importe, Id_tarjeta, Fecha_deposito,Id_tipo_moneda)
 		SELECT DISTINCT Deposito_Codigo, Cuenta_Numero, Deposito_Importe, 
-				T.Id_tarjeta, Deposito_Fecha
+				T.Id_tarjeta, Deposito_Fecha,1
 		FROM gd_esquema.Maestra M, HHHH.tarjetas T
 		WHERE M.Deposito_Codigo is not null and M.Tarjeta_Numero = T.Numero
+	
+	SET IDENTITY_INSERT HHHH.Facturas ON
+	INSERT INTO HHHH.Facturas(Id_factura,id_cliente,Fecha_factura,Monto_total,id_moneda,Pagado)
+		SELECT Factura_Numero,c.Id_cliente, Factura_Fecha,Item_Factura_Importe,1 ,1		--cada factura de la tabla maestra tiene solo 1 item
+			FROM gd_esquema.Maestra m,HHHH.clientes c
+			WHERE m.Cli_Mail = c.Mail
+				AND Factura_Numero IS NOT NULL
+	SET IDENTITY_INSERT HHHH.Facturas OFF
 
+	INSERT INTO HHHH.Movimientos(Id_factura,Tipo_movimiento,Costo,Id_moneda,Id_cuenta,Fecha,Id_transferencia,Dias_comprados,Cambio_tipo_cuenta)
+		SELECT Factura_Numero,'T',Item_Factura_Importe,1,Cuenta_Numero,Transf_Fecha,null,null,null	--en la tabla maestra solo hay movimientos de comision
+			FROM gd_esquema.Maestra m,HHHH.clientes c --todavia no hay tabla de transferencias, por lo que falta el campo id_transferencia
+			WHERE m.Cli_Mail = c.Mail
+				AND Factura_Numero IS NOT NULL
+	
 END
 GO
 
