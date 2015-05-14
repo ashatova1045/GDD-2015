@@ -124,7 +124,7 @@ BEGIN /* *************** CREACION DE TABLAS *************** */
 	)
 
 	CREATE TABLE HHHH.cuentas(
-		Id_cuenta numeric(18,0) primary key,
+		Id_cuenta numeric(18,0) identity(1,1) primary key,
 		Id_pais numeric(18,0) CONSTRAINT FK_cuentas_pais FOREIGN KEY REFERENCES HHHH.paises(Codigo),
 		Id_moneda numeric(18,0),
 		Fecha_apertura datetime,
@@ -150,7 +150,7 @@ BEGIN /* *************** CREACION DE TABLAS *************** */
 	)
 	
 	CREATE TABLE HHHH.depositos(
-		Id_deposito numeric(18,0) primary key,
+		Id_deposito numeric(18,0) identity(1,1) primary key,
 		Id_cuenta numeric(18,0) not null CONSTRAINT FK_depositos_cuenta FOREIGN KEY REFERENCES HHHH.cuentas (Id_cuenta),
 		Importe numeric(18,2)not null,
 		Id_tipo_moneda numeric(18,0) references HHHH.Monedas(Id_Moneda),
@@ -253,12 +253,14 @@ BEGIN /* *************** MIGRACION *************** */
 	INSERT INTO HHHH.usuarios (usuario,contrasena)
 		VALUES ('admin','5rhwUL/LgUP8uNsBcKTcntANkE3dPipK0bHo3A/cm+c=');
 
+	SET IDENTITY_INSERT HHHH.cuentas ON
 	INSERT INTO HHHH.cuentas(Id_cuenta, Id_pais, Fecha_apertura, Id_cliente)
 		SELECT DISTINCT M.Cuenta_Numero, M.Cuenta_Pais_Codigo, M.Cuenta_Fecha_Creacion, 
 				C.Id_cliente
 		FROM gd_esquema.Maestra M, HHHH.clientes C
 		WHERE C.Mail = M.Cli_Mail
-		
+	SET IDENTITY_INSERT HHHH.cuentas OFF
+	
 	INSERT INTO HHHH.tarjetas(Numero, Fecha_emision, Fecha_vencimiento, Codigo_seguridad, Id_cliente)
 		SELECT distinct T.Tarjeta_Numero, T.Tarjeta_Fecha_Emision, T.Tarjeta_Fecha_Vencimiento,
 			T.Tarjeta_Codigo_Seg, C.id_cliente
@@ -267,12 +269,14 @@ BEGIN /* *************** MIGRACION *************** */
 			  FROM gd_esquema.Maestra
 			  WHERE Tarjeta_Numero is not null) T , HHHH.cuentas C
 		WHERE T.Cuenta_Numero = C.id_cuenta
-		
+	
+	SET IDENTITY_INSERT HHHH.depositos ON	
 	INSERT INTO HHHH.depositos(Id_deposito, Id_cuenta, Importe, Id_tarjeta, Fecha_deposito,Id_tipo_moneda)
 		SELECT DISTINCT Deposito_Codigo, Cuenta_Numero, Deposito_Importe, 
 				T.Id_tarjeta, Deposito_Fecha,1
 		FROM gd_esquema.Maestra M, HHHH.tarjetas T
 		WHERE M.Deposito_Codigo is not null and M.Tarjeta_Numero = T.Numero
+	SET IDENTITY_INSERT HHHH.depositos OFF
 	
 	SET IDENTITY_INSERT HHHH.Facturas ON
 	INSERT INTO HHHH.Facturas(Id_factura,id_cliente,Fecha_factura,Monto_total,id_moneda,Pagado)
