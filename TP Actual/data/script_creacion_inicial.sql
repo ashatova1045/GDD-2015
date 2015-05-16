@@ -108,7 +108,7 @@ BEGIN /* *************** CREACION DE TABLAS *************** */
 	CREATE TABLE HHHH.bancos(
 		Id_banco numeric(18,0) PRIMARY KEY,
 		Descripcion varchar(250),
-		Id_pais numeric(18,0) FOREIGN KEY REFERENCES HHHH.paises,
+		Id_pais numeric(18,0) FOREIGN KEY REFERENCES HHHH.paises(Codigo),
 		Localidad varchar(250),
 		Calle varchar(250),
 		Altura numeric(10,0)
