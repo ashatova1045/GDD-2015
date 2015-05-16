@@ -106,7 +106,7 @@ BEGIN /* *************** CREACION DE TABLAS *************** */
 	)
 	
 	CREATE TABLE HHHH.bancos(
-		Id_banco numeric(18,0) PRIMARY KEY,
+		Id_banco numeric(18,0) PRIMARY KEY IDENTITY(1,1),
 		Descripcion varchar(250),
 		Id_pais numeric(18,0) FOREIGN KEY REFERENCES HHHH.paises(Codigo),
 		Localidad varchar(250),
@@ -115,7 +115,7 @@ BEGIN /* *************** CREACION DE TABLAS *************** */
 	)
 	
 	CREATE TABLE HHHH.cheques(
-		Id_cheque numeric(18,0) PRIMARY KEY,
+		Id_cheque numeric(18,0) PRIMARY KEY IDENTITY(1,1),
 		Fecha_cheque datetime,
 		Importe numeric(18,2) NOT NULL,
 		Destinatario varchar(250),
@@ -123,7 +123,7 @@ BEGIN /* *************** CREACION DE TABLAS *************** */
 	)
 	
 	CREATE TABLE HHHH.tipos_documentos(
-		Id_tipo_documento numeric(18,0) PRIMARY KEY,
+		Id_tipo_documento numeric(18,0) PRIMARY KEY IDENTITY(1,1),
 		Descripcion varchar(250) UNIQUE
 	)
 	
@@ -173,7 +173,7 @@ BEGIN /* *************** CREACION DE TABLAS *************** */
 	)
 	
 	CREATE TABLE HHHH.retiros(
-		Id_retiro numeric(18,0) PRIMARY KEY,
+		Id_retiro numeric(18,0) PRIMARY KEY IDENTITY(1,1),
 		Id_cuenta numeric(18,0) FOREIGN KEY REFERENCES HHHH.cuentas(Id_cuenta),
 		importe numeric(18,2) NOT NULL,
 		Id_cheque numeric(18,0) FOREIGN KEY REFERENCES HHHH.cheques(Id_cheque),
@@ -263,19 +263,25 @@ BEGIN /* *************** MIGRACION *************** */
 		SELECT DISTINCT Cuenta_Pais_Codigo, Cuenta_Pais_Desc
 		FROM gd_esquema.Maestra
 		
+	SET IDENTITY_INSERT HHHH.bancos ON
 	INSERT INTO HHHH.bancos(Id_banco, Descripcion)
 		SELECT DISTINCT M.Banco_Cogido, M.Banco_Nombre
 		FROM gd_esquema.Maestra M
 		WHERE M.Banco_Cogido IS NOT NULL
+	SET IDENTITY_INSERT HHHH.bancos OFF
 		
+	SET IDENTITY_INSERT HHHH.cheques ON	
 	INSERT INTO HHHH.cheques(Id_cheque, Fecha_cheque, Importe, Id_banco)
 		SELECT DISTINCT M.Cheque_Numero, M.Cheque_Fecha, M.Cheque_Importe,M.Banco_Cogido
 	FROM gd_esquema.Maestra M
 	WHERE M.Cheque_Numero IS NOT NULL
+	SET IDENTITY_INSERT HHHH.cheques OFF
 	
+	SET IDENTITY_INSERT HHHH.tipos_documentos ON
 	INSERT INTO HHHH.tipos_documentos(Id_tipo_documento, Descripcion)
 		SELECT DISTINCT Cli_Tipo_Doc_Cod, Cli_Tipo_Doc_Desc
 		FROM gd_esquema.Maestra
+	SET IDENTITY_INSERT HHHH.tipos_documentos OFF
 		
 	INSERT INTO HHHH.clientes(Id_pais, Nombre, Apellido, Id_tipo_documento, Mail,
 				 Altura, Calle, Piso, Departamento, Fecha_nacimiento, Nro_Documento)
@@ -306,10 +312,12 @@ BEGIN /* *************** MIGRACION *************** */
 		WHERE C.Mail = M.Cli_Mail
 	SET IDENTITY_INSERT HHHH.cuentas OFF
 	
+	SET IDENTITY_INSERT HHHH.retiros ON
 	INSERT INTO HHHH.retiros(Id_retiro, Id_cuenta, importe, Id_cheque, fecha_retiro)
 		SELECT DISTINCT M.Retiro_Codigo, M.Cuenta_Numero, M.Retiro_Importe, M.Cheque_Numero, M.Retiro_Fecha
 		FROM gd_esquema.Maestra M
 		WHERE M.Retiro_Codigo is not null
+	SET IDENTITY_INSERT HHHH.retiros OFF
 	
 	UPDATE HHHH.retiros SET Id_moneda = 1
 	
