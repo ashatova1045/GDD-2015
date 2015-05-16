@@ -419,6 +419,8 @@ AS
 		
 	IF (SELECT estado FROM HHHH.usuarios WHERE id_usuario = @id_usuario) = 'I'
 		BEGIN
+			INSERT INTO HHHH.logins (id_usuario, fecha, exito,numeroDeFallo)
+				VALUES (@id_usuario,GETDATE(),0,(SELECT intentosFallidos FROM HHHH.usuarios WHERE id_usuario = @id_usuario))
 			RAISERROR ('Este usuario esta inhabilitado. Contacte a un administrador del sistema.',16,1)
 			RETURN
 		END
