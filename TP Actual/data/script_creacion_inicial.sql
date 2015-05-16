@@ -206,48 +206,65 @@ BEGIN /* *************** CREACION DE TABLAS *************** */
 	
 	CREATE TABLE HHHH.rel_rol_usuario(
 		Id_rol numeric(18,0) FOREIGN KEY REFERENCES HHHH.roles(Id_rol),
-		Id_usuario INT FOREIGN KEY REFERENCES HHHH.usuarios(id_usuario)
+		Id_usuario numeric(18,0) FOREIGN KEY REFERENCES HHHH.usuarios(id_usuario)
 		CONSTRAINT Claves_primarias
-		PRIMARY KEY CLUSTERED(
-			Id_rol,
-			Id_usuario
-		)
+		PRIMARY KEY (Id_rol, Id_usuario	)
 	)
 	
-	CREATE TABLE HHHH.Facturas(
+	CREATE TABLE HHHH.facturas(
 		Id_factura numeric(18,0) identity(1,1) primary key,
 		Fecha_factura datetime,
-		id_cliente numeric(18,0) references HHHH.clientes(Id_cliente),
+		Id_cliente numeric(18,0) references HHHH.clientes(Id_cliente),
 		Monto_total numeric(18,2),
-		id_moneda numeric(18,0) references HHHH.Monedas(Id_moneda),
-		Pagado BIT DEFAULT 0,
+		Id_moneda numeric(18,0) references HHHH.monedas(Id_moneda),
+		Pagado BIT DEFAULT 0
 	)
 	
-	CREATE TABLE HHHH.Movimientos(
+
+	CREATE TABLE HHHH.funcionalidades(	
+		Id_funcionalidad numeric (18,0) identity (1,1) Primary Key, 
+		Descripcion nvarchar (255)
+	)
+
+	CREATE TABLE HHHH.transferencias(
+		Id_transferencia numeric (18,0) identity (1,1) Primary Key,
+		Cuenta_origen numeric (18,0) references HHHH.cuentas (Id_cuenta),
+		Cuenta_destino numeric (18,0) references HHHH.cuentas (Id_cuenta),
+		Importe numeric (18,2),
+		Fecha_transferencia datetime, 
+		Costo numeric (18,2),
+		Id_moneda numeric (18,0) references HHHH.monedas (Id_moneda)	
+	)
+	
+	
+	CREATE TABLE HHHH.Rel_Rol_Funcionalidad(	
+		Id_rol numeric (18,0) references HHHH.Roles (Id_rol),
+		Id_funcionalidad numeric (18,0) references HHHH.Funcionalidades (Id_funcionalidad),
+		Primary Key (Id_rol, Id_funcionalidad)
+	)
+	
+	CREATE TABLE HHHH.Tipo_Cuenta(	
+		Id_tipo_cuenta numeric (18,0) identity (1,1) Primary Key,
+		Descripcion nvarchar (255),
+		Id_moneda_cuenta numeric (18,0) references HHHH.Monedas (Id_moneda),
+		Costo_transf numeric (18,2),
+		Duracion int, 
+		Id_moneda_transf numeric (18,0) references HHHH.Monedas (Id_moneda),
+		Costo_cuenta numeric (18,2),
+	)
+	
+	CREATE TABLE HHHH.movimientos(
 		Id_movimiento numeric(18,0) identity(1,1) primary key,
 		Id_factura numeric(18,0) references HHHH.Facturas(Id_factura),
-		Tipo_movimiento char(1) not null, -- T transferencia , C cambio de cuenta
+		Tipo_movimiento char(1) not null CHECK (Tipo_movimiento IN ('T','C')), --  T transferencia , C cambio de cuenta 
 		Costo numeric(18,2) not null,
 		Id_moneda numeric(18,0) references HHHH.Monedas(Id_moneda),
 		Id_cuenta numeric(18,0) references HHHH.Cuentas(Id_cuenta),
 		Fecha datetime not null,
-		Id_transferencia numeric(18,0),-- references HHHH.Transferencias,
+		Id_transferencia numeric(18,0) references HHHH.Transferencias (Id_transferencia),
 		Dias_comprados numeric(18,0),
-		Cambio_tipo_cuenta numeric(18,0)-- references HHHH.Tipo_Cuenta,
+		Cambio_tipo_cuenta numeric(18,0) references HHHH.Tipo_Cuenta (Id_tipo_cuenta)
 	)
-	
-	--CREATE TABLE HHHH.Funcionalidades(		--Ana
-	--)
-
-	--CREATE TABLE HHHH.Transferencias(	--Ana
-	--)
-	
-	
-	--CREATE TABLE HHHH.Rel_Rol_Funcionalidad(	--Ana
-	--)
-	
-	--CREATE TABLE HHHH.Tipo_Cuenta(	--Ana
-	--)
 	
 END
 GO
@@ -339,10 +356,8 @@ BEGIN /* *************** MIGRACION *************** */
 	SET IDENTITY_INSERT HHHH.depositos OFF
 	
 	INSERT INTO HHHH.roles(Nombre_rol, Estado)
-		VALUES ('Administrador', 'A')
-	
-	INSERT INTO HHHH.roles(Nombre_rol, Estado)
-		VALUES ('Cliente', 'A')
+		VALUES	('Administrador', 'A'),
+				('Cliente', 'A')
 		
 	INSERT INTO HHHH.rel_rol_usuario(Id_rol, Id_usuario)
 		VALUES (1,1)
@@ -354,12 +369,59 @@ BEGIN /* *************** MIGRACION *************** */
 			WHERE m.Cli_Mail = c.Mail
 				AND Factura_Numero IS NOT NULL
 	SET IDENTITY_INSERT HHHH.Facturas OFF
+	
+	create table HHHH.temporal(
+		Id_transferencia numeric (18,0) identity (1,1) Primary Key,
+		Cuenta_origen numeric (18,0) references HHHH.cuentas (Id_cuenta),
+		Cuenta_destino numeric (18,0) references HHHH.cuentas (Id_cuenta),
+		Importe numeric (18,2),
+		Fecha_transferencia datetime, 
+		Costo numeric (18,2),
+		Id_factura numeric(18,0) references HHHH.Facturas(Id_factura),
+		Id_cuenta numeric(18,0) references HHHH.Cuentas(Id_cuenta)
+	)
+		
+	insert into HHHH.temporal (Cuenta_origen,Cuenta_destino,Importe,Fecha_transferencia,Costo,Id_factura)
+		SELECT Cuenta_Numero,Cuenta_Dest_Numero,Trans_Importe,Transf_Fecha,Item_Factura_Importe,Factura_Numero
+			FROM gd_esquema.Maestra m 
+			WHERE Factura_Numero IS NOT NULL 
+		
+	SET IDENTITY_INSERT HHHH.Transferencias ON		
+	INSERT INTO HHHH.Transferencias (Id_transferencia,Cuenta_origen , Cuenta_destino, Importe, Fecha_transferencia, Costo, Id_moneda)
+		SELECT Id_transferencia,Cuenta_origen, Cuenta_destino, Importe, Fecha_transferencia, Costo, 1 
+			FROM HHHH.temporal
+	SET IDENTITY_INSERT HHHH.Transferencias OFF		
 
 	INSERT INTO HHHH.Movimientos(Id_factura,Tipo_movimiento,Costo,Id_moneda,Id_cuenta,Fecha,Id_transferencia,Dias_comprados,Cambio_tipo_cuenta)
-		SELECT Factura_Numero,'T',Item_Factura_Importe,1,Cuenta_Numero,Transf_Fecha,null,null,null	--en la tabla maestra solo hay movimientos de comision
-			FROM gd_esquema.Maestra m,HHHH.clientes c --todavia no hay tabla de transferencias, por lo que falta el campo id_transferencia
-			WHERE m.Cli_Mail = c.Mail
-				AND Factura_Numero IS NOT NULL
+		SELECT Id_factura,'T',Costo,1,Cuenta_origen,Fecha_transferencia,Id_transferencia,null,null	--en la tabla maestra solo hay movimientos de comision
+			FROM HHHH.temporal
+	
+	drop table HHHH.temporal
+				
+	INSERT INTO HHHH.Funcionalidades (Descripcion)
+		VALUES	('ABM Rol'),
+				('ABM Usuario'),
+				('ABM Cliente'),
+				('ABM Cuenta'),
+				('Asociar/Desasociar Tarjeta de Credito'),
+				('Depositos'),
+				('Retiro de Efectivo'),
+				('Transferencia entre Cuentas'),
+				('Facturacion de Costos'),
+				('Consulta de Saldo de Cuentas'),
+				('Listado Estadistico')
+				
+	INSERT INTO HHHH.Rel_Rol_Funcionalidad (Id_rol, Id_funcionalidad)
+		VALUES (1,1), (1,2), (1,3), (1,4), (1,9), (1,10), (1,11),
+				(2,4), (2,5), (2,6), (2,7), (2,8), (2,9), (2,10)
+	
+	INSERT INTO HHHH.Tipo_Cuenta (Descripcion, Id_moneda_cuenta, Costo_transf, Duracion, Id_moneda_transf, Costo_cuenta)
+		VALUES ('Gratuita', 1,3,30,1,0),
+				('Bronce', 1,2,30,1,1),
+				('Plata', 1,1,30,1,2),
+				('Oro', 1,0,30,1,3)
+		
+			
 	
 END
 GO
