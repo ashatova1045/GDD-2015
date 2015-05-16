@@ -105,6 +105,28 @@ BEGIN /* *************** CREACION DE TABLAS *************** */
 		Descripcion varchar(250) unique
 	)
 	
+	CREATE TABLE HHHH.bancos(
+		Id_banco numeric(18,0) PRIMARY KEY,
+		Descripcion varchar(250),
+		Id_pais numeric(18,0) FOREIGN KEY REFERENCES HHHH.paises,
+		Localidad varchar(250),
+		Calle varchar(250),
+		Altura numeric(10,0)
+	)
+	
+	CREATE TABLE HHHH.cheques(
+		Id_cheque numeric(18,0) PRIMARY KEY,
+		Fecha_cheque datetime,
+		Importe numeric(18,2) NOT NULL,
+		Destinatario varchar(250),
+		Id_banco numeric(18,0) FOREIGN KEY REFERENCES HHHH.bancos(Id_banco)
+	)
+	
+	CREATE TABLE HHHH.tipos_documentos(
+		Id_tipo_documento numeric(18,0) PRIMARY KEY,
+		Descripcion varchar(250) UNIQUE
+	)
+	
 	CREATE TABLE HHHH.clientes( 
 		Id_cliente numeric(18,0) IDENTITY(1,1) primary key,
 		Id_usuario numeric(18,0) /*unique */CONSTRAINT FK_clientes_usuario FOREIGN KEY REFERENCES HHHH.usuarios(id_usuario),
@@ -150,6 +172,15 @@ BEGIN /* *************** CREACION DE TABLAS *************** */
 		Descripcion nvarchar(30) not null
 	)
 	
+	CREATE TABLE HHHH.retiros(
+		Id_retiro numeric(18,0) PRIMARY KEY,
+		Id_cuenta numeric(18,0) FOREIGN KEY REFERENCES HHHH.cuentas(Id_cuenta),
+		importe numeric(18,2) NOT NULL,
+		Id_cheque numeric(18,0) FOREIGN KEY REFERENCES HHHH.cheques(Id_cheque),
+		fecha_retiro datetime,
+		Id_moneda numeric(18,0) FOREIGN KEY REFERENCES HHHH.monedas(Id_moneda)
+	)
+	
 	CREATE TABLE HHHH.depositos(
 		Id_deposito numeric(18,0) identity(1,1) primary key,
 		Id_cuenta numeric(18,0) not null CONSTRAINT FK_depositos_cuenta FOREIGN KEY REFERENCES HHHH.cuentas (Id_cuenta),
@@ -165,6 +196,22 @@ BEGIN /* *************** CREACION DE TABLAS *************** */
 		exito BIT,
 		numeroDeFallo INT,
 		PRIMARY KEY (id_usuario,fecha)
+	)
+	
+	CREATE TABLE HHHH.roles(
+		Id_rol numeric(18,0) PRIMARY KEY IDENTITY(1,1),
+		Nombre_rol 	varchar(20),
+		Estado nvarchar DEFAULT 'A' CHECK (Estado IN ('A','N')) --Activo, No activo
+	)
+	
+	CREATE TABLE HHHH.rel_rol_usuario(
+		Id_rol numeric(18,0) FOREIGN KEY REFERENCES HHHH.roles(Id_rol),
+		Id_usuario INT FOREIGN KEY REFERENCES HHHH.usuarios(id_usuario)
+		CONSTRAINT Claves_primarias
+		PRIMARY KEY CLUSTERED(
+			Id_rol,
+			Id_usuario
+		)
 	)
 	
 	CREATE TABLE HHHH.Facturas(
@@ -189,29 +236,12 @@ BEGIN /* *************** CREACION DE TABLAS *************** */
 		Cambio_tipo_cuenta numeric(18,0)-- references HHHH.Tipo_Cuenta,
 	)
 	
- --CREATE TABLE HHHH.roles(		--Ely
-	--)
-	
-	--CREATE TABLE HHHH.Retiros(	--Ely
-	--)
-	
-	--CREATE TABLE HHHH.Tipos_Documentos(	--Ely
-	--)
-	
-	--CREATE TABLE HHHH.Rel_Rol_Usuario)	--Ely
-	--)
-	
-	--CREATE TABLE HHHH.Bancos(	--Ely
-	--)
-	
 	--CREATE TABLE HHHH.Funcionalidades(		--Ana
 	--)
 
 	--CREATE TABLE HHHH.Transferencias(	--Ana
 	--)
 	
-	--CREATE TABLE HHHH.Cheques(	--Ana
-	--)
 	
 	--CREATE TABLE HHHH.Rel_Rol_Funcionalidad(	--Ana
 	--)
@@ -231,6 +261,20 @@ BEGIN /* *************** MIGRACION *************** */
 		FROM gd_esquema.Maestra
 	UNION
 		SELECT DISTINCT Cuenta_Pais_Codigo, Cuenta_Pais_Desc
+		FROM gd_esquema.Maestra
+		
+	INSERT INTO HHHH.bancos(Id_banco, Descripcion)
+		SELECT DISTINCT M.Banco_Cogido, M.Banco_Nombre
+		FROM gd_esquema.Maestra M
+		WHERE M.Banco_Cogido IS NOT NULL
+		
+	INSERT INTO HHHH.cheques(Id_cheque, Fecha_cheque, Importe, Id_banco)
+		SELECT DISTINCT M.Cheque_Numero, M.Cheque_Fecha, M.Cheque_Importe,M.Banco_Cogido
+	FROM gd_esquema.Maestra M
+	WHERE M.Cheque_Numero IS NOT NULL
+	
+	INSERT INTO HHHH.tipos_documentos(Id_tipo_documento, Descripcion)
+		SELECT DISTINCT Cli_Tipo_Doc_Cod, Cli_Tipo_Doc_Desc
 		FROM gd_esquema.Maestra
 		
 	INSERT INTO HHHH.clientes(Id_pais, Nombre, Apellido, Id_tipo_documento, Mail,
@@ -262,6 +306,13 @@ BEGIN /* *************** MIGRACION *************** */
 		WHERE C.Mail = M.Cli_Mail
 	SET IDENTITY_INSERT HHHH.cuentas OFF
 	
+	INSERT INTO HHHH.retiros(Id_retiro, Id_cuenta, importe, Id_cheque, fecha_retiro)
+		SELECT DISTINCT M.Retiro_Codigo, M.Cuenta_Numero, M.Retiro_Importe, M.Cheque_Numero, M.Retiro_Fecha
+		FROM gd_esquema.Maestra M
+		WHERE M.Retiro_Codigo is not null
+	
+	UPDATE HHHH.retiros SET Id_moneda = 1
+	
 	INSERT INTO HHHH.tarjetas(Numero, Fecha_emision, Fecha_vencimiento, Codigo_seguridad, Id_cliente)
 		SELECT distinct T.Tarjeta_Numero, T.Tarjeta_Fecha_Emision, T.Tarjeta_Fecha_Vencimiento,
 			T.Tarjeta_Codigo_Seg, C.id_cliente
@@ -278,6 +329,15 @@ BEGIN /* *************** MIGRACION *************** */
 		FROM gd_esquema.Maestra M, HHHH.tarjetas T
 		WHERE M.Deposito_Codigo is not null and M.Tarjeta_Numero = T.Numero
 	SET IDENTITY_INSERT HHHH.depositos OFF
+	
+	INSERT INTO HHHH.roles(Nombre_rol, Estado)
+		VALUES ('Administrador', 'A')
+	
+	INSERT INTO HHHH.roles(Nombre_rol, Estado)
+		VALUES ('Cliente', 'A')
+		
+	INSERT INTO HHHH.rel_rol_usuario(Id_rol, Id_usuario)
+		VALUES (1,1)
 	
 	SET IDENTITY_INSERT HHHH.Facturas ON
 	INSERT INTO HHHH.Facturas(Id_factura,id_cliente,Fecha_factura,Monto_total,id_moneda,Pagado)
