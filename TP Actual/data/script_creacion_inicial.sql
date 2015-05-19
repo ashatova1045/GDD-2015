@@ -143,9 +143,7 @@ GO
 	RETURNS nvarchar(255)
 	AS
 	BEGIN 
-		DECLARE @resultado nvarchar(255)
-		SET @resultado=substring(@mail,0,charindex('@gmail.com',@mail))
-		RETURN @resultado
+		RETURN substring(@mail,0,charindex('@gmail.com',@mail))
 	END
 GO
 
@@ -155,7 +153,7 @@ BEGIN /* *************** CREACION DE TABLAS *************** */
 		Usuario NVARCHAR(255) UNIQUE NOT NULL,
 		Contrasena CHAR(44) NOT NULL,
 		IntentosFallidos INT DEFAULT 0,
-		Estado NVARCHAR DEFAULT 'H' CHECK (Estado IN ('H','I','B')) -- habilitado, inhabilitado, baja
+		Estado NVARCHAR CHECK (Estado IN ('H','I','B')) -- habilitado, inhabilitado, baja
 	)
 	
 	CREATE TABLE HHHH.paises(
@@ -201,7 +199,7 @@ BEGIN /* *************** CREACION DE TABLAS *************** */
 		Localidad varchar(255),
 		Id_nacionalidad numeric(18,0) CONSTRAINT FK_clientes_nacionalidad FOREIGN KEY REFERENCES HHHH.paises (Codigo),
 		Fecha_nacimiento datetime,
-		Estado NVARCHAR DEFAULT 'H' CHECK (Estado IN ('H','I')) -- habilitado, inhabilitado
+		Estado NVARCHAR CHECK (Estado IN ('H','I')) -- habilitado, inhabilitado
 	)
 
 	CREATE TABLE HHHH.cuentas(
@@ -332,18 +330,18 @@ BEGIN /* *************** MIGRACION *************** */
 -------------------------------------------------------------------------------------------			
 	INSERT INTO HHHH.paises(Codigo,Descripcion)
 		SELECT DISTINCT Cli_Pais_Codigo, Cli_Pais_Desc
-		FROM gd_esquema.Maestra
+			FROM gd_esquema.Maestra
 	UNION
 		SELECT DISTINCT Cuenta_Pais_Codigo, Cuenta_Pais_Desc
-		FROM gd_esquema.Maestra
+			FROM gd_esquema.Maestra
 -------------------------------------------------------------------------------------------	
 	INSERT INTO HHHH.bancos(Descripcion)
 		VALUES('Banco migracion')	
 	SET IDENTITY_INSERT HHHH.bancos ON
 	INSERT INTO HHHH.bancos(Id_banco, Descripcion)
 		SELECT DISTINCT M.Banco_Cogido, M.Banco_Nombre
-		FROM gd_esquema.Maestra M
-		WHERE M.Banco_Cogido IS NOT NULL
+			FROM gd_esquema.Maestra M
+			WHERE M.Banco_Cogido IS NOT NULL
 	SET IDENTITY_INSERT HHHH.bancos OFF
 -------------------------------------------------------------------------------------------			
 	SET IDENTITY_INSERT HHHH.cheques ON	
@@ -360,25 +358,25 @@ BEGIN /* *************** MIGRACION *************** */
 	SET IDENTITY_INSERT HHHH.tipos_documentos OFF
 -------------------------------------------------------------------------------------------			
 	INSERT INTO HHHH.clientes(Id_pais, Nombre, Apellido, Id_tipo_documento, Mail,
-				 Altura, Calle, Piso, Departamento, Fecha_nacimiento, Nro_Documento)
+				 Altura, Calle, Piso, Departamento, Fecha_nacimiento, Nro_Documento, Estado)
 		SELECT  DISTINCT Cli_Pais_Codigo, Cli_Nombre, Cli_Apellido, 
 			Cli_Tipo_Doc_Cod, Cli_Mail,
 			Cli_Dom_Nro, Cli_Dom_Calle,
 			Cli_Dom_Piso, Cli_Dom_Depto, Cli_Fecha_Nac, 
-			Cli_Nro_Doc 
-		FROM gd_esquema.Maestra
+			Cli_Nro_Doc, 'H' 
+			FROM gd_esquema.Maestra
 -------------------------------------------------------------------------------------------			
-	INSERT INTO HHHH.usuarios (usuario,contrasena)
-		SELECT DISTINCT HHHH.borrardominio(Mail),'10/w7o2juYBrGMh32/KbveULW9jk2tejpyUAD+uC6PE=' --contrasena: pass
+	INSERT INTO HHHH.usuarios(usuario,contrasena,Estado)
+		SELECT DISTINCT HHHH.borrardominio(Mail),'10/w7o2juYBrGMh32/KbveULW9jk2tejpyUAD+uC6PE=', 'H' --contrasena: pass
 			FROM HHHH.clientes
 			
-	INSERT INTO HHHH.usuarios (usuario,contrasena)
+	INSERT INTO HHHH.usuarios(usuario,contrasena)
 		VALUES ('admin','5rhwUL/LgUP8uNsBcKTcntANkE3dPipK0bHo3A/cm+c=');
 -------------------------------------------------------------------------------------------		
 	UPDATE HHHH.clientes
 		SET Id_usuario = usuarios.id_usuario
 		FROM HHHH.usuarios
-			WHERE usuarios.usuario=clientes.Mail
+			WHERE usuarios.usuario = HHHH.borrardominio(clientes.Mail)
 -------------------------------------------------------------------------------------------			
 	SET IDENTITY_INSERT HHHH.cuentas ON
 	INSERT INTO HHHH.cuentas(Id_cuenta, Id_pais, Fecha_apertura, Id_cliente)
@@ -438,13 +436,13 @@ BEGIN /* *************** MIGRACION *************** */
 		Id_cuenta numeric(18,0) REFERENCES HHHH.Cuentas(Id_cuenta)
 	)
 		
-	insert into HHHH.temporal (Cuenta_origen,Cuenta_destino,Importe,Fecha_transferencia,Costo,Id_factura)
+	insert into HHHH.temporal(Cuenta_origen,Cuenta_destino,Importe,Fecha_transferencia,Costo,Id_factura)
 		SELECT Cuenta_Numero,Cuenta_Dest_Numero,Trans_Importe,Transf_Fecha,Item_Factura_Importe,Factura_Numero
 			FROM gd_esquema.Maestra m 
 			WHERE Factura_Numero IS NOT NULL 
 -------------------------------------------------------------------------------------------		
 	SET IDENTITY_INSERT HHHH.transferencias ON		
-	INSERT INTO HHHH.Transferencias (Id_transferencia,Cuenta_origen , Cuenta_destino, Importe, Fecha_transferencia, Costo, Id_moneda)
+	INSERT INTO HHHH.Transferencias(Id_transferencia,Cuenta_origen , Cuenta_destino, Importe, Fecha_transferencia, Costo, Id_moneda)
 		SELECT Id_transferencia,Cuenta_origen, Cuenta_destino, Importe, Fecha_transferencia, Costo, 1 
 			FROM HHHH.temporal
 	SET IDENTITY_INSERT HHHH.Transferencias OFF		
@@ -455,7 +453,7 @@ BEGIN /* *************** MIGRACION *************** */
 -------------------------------------------------------------------------------------------	
 	DROP TABLE HHHH.temporal
 -------------------------------------------------------------------------------------------				
-	INSERT INTO HHHH.funcionalidades (Descripcion)
+	INSERT INTO HHHH.funcionalidades(Descripcion)
 		VALUES	('ABM Rol'),
 				('ABM Usuario'),
 				('ABM Cliente'),
@@ -468,11 +466,11 @@ BEGIN /* *************** MIGRACION *************** */
 				('Consulta de Saldo de Cuentas'),
 				('Listado Estadistico')
 -------------------------------------------------------------------------------------------				
-	INSERT INTO HHHH.Rel_Rol_Funcionalidad (Id_rol, Id_funcionalidad)
+	INSERT INTO HHHH.Rel_Rol_Funcionalidad(Id_rol, Id_funcionalidad)
 		VALUES (1,1), (1,2), (1,3), (1,4), (1,9), (1,10), (1,11),
 				(2,4), (2,5), (2,6), (2,7), (2,8), (2,9), (2,10)
 -------------------------------------------------------------------------------------------	
-	INSERT INTO HHHH.Tipo_Cuenta (Descripcion, Id_moneda_cuenta, Costo_transf, Duracion, Id_moneda_transf, Costo_cuenta)
+	INSERT INTO HHHH.Tipo_Cuenta(Descripcion, Id_moneda_cuenta, Costo_transf, Duracion, Id_moneda_transf, Costo_cuenta)
 		VALUES ('Gratuita', 1,3,30,1,0),
 				('Bronce', 1,2,30,1,1),
 				('Plata', 1,1,30,1,2),
