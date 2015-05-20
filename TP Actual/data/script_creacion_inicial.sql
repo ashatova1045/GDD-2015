@@ -367,11 +367,11 @@ BEGIN /* *************** MIGRACION *************** */
 			FROM gd_esquema.Maestra
 -------------------------------------------------------------------------------------------			
 	INSERT INTO HHHH.usuarios(usuario,contrasena,Estado)
+		VALUES ('admin','5rhwUL/LgUP8uNsBcKTcntANkE3dPipK0bHo3A/cm+c=','H');
+		
+	INSERT INTO HHHH.usuarios(usuario,contrasena,Estado)
 		SELECT DISTINCT HHHH.borrardominio(Mail),'10/w7o2juYBrGMh32/KbveULW9jk2tejpyUAD+uC6PE=', 'H' --contrasena: pass
 			FROM HHHH.clientes
-			
-	INSERT INTO HHHH.usuarios(usuario,contrasena)
-		VALUES ('admin','5rhwUL/LgUP8uNsBcKTcntANkE3dPipK0bHo3A/cm+c=');
 -------------------------------------------------------------------------------------------		
 	UPDATE HHHH.clientes
 		SET Id_usuario = usuarios.id_usuario
