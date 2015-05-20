@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace OperacionesDB.ConexionDB
+namespace PagoElectronico.OperacionesDB.ConexionDB
 {
     static class ConexionDB // Clase que maneja el acceso a DB
     {
@@ -29,7 +29,7 @@ namespace OperacionesDB.ConexionDB
         }
 
         //invocar storeProcedures en la DB
-        public static SqlDataReader invocarStoreProcedure(SqlConnection conexionDB, string nombreProcedure, List<SqlParameter> parametros)
+        public static DataTable invocarStoreProcedure(SqlConnection conexionDB, string nombreProcedure, List<SqlParameter> parametros)
         {
             SqlCommand comandoSQL = new SqlCommand("HHHH."+nombreProcedure, conexionDB);
             comandoSQL.CommandType = CommandType.StoredProcedure;
@@ -42,15 +42,23 @@ namespace OperacionesDB.ConexionDB
                 }
             }
 
-            return comandoSQL.ExecuteReader();
+            return llenarDataTable(comandoSQL);
         }
 
         //correrQuery
-        public static SqlDataReader correrQuery(SqlConnection conexionDB, string query)
+        public static DataTable correrQuery(SqlConnection conexionDB, string query)
         {
-            SqlCommand comandoSQL = new SqlCommand("HHHH."+query, conexionDB);
+            SqlCommand comandoSQL = new SqlCommand(query, conexionDB);
+            return llenarDataTable(comandoSQL);
+        }
 
-            return comandoSQL.ExecuteReader();
+        private static DataTable llenarDataTable(SqlCommand comandoSQL)
+        {
+            SqlDataReader dr = comandoSQL.ExecuteReader();
+            DataTable dt = new DataTable();
+            dt.Load(dr);
+            dr.Close();
+            return dt;
         }
 
    }

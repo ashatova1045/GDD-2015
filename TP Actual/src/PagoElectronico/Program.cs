@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
-using OperacionesDB.ConexionDB;
+using PagoElectronico.OperacionesDB.ConexionDB;
 using System.IO;
 
 namespace PagoElectronico
