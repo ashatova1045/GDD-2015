@@ -17,7 +17,7 @@ namespace PagoElectronico.Login
         {
             InitializeComponent();
 
-            string queryRoles = "SELECT r.Id_rol,Nombre_rol FROM HHHH.rel_rol_usuario r,HHHH.roles ro WHERE r.Id_rol=ro.Id_rol AND r.Id_usuario = " + Sesion.user_id;
+            string queryRoles = "SELECT r.Id_rol,Nombre_rol FROM HHHH.rel_rol_usuario r,HHHH.roles ro WHERE r.Id_rol=ro.Id_rol AND ro.Estado = 'A' AND r.Id_usuario = " + Sesion.user_id;
             DataTable rolesDeUsuario = ConexionDB.correrQuery(Sesion.conexion, queryRoles);
 
             cbRoles.DisplayMember = "Nombre_rol";
