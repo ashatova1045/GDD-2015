@@ -26,5 +26,13 @@ namespace PagoElectronico.Login
             cbFuncionalidad.Update();
         }
 
+        private void btVolver_Click(object sender, EventArgs e)
+        {
+            ((DataTable)(cbFuncionalidad.DataSource)).Dispose();
+
+            Owner.Show();
+            this.Close();
+        }
+
     }
 }

@@ -42,6 +42,7 @@
             this.btVolver.TabIndex = 7;
             this.btVolver.Text = "Volver";
             this.btVolver.UseVisualStyleBackColor = true;
+            this.btVolver.Click += new System.EventHandler(this.btVolver_Click);
             // 
             // btSeleccionar
             // 
@@ -80,7 +81,6 @@
             this.Controls.Add(this.cbFuncionalidad);
             this.Name = "SeleccionarFuncionalidad";
             this.Text = "SeleccionarFuncionalidad";
-            
             this.ResumeLayout(false);
             this.PerformLayout();
 

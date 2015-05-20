@@ -13,11 +13,10 @@ namespace PagoElectronico.Login
 {
     public partial class SeleccionarRol : Form
     {
-        bool cerrar = false;
         public SeleccionarRol()
         {
             InitializeComponent();
-            
+
             string queryRoles = "SELECT r.Id_rol,Nombre_rol FROM HHHH.rel_rol_usuario r,HHHH.roles ro WHERE r.Id_rol=ro.Id_rol AND r.Id_usuario = " + Sesion.user_id;
             DataTable rolesDeUsuario = ConexionDB.correrQuery(Sesion.conexion, queryRoles);
 
@@ -26,19 +25,16 @@ namespace PagoElectronico.Login
             cbRoles.DataSource = rolesDeUsuario;
             cbRoles.Update();
 
-            if (rolesDeUsuario.Rows.Count == 1) //si solo tiene un rol, entra directo
-            {
-                cerrar = true;
-                btSeleccionar_Click(null,null);
-               
-            }
+            Shown += SeleccionarRol_Shown;
         }
 
-
-        protected override void OnVisibleChanged(EventArgs e) // para poder hacer hide() antes de load()
+        private void SeleccionarRol_Shown(Object sender, EventArgs e)
         {
-            base.OnVisibleChanged(e);
-            if (cerrar) { this.Visible = false; }
+            if (cbRoles.Items.Count == 1) //si solo tiene un rol, entra directo
+            {
+                this.Hide();
+                btSeleccionar_Click(null, null);
+            }
         }
 
         private void btVolver_Click(object sender, EventArgs e)
@@ -56,8 +52,6 @@ namespace PagoElectronico.Login
 
             new SeleccionarFuncionalidad().Show(this);
             this.Hide();
-
-            ((DataTable)(cbRoles.DataSource)).Dispose();
         }
     }
 }

@@ -39,8 +39,7 @@ namespace PagoElectronico.Login
             Sesion.usuario = txtUsuario.Text;
             DTUsuario.Dispose();
 
-            SeleccionarRol selecRol = new SeleccionarRol();
-            selecRol.Show(this);
+            new SeleccionarRol().Show(this);
             this.Hide();
          }
      }
