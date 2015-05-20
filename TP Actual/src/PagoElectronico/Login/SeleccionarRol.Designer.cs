@@ -41,7 +41,6 @@
             this.cbRoles.Name = "cbRoles";
             this.cbRoles.Size = new System.Drawing.Size(271, 21);
             this.cbRoles.TabIndex = 0;
-            
             // 
             // lblRol
             // 
@@ -60,7 +59,7 @@
             this.btSeleccionar.TabIndex = 2;
             this.btSeleccionar.Text = "Seleccionar";
             this.btSeleccionar.UseVisualStyleBackColor = true;
-            
+            this.btSeleccionar.Click += new System.EventHandler(this.btSeleccionar_Click);
             // 
             // btVolver
             // 
@@ -70,6 +69,7 @@
             this.btVolver.TabIndex = 3;
             this.btVolver.Text = "Volver";
             this.btVolver.UseVisualStyleBackColor = true;
+            this.btVolver.Click += new System.EventHandler(this.btVolver_Click);
             // 
             // SeleccionarRol
             // 

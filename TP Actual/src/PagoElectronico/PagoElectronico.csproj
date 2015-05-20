@@ -90,6 +90,12 @@
     <Compile Include="Facturacion\Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
+    <Compile Include="Login\SeleccionarFuncionalidad.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Login\SeleccionarFuncionalidad.Designer.cs">
+      <DependentUpon>SeleccionarFuncionalidad.cs</DependentUpon>
+    </Compile>
     <Compile Include="Login\SeleccionarRol.cs">
       <SubType>Form</SubType>
     </Compile>
