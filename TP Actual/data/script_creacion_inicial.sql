@@ -416,6 +416,11 @@ BEGIN /* *************** MIGRACION *************** */
 -------------------------------------------------------------------------------------------		
 	INSERT INTO HHHH.rel_rol_usuario(Id_rol, Id_usuario)
 		VALUES (1,1)
+		
+	INSERT INTO HHHH.rel_rol_usuario(Id_rol, Id_usuario)
+		SELECT 2,Id_usuario
+			FROM HHHH.usuarios
+			WHERE Usuario != 'admin'
 -------------------------------------------------------------------------------------------	
 	SET IDENTITY_INSERT HHHH.facturas ON
 	INSERT INTO HHHH.Facturas(Id_factura,id_cliente,Fecha_factura,Monto_total,id_moneda,Pagado)
