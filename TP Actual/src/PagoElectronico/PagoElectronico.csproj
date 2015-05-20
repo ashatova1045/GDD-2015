@@ -134,6 +134,9 @@
     <EmbeddedResource Include="Login\Login.resx">
       <DependentUpon>Login.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Login\SeleccionarFuncionalidad.resx">
+      <DependentUpon>SeleccionarFuncionalidad.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Login\SeleccionarRol.resx">
       <DependentUpon>SeleccionarRol.cs</DependentUpon>
     </EmbeddedResource>
