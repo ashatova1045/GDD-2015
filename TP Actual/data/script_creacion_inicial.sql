@@ -201,16 +201,31 @@ BEGIN /* *************** CREACION DE TABLAS *************** */
 		Fecha_nacimiento datetime,
 		Estado NVARCHAR CHECK (Estado IN ('H','I')) -- habilitado, inhabilitado
 	)
+	
+	CREATE TABLE HHHH.Monedas(
+		Id_moneda numeric(18,0) IDENTITY(1,1) PRIMARY KEY,
+		Descripcion nvarchar(30) NOT NULL
+	)
 
+	CREATE TABLE HHHH.tipo_cuenta(	
+		Id_tipo_cuenta numeric(18,0) IDENTITY(1,1) PRIMARY KEY,
+		Descripcion nvarchar(255),
+		Id_moneda_cuenta numeric(18,0) CONSTRAINT FK_tipo_cuenta__monedas_cuenta REFERENCES HHHH.monedas (Id_moneda),
+		Costo_transf numeric(18,2),
+		Duracion int, 
+		Id_moneda_transf numeric(18,0) CONSTRAINT FK_tipo_cuenta__monedas_transf REFERENCES HHHH.monedas (Id_moneda),
+		Costo_cuenta numeric(18,2),
+	)
+	
 	CREATE TABLE HHHH.cuentas(
 		Id_cuenta numeric(18,0) IDENTITY(1,1) PRIMARY KEY,
 		Id_pais numeric(18,0) CONSTRAINT FK_cuentas_pais FOREIGN KEY REFERENCES HHHH.paises(Codigo),
 		Id_moneda numeric(18,0),
 		Fecha_apertura datetime,
-		Id_tipo_cuenta numeric(18,0),
+		Id_tipo_cuenta numeric(18,0) CONSTRAINT FK_cuentas_tc FOREIGN KEY REFERENCES HHHH.tipo_cuenta(Id_tipo_cuenta),
 		Id_cliente numeric(18,0) NOT NULL CONSTRAINT FK_cuentas_cliente FOREIGN KEY REFERENCES HHHH.clientes(Id_cliente),
 		Estado NVARCHAR DEFAULT 'P' CHECK (Estado IN ('P','C','H','I')), -- pend act, cerrada, habilida, inhabilitada
-		Saldo numeric(18,0)
+		Saldo numeric(18,2)
 	)
 	
 	CREATE TABLE HHHH.tarjetas(
@@ -221,11 +236,6 @@ BEGIN /* *************** CREACION DE TABLAS *************** */
 		Fecha_vencimiento datetime,
 		Codigo_seguridad varchar(3),
 		Id_cliente numeric(18,0) CONSTRAINT FK_tarjetas_cliente FOREIGN KEY REFERENCES HHHH.clientes (Id_cliente)
-	)
-	
-	CREATE TABLE HHHH.Monedas(
-		Id_moneda numeric(18,0) IDENTITY(1,1) PRIMARY KEY,
-		Descripcion nvarchar(30) NOT NULL
 	)
 	
 	CREATE TABLE HHHH.retiros(
@@ -296,16 +306,6 @@ BEGIN /* *************** CREACION DE TABLAS *************** */
 		Id_rol numeric(18,0) CONSTRAINT FK_rel_rol_funcionalidad__roles REFERENCES HHHH.roles (Id_rol),
 		Id_funcionalidad numeric(18,0) CONSTRAINT FK_rel_rol_funcionalidad__funcionalidades REFERENCES HHHH.funcionalidades(Id_funcionalidad),
 		PRIMARY KEY (Id_rol, Id_funcionalidad)
-	)
-	
-	CREATE TABLE HHHH.tipo_cuenta(	
-		Id_tipo_cuenta numeric(18,0) IDENTITY(1,1) PRIMARY KEY,
-		Descripcion nvarchar(255),
-		Id_moneda_cuenta numeric(18,0) CONSTRAINT FK_tipo_cuenta__monedas_cuenta REFERENCES HHHH.monedas (Id_moneda),
-		Costo_transf numeric(18,2),
-		Duracion int, 
-		Id_moneda_transf numeric(18,0) CONSTRAINT FK_tipo_cuenta__monedas_transf REFERENCES HHHH.monedas (Id_moneda),
-		Costo_cuenta numeric(18,2),
 	)
 	
 	CREATE TABLE HHHH.movimientos(
@@ -379,9 +379,9 @@ BEGIN /* *************** MIGRACION *************** */
 			WHERE usuarios.usuario = HHHH.borrardominio(clientes.Mail)
 -------------------------------------------------------------------------------------------			
 	SET IDENTITY_INSERT HHHH.cuentas ON
-	INSERT INTO HHHH.cuentas(Id_cuenta, Id_pais, Fecha_apertura, Id_cliente)
+	INSERT INTO HHHH.cuentas(Id_cuenta, Id_pais, Fecha_apertura, Id_cliente,Id_moneda,Saldo)
 		SELECT DISTINCT M.Cuenta_Numero, M.Cuenta_Pais_Codigo, M.Cuenta_Fecha_Creacion, 
-				C.Id_cliente
+				C.Id_cliente,1,100
 			FROM gd_esquema.Maestra M, HHHH.clientes C
 			WHERE C.Mail = M.Cli_Mail
 	SET IDENTITY_INSERT HHHH.cuentas OFF
