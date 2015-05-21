@@ -42,7 +42,6 @@ namespace PagoElectronico.ABM_Rol
         }
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
-            //this.ActualizarRoles();
 
             foreach (DataRow rol in rolesActuales.Rows)
             {
@@ -127,6 +126,12 @@ namespace PagoElectronico.ABM_Rol
             ConexionDB.invocarStoreProcedure(Sesion.conexion, "asignarNuevasFuncRol", listaDeParametros);
 
             this.ActualizarRoles();
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            Owner.Show();
+            this.Close();
         }
     }
 }

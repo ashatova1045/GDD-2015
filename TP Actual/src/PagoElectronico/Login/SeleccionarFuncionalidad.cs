@@ -34,5 +34,17 @@ namespace PagoElectronico.Login
             this.Close();
         }
 
+        private void btSeleccionar_Click(object sender, EventArgs e)
+        {
+            switch (cbFuncionalidad.Text)
+            {
+                case "ABM Rol":
+                    ABM_Rol.AdministrarRoles AdmRol = new ABM_Rol.AdministrarRoles();
+                    AdmRol.Show(this);
+                    this.Hide();
+                    break;
+            }
+
+        }
     }
 }
