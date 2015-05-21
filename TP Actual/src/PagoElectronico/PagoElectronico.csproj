@@ -90,16 +90,16 @@
     <Compile Include="Consulta Saldos\Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
+    <Compile Include="Facturacion\Facturacion.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Facturacion\Facturacion.Designer.cs">
+      <DependentUpon>Facturacion.cs</DependentUpon>
+    </Compile>
     <Compile Include="Listados\Form1.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Listados\Form1.Designer.cs">
-      <DependentUpon>Form1.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Facturacion\Form1.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Facturacion\Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
     <Compile Include="Login\SeleccionarFuncionalidad.cs">
@@ -148,6 +148,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="ABM Rol\NuevoNombreRol.resx">
       <DependentUpon>NuevoNombreRol.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Facturacion\Facturacion.resx">
+      <DependentUpon>Facturacion.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Login\Login.resx">
       <DependentUpon>Login.cs</DependentUpon>
