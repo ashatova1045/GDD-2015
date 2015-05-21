@@ -256,7 +256,7 @@ BEGIN /* *************** CREACION DE TABLAS *************** */
 	
 	CREATE TABLE HHHH.roles(
 		Id_rol numeric(18,0) IDENTITY(1,1) PRIMARY KEY,
-		Nombre_rol 	varchar(20),
+		Nombre_rol 	varchar(20) UNIQUE,
 		Estado nvarchar DEFAULT 'A' CHECK (Estado IN ('A','N')) --Activo, No activo
 	)
 	
@@ -536,3 +536,77 @@ AS
 			RETURN
 		END
 GO
+
+CREATE PROCEDURE HHHH.funcionesdelrol
+	@nombre nvarchar(255)
+AS
+
+	SELECT Rol.Nombre_rol, Fun.Descripcion, Fun.Id_funcionalidad
+		FROM HHHH.funcionalidades Fun, HHHH.roles Rol, HHHH.rel_rol_funcionalidad Rel
+		WHERE Rel.Id_rol = Rol.Id_rol AND
+			Rel.Id_funcionalidad = Fun.Id_funcionalidad AND
+			Rol.Nombre_rol = @nombre
+	GO
+	
+CREATE PROCEDURE HHHH.agregarNuevoRol
+	@nombre nvarchar(255),
+	@estado nvarchar
+AS
+BEGIN
+	DECLARE @existeRol nvarchar(255)
+	SET @existeRol = (SELECT Nombre_rol FROM HHHH.roles WHERE Nombre_rol = @nombre)
+	IF @existeRol IS NOT NULL
+		BEGIN
+			RAISERROR ('El nombre de rol ya existe, intente otro nombre',16,1)
+			RETURN
+		END
+	INSERT INTO HHHH.roles(Nombre_rol, Estado)
+		VALUES	(@nombre, @estado)
+END		
+GO
+
+
+CREATE PROCEDURE HHHH.asignarNuevasFuncRol
+	@Rol nvarchar(255),
+	@ListaFuc nvarchar(255)
+AS
+	BEGIN
+		DELETE FROM HHHH.rel_rol_funcionalidad
+			   FROM HHHH.rel_rol_funcionalidad Rel
+				inner join HHHH.roles R
+				on R.Nombre_rol = @Rol AND
+					R.Id_rol = Rel.Id_rol
+		
+		DECLARE @strlist NVARCHAR(max), @pos INT, @delim CHAR, @lstr NVARCHAR(max)
+		SET @strlist = ISNULL(@ListaFuc,'')
+		SET @delim = ','
+
+		WHILE ((len(@strlist) > 0) and (@strlist <> ''))
+			BEGIN
+				SET @pos = charindex(@delim, @strlist)
+        
+				IF @pos > 0
+					BEGIN
+						SET @lstr = substring(@strlist, 1, @pos-1)
+						SET @strlist = ltrim(substring(@strlist,charindex(@delim, @strlist)+1, 8000))
+					END
+				ELSE
+					BEGIN
+						SET @lstr = @strlist
+						SET @strlist = ''
+					END
+			
+			
+			INSERT INTO HHHH.rel_rol_funcionalidad(Id_rol,Id_funcionalidad)
+				SELECT R.Id_rol, F.Id_funcionalidad 
+					FROM HHHH.roles R, HHHH.funcionalidades F
+					WHERE R.Nombre_rol = @Rol AND
+						  F.Descripcion = @lstr
+			
+			END
+        RETURN 
+    END			
+		
+GO
+
+ 
