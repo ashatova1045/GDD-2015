@@ -36,14 +36,46 @@ namespace PagoElectronico.Login
 
         private void btSeleccionar_Click(object sender, EventArgs e)
         {
+            Form nuevoForm = null;
             switch (cbFuncionalidad.Text)
             {
                 case "ABM Rol":
-                    ABM_Rol.AdministrarRoles AdmRol = new ABM_Rol.AdministrarRoles();
-                    AdmRol.Show(this);
-                    this.Hide();
+                    nuevoForm = new ABM_Rol.AdministrarRoles();
+                    break;
+                case "ABM Usuario":
+                    nuevoForm = new ABM_Usuario.Form1();
+                    break;
+                case "ABM Cliente":
+                    nuevoForm = new ABM_Cliente.Form1();
+                    break;
+                case "ABM Cuenta":
+                    nuevoForm = new ABM_Cuenta.Form1();
+                    break;
+                case "Asociar/Desasociar Tarjeta de Credito":
+                    nuevoForm = new ABM_Tarjeta.Form1();
+                    break;
+                case "Depositos":
+                    nuevoForm = new Depositos.Form1();
+                    break;
+                case "Retiro de Efectivo":
+                    nuevoForm = new Retiros.Form1();
+                    break;
+                case "Transferencia entre Cuentas":
+                    nuevoForm = new Transferencias.Form1();
+                    break;
+                case "Facturacion de Costos":
+                    nuevoForm = new Facturacion.Form1();
+                    break;
+                case "Consulta de Saldo de Cuentas":
+                    nuevoForm = new Consulta_Saldos.Form1();
+                    break;
+                case "Listado Estadistico":
+                    nuevoForm = new Listados.Form1();
                     break;
             }
+
+            nuevoForm.Show(this);
+            this.Hide();
 
         }
     }
