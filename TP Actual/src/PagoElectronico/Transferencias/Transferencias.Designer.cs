@@ -38,17 +38,20 @@
             this.nImporte = new System.Windows.Forms.NumericUpDown();
             this.btTransferir = new System.Windows.Forms.Button();
             this.btVolver = new System.Windows.Forms.Button();
+            this.cbImporteMoneda = new System.Windows.Forms.ComboBox();
             ((System.ComponentModel.ISupportInitialize)(this.nImporte)).BeginInit();
             this.SuspendLayout();
             // 
             // cbOrigen
             // 
+            this.cbOrigen.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbOrigen.FormattingEnabled = true;
             this.cbOrigen.Location = new System.Drawing.Point(146, 12);
             this.cbOrigen.MaxLength = 18;
             this.cbOrigen.Name = "cbOrigen";
             this.cbOrigen.Size = new System.Drawing.Size(133, 21);
             this.cbOrigen.TabIndex = 0;
+            this.cbOrigen.SelectedIndexChanged += new System.EventHandler(this.cbOrigen_SelectedIndexChanged);
             // 
             // label1
             // 
@@ -70,6 +73,7 @@
             // 
             // cbDestino
             // 
+            this.cbDestino.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbDestino.FormattingEnabled = true;
             this.cbDestino.Location = new System.Drawing.Point(146, 49);
             this.cbDestino.MaxLength = 18;
@@ -90,11 +94,10 @@
             // 
             this.txtSaldo.Enabled = false;
             this.txtSaldo.Location = new System.Drawing.Point(335, 12);
-            this.txtSaldo.MaxLength = 19;
+            this.txtSaldo.MaxLength = 99999;
             this.txtSaldo.Name = "txtSaldo";
-            this.txtSaldo.Size = new System.Drawing.Size(119, 20);
+            this.txtSaldo.Size = new System.Drawing.Size(179, 20);
             this.txtSaldo.TabIndex = 6;
-            this.txtSaldo.Text = "0,00";
             // 
             // label4
             // 
@@ -136,6 +139,7 @@
             this.btTransferir.TabIndex = 9;
             this.btTransferir.Text = "Transferir";
             this.btTransferir.UseVisualStyleBackColor = true;
+            this.btTransferir.Click += new System.EventHandler(this.btTransferir_Click);
             // 
             // btVolver
             // 
@@ -145,12 +149,23 @@
             this.btVolver.TabIndex = 10;
             this.btVolver.Text = "Volver";
             this.btVolver.UseVisualStyleBackColor = true;
+            this.btVolver.Click += new System.EventHandler(this.btVolver_Click);
+            // 
+            // cbImporteMoneda
+            // 
+            this.cbImporteMoneda.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbImporteMoneda.FormattingEnabled = true;
+            this.cbImporteMoneda.Location = new System.Drawing.Point(285, 84);
+            this.cbImporteMoneda.Name = "cbImporteMoneda";
+            this.cbImporteMoneda.Size = new System.Drawing.Size(91, 21);
+            this.cbImporteMoneda.TabIndex = 11;
             // 
             // Transferencias
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(463, 158);
+            this.ClientSize = new System.Drawing.Size(521, 158);
+            this.Controls.Add(this.cbImporteMoneda);
             this.Controls.Add(this.btVolver);
             this.Controls.Add(this.btTransferir);
             this.Controls.Add(this.nImporte);
@@ -181,5 +196,6 @@
         private System.Windows.Forms.NumericUpDown nImporte;
         private System.Windows.Forms.Button btTransferir;
         private System.Windows.Forms.Button btVolver;
+        private System.Windows.Forms.ComboBox cbImporteMoneda;
     }
 }
