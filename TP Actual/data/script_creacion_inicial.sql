@@ -568,7 +568,8 @@ GO
 
 CREATE PROCEDURE HHHH.asignarNuevasFuncRol
 	@Rol nvarchar(255),
-	@ListaFuc nvarchar(255)
+	@ListaFuc nvarchar(255),
+	@estado char
 AS
 	BEGIN
 		DELETE FROM HHHH.rel_rol_funcionalidad
@@ -576,6 +577,11 @@ AS
 				inner join HHHH.roles R
 				on R.Nombre_rol = @Rol AND
 					R.Id_rol = Rel.Id_rol
+					
+		UPDATE HHHH.roles
+		SET Estado = @estado
+		FROM HHHH.roles
+			WHERE Nombre_rol = @Rol
 		
 		DECLARE @strlist NVARCHAR(max), @pos INT, @delim CHAR, @lstr NVARCHAR(max)
 		SET @strlist = ISNULL(@ListaFuc,'')
@@ -602,7 +608,6 @@ AS
 					FROM HHHH.roles R, HHHH.funcionalidades F
 					WHERE R.Nombre_rol = @Rol AND
 						  F.Descripcion = @lstr
-			
 			END
         RETURN 
     END			
