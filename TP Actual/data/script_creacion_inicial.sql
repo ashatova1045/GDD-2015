@@ -230,7 +230,7 @@ BEGIN /* *************** CREACION DE TABLAS *************** */
 	
 	CREATE TABLE HHHH.tarjetas(
 		Id_tarjeta numeric(18,0) IDENTITY(1,1) PRIMARY KEY,
-		Numero varchar(16) unique,
+		Numero binary(20) unique,
 		Id_banco numeric(18,0) CONSTRAINT FK_tarjetas_banco FOREIGN KEY REFERENCES HHHH.bancos(Id_banco),
 		Fecha_emision datetime,
 		Fecha_vencimiento datetime,

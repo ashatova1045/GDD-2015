@@ -38,7 +38,7 @@ namespace PagoElectronico.ABM_Tarjeta
             }
             if (!ValidadorHelper.validarSoloNumeros(txttarjeta.Text))
             {
-                MessageBox.Show("El numero de tarjeta debe contener 16 numeros");
+                MessageBox.Show("El codigo debe contener 3 numeros");
                 return;
             }
             List<SqlParameter> listaP = new List<SqlParameter>();
