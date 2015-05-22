@@ -16,7 +16,7 @@ namespace PagoElectronico.Facturacion
         public Facturacion()
         {
             InitializeComponent();
-            string query = "select cu.* from " +
+            /*string query = "select cu.* from " +
             "HHHH.clientes cli, " +
             "HHHH.cuentas cu Where " +
             Sesion.user_id.ToString() + " = cli.Id_usuario and " +
@@ -25,7 +25,16 @@ namespace PagoElectronico.Facturacion
             DataTable cuentasUser;
             cuentasUser = ConexionDB.correrQuery(Sesion.conexion, query);
             listBox1.DataSource = cuentasUser;
-            listBox1.DisplayMember = "Id_cuenta";
+            listBox1.DisplayMember = "Id_cuenta";*/
+            label3.Text = Sesion.usuario;
+            DataTable movSinFacturar;
+            List<SqlParameter> listaDeParametros = new List<SqlParameter>();
+            listaDeParametros.Add(new SqlParameter("@user_id", Sesion.user_id));
+            movSinFacturar = ConexionDB.invocarStoreProcedure(Sesion.conexion, "movSinFacturar",listaDeParametros);
+
+            listBox1.DataSource = movSinFacturar;
+            listBox1.DisplayMember = "";
+  
         }
 
         private void listBox1_SelectedIndexChanged(object sender, EventArgs e)

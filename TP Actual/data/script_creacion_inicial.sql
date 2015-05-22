@@ -639,4 +639,12 @@ AS
 		
 GO
 
- 
+ CREATE PROCEDURE HHHH.movSinFacturar
+@user_id int
+AS
+	BEGIN
+		SELECT mov.* FROM HHHH.movimientos mov, HHHH.cuentas cue, HHHH.clientes cli
+			WHERE mov.Id_cuenta = cue.Id_cuenta and cue.Id_cliente = cli.Id_cliente
+					and cli.Id_usuario = @user_id
+	END
+GO
