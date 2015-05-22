@@ -394,7 +394,7 @@ BEGIN /* *************** MIGRACION *************** */
 	SET IDENTITY_INSERT HHHH.retiros OFF
 -------------------------------------------------------------------------------------------	
 	INSERT INTO HHHH.tarjetas(Numero, Fecha_emision, Fecha_vencimiento, Codigo_seguridad, Id_cliente, Id_banco)
-		SELECT distinct T.Tarjeta_Numero, T.Tarjeta_Fecha_Emision, T.Tarjeta_Fecha_Vencimiento,
+		SELECT distinct HashBytes('SHA1',T.Tarjeta_Numero), T.Tarjeta_Fecha_Emision, T.Tarjeta_Fecha_Vencimiento,
 			T.Tarjeta_Codigo_Seg, C.id_cliente, 1 --Banco Migracion
 		FROM (SELECT DISTINCT Tarjeta_Numero, Tarjeta_Fecha_Emision,
 							Tarjeta_Fecha_Vencimiento, Tarjeta_Codigo_Seg, Cuenta_Numero
@@ -635,6 +635,26 @@ AS
 		UPDATE HHHH.cuentas
 			SET Saldo += @importe
 			WHERE Id_cuenta = @destino
+    END				
+		
+GO
+
+CREATE PROCEDURE HHHH.asociarTarjeta
+	@idusuario numeric(18,0),
+	@tarjeta varchar(16),
+	@banco numeric(18,0),
+	@emision datetime,
+	@vencimiento datetime,
+	@codigo nvarchar(3)
+AS
+	BEGIN
+		IF EXISTS (SELECT 1 from hhhh.tarjetas where Id_tarjeta = @tarjeta)
+			BEGIN
+				RAISERROR ('Ya existe esa tarjeta',16,1)
+				RETURN
+			END
+		INSERT INTO HHHH.tarjetas(Numero,Id_banco,Id_cliente,Fecha_vencimiento,Fecha_emision,Codigo_seguridad)
+			VALUES(HashBytes('SHA1',@tarjeta),@banco,(select Id_cliente from HHHH.clientes where Id_usuario=@idusuario),@vencimiento,@emision,@codigo)
     END				
 		
 GO

@@ -11,9 +11,9 @@ namespace PagoElectronico
         public static SqlConnection conexion;
         public static DateTime fecha;
 
-        public static int rol_id;
+        public static decimal rol_id;
         public static string rol_nombre;
-        public static int user_id;
+        public static decimal user_id;
         public static string usuario;
     }
 }
