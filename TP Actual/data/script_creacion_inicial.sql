@@ -610,7 +610,32 @@ AS
 						  F.Descripcion = @lstr
 			END
         RETURN 
-    END			
+    END
+GO
+		
+CREATE PROCEDURE HHHH.transferencia
+	@origen numeric(18,0),
+	@destino numeric(18,0),
+	@moneda numeric(18,0),
+	@importe numeric(18,2),
+	@costo numeric(18,2),
+	@fecha datetime 
+AS
+	BEGIN
+		INSERT INTO HHHH.transferencias(Cuenta_destino,Cuenta_origen,Fecha_transferencia,Id_moneda,Importe,Costo)
+			VALUES(@destino,@origen,@fecha,@moneda,@importe,@costo)
+		
+		INSERT INTO HHHH.movimientos(Id_cuenta,Fecha,Id_moneda,Id_transferencia,Tipo_movimiento,Costo)
+			VALUES (@origen,@fecha,@moneda,(SELECT IDENT_CURRENT('HHHH.transferencias')),'T',@costo+@importe)
+		
+		UPDATE HHHH.cuentas
+			SET Saldo -= @importe +@costo
+			WHERE Id_cuenta = @origen
+		
+		UPDATE HHHH.cuentas
+			SET Saldo += @importe
+			WHERE Id_cuenta = @destino
+    END				
 		
 GO
 

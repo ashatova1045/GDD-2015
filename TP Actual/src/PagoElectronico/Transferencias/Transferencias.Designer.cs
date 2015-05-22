@@ -31,7 +31,6 @@
             this.cbOrigen = new System.Windows.Forms.ComboBox();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
-            this.cbDestino = new System.Windows.Forms.ComboBox();
             this.label3 = new System.Windows.Forms.Label();
             this.txtSaldo = new System.Windows.Forms.TextBox();
             this.label4 = new System.Windows.Forms.Label();
@@ -39,6 +38,11 @@
             this.btTransferir = new System.Windows.Forms.Button();
             this.btVolver = new System.Windows.Forms.Button();
             this.cbImporteMoneda = new System.Windows.Forms.ComboBox();
+            this.txtMoneda = new System.Windows.Forms.TextBox();
+            this.txtCosto = new System.Windows.Forms.TextBox();
+            this.label5 = new System.Windows.Forms.Label();
+            this.txtMoneda2 = new System.Windows.Forms.TextBox();
+            this.cbDestino = new System.Windows.Forms.ComboBox();
             ((System.ComponentModel.ISupportInitialize)(this.nImporte)).BeginInit();
             this.SuspendLayout();
             // 
@@ -71,16 +75,6 @@
             this.label2.TabIndex = 3;
             this.label2.Text = "Cuenta Destino:";
             // 
-            // cbDestino
-            // 
-            this.cbDestino.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cbDestino.FormattingEnabled = true;
-            this.cbDestino.Location = new System.Drawing.Point(123, 49);
-            this.cbDestino.MaxLength = 18;
-            this.cbDestino.Name = "cbDestino";
-            this.cbDestino.Size = new System.Drawing.Size(133, 21);
-            this.cbDestino.TabIndex = 2;
-            // 
             // label3
             // 
             this.label3.AutoSize = true;
@@ -93,10 +87,10 @@
             // txtSaldo
             // 
             this.txtSaldo.Enabled = false;
-            this.txtSaldo.Location = new System.Drawing.Point(306, 12);
+            this.txtSaldo.Location = new System.Drawing.Point(306, 15);
             this.txtSaldo.MaxLength = 99999;
             this.txtSaldo.Name = "txtSaldo";
-            this.txtSaldo.Size = new System.Drawing.Size(179, 20);
+            this.txtSaldo.Size = new System.Drawing.Size(117, 20);
             this.txtSaldo.TabIndex = 6;
             // 
             // label4
@@ -160,11 +154,61 @@
             this.cbImporteMoneda.Size = new System.Drawing.Size(91, 21);
             this.cbImporteMoneda.TabIndex = 11;
             // 
+            // txtMoneda
+            // 
+            this.txtMoneda.Enabled = false;
+            this.txtMoneda.Location = new System.Drawing.Point(429, 15);
+            this.txtMoneda.Name = "txtMoneda";
+            this.txtMoneda.Size = new System.Drawing.Size(76, 20);
+            this.txtMoneda.TabIndex = 12;
+            // 
+            // txtCosto
+            // 
+            this.txtCosto.Enabled = false;
+            this.txtCosto.Location = new System.Drawing.Point(306, 41);
+            this.txtCosto.MaxLength = 99999;
+            this.txtCosto.Name = "txtCosto";
+            this.txtCosto.Size = new System.Drawing.Size(117, 20);
+            this.txtCosto.TabIndex = 14;
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(263, 43);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(37, 13);
+            this.label5.TabIndex = 13;
+            this.label5.Text = "Costo:";
+            // 
+            // txtMoneda2
+            // 
+            this.txtMoneda2.Enabled = false;
+            this.txtMoneda2.Location = new System.Drawing.Point(429, 41);
+            this.txtMoneda2.Name = "txtMoneda2";
+            this.txtMoneda2.Size = new System.Drawing.Size(76, 20);
+            this.txtMoneda2.TabIndex = 15;
+            // 
+            // cbDestino
+            // 
+            this.cbDestino.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbDestino.FormattingEnabled = true;
+            this.cbDestino.Location = new System.Drawing.Point(123, 46);
+            this.cbDestino.MaxLength = 18;
+            this.cbDestino.Name = "cbDestino";
+            this.cbDestino.Size = new System.Drawing.Size(133, 21);
+            this.cbDestino.TabIndex = 16;
+            this.cbDestino.SelectedIndexChanged += new System.EventHandler(this.cbDestino_SelectedIndexChanged);
+            // 
             // Transferencias
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(494, 158);
+            this.ClientSize = new System.Drawing.Size(509, 158);
+            this.Controls.Add(this.cbDestino);
+            this.Controls.Add(this.txtMoneda2);
+            this.Controls.Add(this.txtCosto);
+            this.Controls.Add(this.label5);
+            this.Controls.Add(this.txtMoneda);
             this.Controls.Add(this.cbImporteMoneda);
             this.Controls.Add(this.btVolver);
             this.Controls.Add(this.btTransferir);
@@ -173,7 +217,6 @@
             this.Controls.Add(this.txtSaldo);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.label2);
-            this.Controls.Add(this.cbDestino);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.cbOrigen);
             this.Name = "Transferencias";
@@ -189,7 +232,6 @@
         private System.Windows.Forms.ComboBox cbOrigen;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.ComboBox cbDestino;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.TextBox txtSaldo;
         private System.Windows.Forms.Label label4;
@@ -197,5 +239,10 @@
         private System.Windows.Forms.Button btTransferir;
         private System.Windows.Forms.Button btVolver;
         private System.Windows.Forms.ComboBox cbImporteMoneda;
+        private System.Windows.Forms.TextBox txtMoneda;
+        private System.Windows.Forms.TextBox txtCosto;
+        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.TextBox txtMoneda2;
+        private System.Windows.Forms.ComboBox cbDestino;
     }
 }
