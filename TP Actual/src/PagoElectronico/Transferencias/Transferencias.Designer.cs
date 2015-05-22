@@ -46,7 +46,7 @@
             // 
             this.cbOrigen.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbOrigen.FormattingEnabled = true;
-            this.cbOrigen.Location = new System.Drawing.Point(146, 12);
+            this.cbOrigen.Location = new System.Drawing.Point(123, 12);
             this.cbOrigen.MaxLength = 18;
             this.cbOrigen.Name = "cbOrigen";
             this.cbOrigen.Size = new System.Drawing.Size(133, 21);
@@ -67,15 +67,15 @@
             this.label2.AutoSize = true;
             this.label2.Location = new System.Drawing.Point(22, 52);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(80, 13);
+            this.label2.Size = new System.Drawing.Size(83, 13);
             this.label2.TabIndex = 3;
-            this.label2.Text = "Cuenta Destino";
+            this.label2.Text = "Cuenta Destino:";
             // 
             // cbDestino
             // 
             this.cbDestino.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbDestino.FormattingEnabled = true;
-            this.cbDestino.Location = new System.Drawing.Point(146, 49);
+            this.cbDestino.Location = new System.Drawing.Point(123, 49);
             this.cbDestino.MaxLength = 18;
             this.cbDestino.Name = "cbDestino";
             this.cbDestino.Size = new System.Drawing.Size(133, 21);
@@ -84,7 +84,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(292, 17);
+            this.label3.Location = new System.Drawing.Point(263, 17);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(37, 13);
             this.label3.TabIndex = 5;
@@ -93,7 +93,7 @@
             // txtSaldo
             // 
             this.txtSaldo.Enabled = false;
-            this.txtSaldo.Location = new System.Drawing.Point(335, 12);
+            this.txtSaldo.Location = new System.Drawing.Point(306, 12);
             this.txtSaldo.MaxLength = 99999;
             this.txtSaldo.Name = "txtSaldo";
             this.txtSaldo.Size = new System.Drawing.Size(179, 20);
@@ -111,7 +111,7 @@
             // nImporte
             // 
             this.nImporte.DecimalPlaces = 2;
-            this.nImporte.Location = new System.Drawing.Point(146, 84);
+            this.nImporte.Location = new System.Drawing.Point(123, 84);
             this.nImporte.Maximum = new decimal(new int[] {
             -1486618625,
             232830643,
@@ -143,7 +143,7 @@
             // 
             // btVolver
             // 
-            this.btVolver.Location = new System.Drawing.Point(316, 121);
+            this.btVolver.Location = new System.Drawing.Point(210, 120);
             this.btVolver.Name = "btVolver";
             this.btVolver.Size = new System.Drawing.Size(90, 26);
             this.btVolver.TabIndex = 10;
@@ -155,7 +155,7 @@
             // 
             this.cbImporteMoneda.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbImporteMoneda.FormattingEnabled = true;
-            this.cbImporteMoneda.Location = new System.Drawing.Point(285, 84);
+            this.cbImporteMoneda.Location = new System.Drawing.Point(262, 84);
             this.cbImporteMoneda.Name = "cbImporteMoneda";
             this.cbImporteMoneda.Size = new System.Drawing.Size(91, 21);
             this.cbImporteMoneda.TabIndex = 11;
@@ -164,7 +164,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(521, 158);
+            this.ClientSize = new System.Drawing.Size(494, 158);
             this.Controls.Add(this.cbImporteMoneda);
             this.Controls.Add(this.btVolver);
             this.Controls.Add(this.btTransferir);
