@@ -224,7 +224,7 @@ BEGIN /* *************** CREACION DE TABLAS *************** */
 		Fecha_apertura datetime,
 		Id_tipo_cuenta numeric(18,0) CONSTRAINT FK_cuentas_tc FOREIGN KEY REFERENCES HHHH.tipo_cuenta(Id_tipo_cuenta),
 		Id_cliente numeric(18,0) NOT NULL CONSTRAINT FK_cuentas_cliente FOREIGN KEY REFERENCES HHHH.clientes(Id_cliente),
-		Estado NVARCHAR DEFAULT 'P' CHECK (Estado IN ('P','C','H','I')), -- pend act, cerrada, habilida, inhabilitada
+		Estado NVARCHAR DEFAULT 'H' CHECK (Estado IN ('P','C','H','I')), -- pend act, cerrada, habilida, inhabilitada
 		Saldo numeric(18,2)
 	)
 	
@@ -638,13 +638,113 @@ AS
     END				
 		
 GO
+/*
+drop function HHHH.DetallarFactura go
 
- CREATE PROCEDURE HHHH.movSinFacturar
-@user_id int
+CREATE FUNCTION HHHH.Obtenerorigen(@idtrans numeric(18,0))
+	RETURNS nvarchar(max)
+	AS
+		BEGIN
+			DECLARE @RET nvarchar(255)
+			SELECT @RET = convert(varchar(255),cuenta_origen)
+							FROM HHHH.transferencias
+							WHERE Id_transferencia = @idtrans
+			RETURN @RET
+		END
+GO
+
+CREATE FUNCTION HHHH.Obtenerdestino(@idtrans numeric(18,0))
+	RETURNS nvarchar(max)
+	AS
+		BEGIN
+			DECLARE @RET nvarchar(255)
+			SELECT @RET = convert(varchar(255),cuenta_destino)
+							FROM HHHH.transferencias
+							WHERE Id_transferencia = @idtrans
+			RETURN @RET
+		END
+GO
+
+CREATE FUNCTION HHHH.DetallarFactura(
+@tmov char, 
+@costo numeric(18,2), 
+@fecha datetime,
+@transfnum numeric(18,0),
+@diascomp numeric(18,0),
+@cambio nvarchar(255))
+	RETURNS nvarchar(max)
+	AS
+	BEGIN 
+		IF (@tmov = 'T')
+			RETURN 'cod. '+convert(varchar(255),@transfnum)+' Transferencia de la cuenta '+convert(varchar(255),@id_origen)+' a la cuenta '
+					+convert(varchar(255),@id_destino)+' un total de '+convert(varchar(255),@costo)
+			
+		IF (@tmov = 'C')
+			RETURN 'SDDSS'
+		RETURN 'Nada'
+	END
+GO*/
+
+CREATE FUNCTION HHHH.obtenerUser(
+@cuenta numeric(18,0))
+RETURNS numeric(18,0)
 AS
 	BEGIN
-		SELECT mov.* FROM HHHH.movimientos mov, HHHH.cuentas cue, HHHH.clientes cli
-			WHERE mov.Id_cuenta = cue.Id_cuenta and cue.Id_cliente = cli.Id_cliente
-					and cli.Id_usuario = @user_id
+		DECLARE @usua numeric(18,0)
+		SELECT @usua = cli.Id_usuario FROM HHHH.cuentas cue , HHHH.clientes cli 
+					WHERE Id_cuenta = @cuenta and cli.id_cliente = cue.Id_cliente
+						
+		RETURN @usua
+	END
+GO
+
+CREATE FUNCTION HHHH.GenerarDescripcion(
+@tipomov char,
+@idTransf numeric(18,0),
+@Dcomprados numeric(18,0),
+@Tipocambio numeric(18,0))
+RETURNS nvarchar(max)
+AS
+	BEGIN
+		IF(@tipomov = 'T')
+			BEGIN
+				RETURN 'Transferencia de saldo cod.'+convert(nvarchar(max),@idTransf)
+			END
+		IF(@tipomov = 'C')
+			BEGIN
+					DECLARE @Tipocuenta nvarchar(255)
+					SELECT @Tipocuenta = Descripcion FROM HHHH.tipo_cuenta WHERE Id_tipo_cuenta = @Tipocambio
+				RETURN convert(nvarchar(max),@Dcomprados)+' dias de cuenta tipo: '+@Tipocuenta
+			END
+			RETURN ''
+	END
+GO
+
+CREATE FUNCTION HHHH.impconmoneda(
+@Importe numeric(18,2),
+@Idmoneda numeric(18,0)
+)
+RETURNS nvarchar(max)
+AS
+	BEGIN
+		IF (@Importe is null)
+			RETURN ''
+		DECLARE @Descr nvarchar(50)
+			SELECT @Descr = Descripcion
+				 FROM HHHH.monedas WHERE Id_moneda = @Idmoneda
+		RETURN convert(nvarchar(max),@Importe)+' '+@Descr
+	END
+GO
+
+CREATE PROCEDURE HHHH.movSinFacturar
+@user_id int
+AS
+
+	BEGIN
+		select convert(date,Fecha) AS Fecha, HHHH.GenerarDescripcion (mov.Tipo_movimiento,mov.Id_transferencia,mov.Dias_comprados,mov.Cambio_tipo_cuenta) AS Descripcion,
+				HHHH.impconmoneda(tr.Importe,mov.Id_moneda) AS Importe,HHHH.impconmoneda(mov.Costo,mov.Id_moneda) AS Costo_Final
+			from HHHH.movimientos mov, HHHH.transferencias tr
+			where Id_factura is null and tr.Id_transferencia = mov.Id_transferencia
+			 and HHHH.obtenerUser(mov.Id_cuenta) = @user_id
 	END
 GO
