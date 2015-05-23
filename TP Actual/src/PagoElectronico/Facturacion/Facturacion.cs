@@ -31,9 +31,8 @@ namespace PagoElectronico.Facturacion
             List<SqlParameter> listaDeParametros = new List<SqlParameter>();
             listaDeParametros.Add(new SqlParameter("@user_id", Sesion.user_id));
             movSinFacturar = ConexionDB.invocarStoreProcedure(Sesion.conexion, "movSinFacturar",listaDeParametros);
-
-            listBox1.DataSource = movSinFacturar;
-            listBox1.DisplayMember = "";
+       
+            dataGridView1.DataSource = movSinFacturar;
   
         }
 
@@ -41,5 +40,12 @@ namespace PagoElectronico.Facturacion
         {
 
         }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            Owner.Show();
+            this.Close();
+        }
+
     }
 }
