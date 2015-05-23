@@ -377,11 +377,17 @@ BEGIN /* *************** MIGRACION *************** */
 		SET Id_usuario = usuarios.id_usuario
 		FROM HHHH.usuarios
 			WHERE usuarios.usuario = HHHH.borrardominio(clientes.Mail)
+-------------------------------------------------------------------------------------------	
+	INSERT INTO HHHH.Tipo_Cuenta(Descripcion, Id_moneda_cuenta, Costo_transf, Duracion, Id_moneda_transf, Costo_cuenta)
+		VALUES ('Gratuita', 1,3,30,1,0),
+				('Bronce', 1,2,30,1,1),
+				('Plata', 1,1,30,1,2),
+				('Oro', 1,0,30,1,3)
 -------------------------------------------------------------------------------------------			
 	SET IDENTITY_INSERT HHHH.cuentas ON
-	INSERT INTO HHHH.cuentas(Id_cuenta, Id_pais, Fecha_apertura, Id_cliente,Id_moneda,Saldo)
+	INSERT INTO HHHH.cuentas(Id_cuenta, Id_pais, Fecha_apertura, Id_cliente,Id_moneda,Saldo,Estado,Id_tipo_cuenta)
 		SELECT DISTINCT M.Cuenta_Numero, M.Cuenta_Pais_Codigo, M.Cuenta_Fecha_Creacion, 
-				C.Id_cliente,1,100
+				C.Id_cliente,1,100,'H',1
 			FROM gd_esquema.Maestra M, HHHH.clientes C
 			WHERE C.Mail = M.Cli_Mail
 	SET IDENTITY_INSERT HHHH.cuentas OFF
@@ -474,12 +480,6 @@ BEGIN /* *************** MIGRACION *************** */
 	INSERT INTO HHHH.Rel_Rol_Funcionalidad(Id_rol, Id_funcionalidad)
 		VALUES (1,1), (1,2), (1,3), (1,4), (1,9), (1,10), (1,11),
 				(2,4), (2,5), (2,6), (2,7), (2,8), (2,9), (2,10)
--------------------------------------------------------------------------------------------	
-	INSERT INTO HHHH.Tipo_Cuenta(Descripcion, Id_moneda_cuenta, Costo_transf, Duracion, Id_moneda_transf, Costo_cuenta)
-		VALUES ('Gratuita', 1,3,30,1,0),
-				('Bronce', 1,2,30,1,1),
-				('Plata', 1,1,30,1,2),
-				('Oro', 1,0,30,1,3)
 				
 END
 GO
