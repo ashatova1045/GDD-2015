@@ -513,7 +513,7 @@ AS
 			UPDATE HHHH.usuarios
 				SET intentosFallidos = 0
 				WHERE id_usuario = @id_usuario
-			SELECT @id_usuario			 --devuelvo el numero de usuario para agregarlo a la sesion
+			SELECT @id_usuario,Id_cliente from HHHH.clientes where Id_usuario=@id_usuario			 --devuelvo el numero de usuario para agregarlo a la sesion
 		END
 	ELSE
 		BEGIN	
