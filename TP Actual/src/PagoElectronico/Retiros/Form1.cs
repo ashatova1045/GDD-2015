@@ -9,11 +9,41 @@ using System.Windows.Forms;
 
 namespace PagoElectronico.Retiros
 {
-    public partial class Form1 : Form
+    public partial class RetiroEfectivo_FRM : Form
     {
-        public Form1()
+        public RetiroEfectivo_FRM()
         {
             InitializeComponent();
+        }
+
+        private void label1_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label1_Click_1(object sender, EventArgs e)
+        {
+
+        }
+
+        private void dateTimePicker1_ValueChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void Importe_NUD_ValueChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void pictureBox1_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

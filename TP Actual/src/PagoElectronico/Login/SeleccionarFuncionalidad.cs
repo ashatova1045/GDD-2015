@@ -58,7 +58,7 @@ namespace PagoElectronico.Login
                     nuevoForm = new Depositos.Form1();
                     break;
                 case "Retiro de Efectivo":
-                    nuevoForm = new Retiros.Form1();
+                    nuevoForm = new Retiros.RetiroEfectivo_FRM();
                     break;
                 case "Transferencia entre Cuentas":
                     nuevoForm = new Transferencias.Transferencias();

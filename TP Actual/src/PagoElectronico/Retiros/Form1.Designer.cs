@@ -1,6 +1,6 @@
 ﻿namespace PagoElectronico.Retiros
 {
-    partial class Form1
+    partial class RetiroEfectivo_FRM
     {
         /// <summary>
         /// Required designer variable.
@@ -28,11 +28,192 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(RetiroEfectivo_FRM));
+            this.Cuenta_CB = new System.Windows.Forms.ComboBox();
+            this.Cuenta_LB = new System.Windows.Forms.Label();
+            this.Importe_LB = new System.Windows.Forms.Label();
+            this.Importe_NUD = new System.Windows.Forms.NumericUpDown();
+            this.Moneda_LB = new System.Windows.Forms.Label();
+            this.Moneda_CB = new System.Windows.Forms.ComboBox();
+            this.Fecha_LB = new System.Windows.Forms.Label();
+            this.dateTimePicker1 = new System.Windows.Forms.DateTimePicker();
+            this.RealizarCheque_BTN = new System.Windows.Forms.Button();
+            this.Cancelar_BTN = new System.Windows.Forms.Button();
+            this.NoDoc_LB = new System.Windows.Forms.Label();
+            this.NoDoc_TXT = new System.Windows.Forms.TextBox();
+            this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            ((System.ComponentModel.ISupportInitialize)(this.Importe_NUD)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
+            this.SuspendLayout();
+            // 
+            // Cuenta_CB
+            // 
+            this.Cuenta_CB.FormattingEnabled = true;
+            this.Cuenta_CB.Location = new System.Drawing.Point(143, 23);
+            this.Cuenta_CB.Name = "Cuenta_CB";
+            this.Cuenta_CB.Size = new System.Drawing.Size(121, 21);
+            this.Cuenta_CB.TabIndex = 0;
+            // 
+            // Cuenta_LB
+            // 
+            this.Cuenta_LB.AutoSize = true;
+            this.Cuenta_LB.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Underline))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Cuenta_LB.ForeColor = System.Drawing.Color.Black;
+            this.Cuenta_LB.Location = new System.Drawing.Point(30, 22);
+            this.Cuenta_LB.Name = "Cuenta_LB";
+            this.Cuenta_LB.Size = new System.Drawing.Size(61, 18);
+            this.Cuenta_LB.TabIndex = 1;
+            this.Cuenta_LB.Text = "Cuenta";
+            this.Cuenta_LB.Click += new System.EventHandler(this.label1_Click);
+            // 
+            // Importe_LB
+            // 
+            this.Importe_LB.AutoSize = true;
+            this.Importe_LB.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Underline))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Importe_LB.Location = new System.Drawing.Point(30, 115);
+            this.Importe_LB.Name = "Importe_LB";
+            this.Importe_LB.Size = new System.Drawing.Size(65, 18);
+            this.Importe_LB.TabIndex = 3;
+            this.Importe_LB.Text = "Importe";
+            this.Importe_LB.Click += new System.EventHandler(this.label1_Click_1);
+            // 
+            // Importe_NUD
+            // 
+            this.Importe_NUD.Location = new System.Drawing.Point(144, 117);
+            this.Importe_NUD.Name = "Importe_NUD";
+            this.Importe_NUD.Size = new System.Drawing.Size(120, 20);
+            this.Importe_NUD.TabIndex = 4;
+            this.Importe_NUD.ValueChanged += new System.EventHandler(this.Importe_NUD_ValueChanged);
+            // 
+            // Moneda_LB
+            // 
+            this.Moneda_LB.AutoSize = true;
+            this.Moneda_LB.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Underline))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Moneda_LB.Location = new System.Drawing.Point(30, 163);
+            this.Moneda_LB.Name = "Moneda_LB";
+            this.Moneda_LB.Size = new System.Drawing.Size(68, 18);
+            this.Moneda_LB.TabIndex = 5;
+            this.Moneda_LB.Text = "Moneda";
+            // 
+            // Moneda_CB
+            // 
+            this.Moneda_CB.FormattingEnabled = true;
+            this.Moneda_CB.Location = new System.Drawing.Point(142, 164);
+            this.Moneda_CB.Name = "Moneda_CB";
+            this.Moneda_CB.Size = new System.Drawing.Size(121, 21);
+            this.Moneda_CB.TabIndex = 6;
+            // 
+            // Fecha_LB
+            // 
+            this.Fecha_LB.AutoSize = true;
+            this.Fecha_LB.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Underline))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Fecha_LB.Location = new System.Drawing.Point(30, 212);
+            this.Fecha_LB.Name = "Fecha_LB";
+            this.Fecha_LB.Size = new System.Drawing.Size(54, 18);
+            this.Fecha_LB.TabIndex = 7;
+            this.Fecha_LB.Text = "Fecha";
+            // 
+            // dateTimePicker1
+            // 
+            this.dateTimePicker1.Enabled = false;
+            this.dateTimePicker1.Format = System.Windows.Forms.DateTimePickerFormat.Short;
+            this.dateTimePicker1.Location = new System.Drawing.Point(143, 212);
+            this.dateTimePicker1.Name = "dateTimePicker1";
+            this.dateTimePicker1.Size = new System.Drawing.Size(121, 20);
+            this.dateTimePicker1.TabIndex = 8;
+            this.dateTimePicker1.ValueChanged += new System.EventHandler(this.dateTimePicker1_ValueChanged);
+            // 
+            // RealizarCheque_BTN
+            // 
+            this.RealizarCheque_BTN.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
+            this.RealizarCheque_BTN.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.RealizarCheque_BTN.Location = new System.Drawing.Point(47, 281);
+            this.RealizarCheque_BTN.Name = "RealizarCheque_BTN";
+            this.RealizarCheque_BTN.Size = new System.Drawing.Size(161, 32);
+            this.RealizarCheque_BTN.TabIndex = 9;
+            this.RealizarCheque_BTN.Text = "Realizar Cheque";
+            this.RealizarCheque_BTN.UseVisualStyleBackColor = false;
+            this.RealizarCheque_BTN.Click += new System.EventHandler(this.button1_Click);
+            // 
+            // Cancelar_BTN
+            // 
+            this.Cancelar_BTN.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(128)))));
+            this.Cancelar_BTN.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Cancelar_BTN.Location = new System.Drawing.Point(247, 281);
+            this.Cancelar_BTN.Name = "Cancelar_BTN";
+            this.Cancelar_BTN.Size = new System.Drawing.Size(117, 32);
+            this.Cancelar_BTN.TabIndex = 10;
+            this.Cancelar_BTN.Text = "Cancelar";
+            this.Cancelar_BTN.UseVisualStyleBackColor = false;
+            // 
+            // NoDoc_LB
+            // 
+            this.NoDoc_LB.AutoSize = true;
+            this.NoDoc_LB.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Underline))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.NoDoc_LB.Location = new System.Drawing.Point(30, 72);
+            this.NoDoc_LB.Name = "NoDoc_LB";
+            this.NoDoc_LB.Size = new System.Drawing.Size(57, 16);
+            this.NoDoc_LB.TabIndex = 11;
+            this.NoDoc_LB.Text = "Nº Doc";
+            // 
+            // NoDoc_TXT
+            // 
+            this.NoDoc_TXT.Location = new System.Drawing.Point(142, 71);
+            this.NoDoc_TXT.Name = "NoDoc_TXT";
+            this.NoDoc_TXT.Size = new System.Drawing.Size(121, 20);
+            this.NoDoc_TXT.TabIndex = 12;
+            // 
+            // pictureBox1
+            // 
+            this.pictureBox1.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox1.Image")));
+            this.pictureBox1.Location = new System.Drawing.Point(306, 71);
+            this.pictureBox1.Name = "pictureBox1";
+            this.pictureBox1.Size = new System.Drawing.Size(157, 140);
+            this.pictureBox1.TabIndex = 13;
+            this.pictureBox1.TabStop = false;
+            // 
+            // RetiroEfectivo_FRM
+            // 
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Text = "Form1";
+            this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(192)))), ((int)(((byte)(255)))));
+            this.ClientSize = new System.Drawing.Size(487, 348);
+            this.Controls.Add(this.pictureBox1);
+            this.Controls.Add(this.NoDoc_TXT);
+            this.Controls.Add(this.NoDoc_LB);
+            this.Controls.Add(this.Cancelar_BTN);
+            this.Controls.Add(this.RealizarCheque_BTN);
+            this.Controls.Add(this.dateTimePicker1);
+            this.Controls.Add(this.Fecha_LB);
+            this.Controls.Add(this.Moneda_CB);
+            this.Controls.Add(this.Moneda_LB);
+            this.Controls.Add(this.Importe_NUD);
+            this.Controls.Add(this.Importe_LB);
+            this.Controls.Add(this.Cuenta_LB);
+            this.Controls.Add(this.Cuenta_CB);
+            this.Name = "RetiroEfectivo_FRM";
+            this.Text = "Retiro de Efectivo";
+            ((System.ComponentModel.ISupportInitialize)(this.Importe_NUD)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
+            this.ResumeLayout(false);
+            this.PerformLayout();
+
         }
 
         #endregion
+
+        private System.Windows.Forms.ComboBox Cuenta_CB;
+        private System.Windows.Forms.Label Cuenta_LB;
+        private System.Windows.Forms.Label Importe_LB;
+        private System.Windows.Forms.NumericUpDown Importe_NUD;
+        private System.Windows.Forms.Label Moneda_LB;
+        private System.Windows.Forms.ComboBox Moneda_CB;
+        private System.Windows.Forms.Label Fecha_LB;
+        private System.Windows.Forms.DateTimePicker dateTimePicker1;
+        private System.Windows.Forms.Button RealizarCheque_BTN;
+        private System.Windows.Forms.Button Cancelar_BTN;
+        private System.Windows.Forms.Label NoDoc_LB;
+        private System.Windows.Forms.TextBox NoDoc_TXT;
+        private System.Windows.Forms.PictureBox pictureBox1;
     }
 }
