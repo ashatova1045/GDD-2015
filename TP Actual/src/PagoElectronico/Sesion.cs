@@ -15,5 +15,6 @@ namespace PagoElectronico
         public static string rol_nombre;
         public static decimal user_id;
         public static string usuario;
+        public static decimal cliente_id;
     }
 }
