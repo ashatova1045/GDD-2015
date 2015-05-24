@@ -377,17 +377,11 @@ BEGIN /* *************** MIGRACION *************** */
 		SET Id_usuario = usuarios.id_usuario
 		FROM HHHH.usuarios
 			WHERE usuarios.usuario = HHHH.borrardominio(clientes.Mail)
--------------------------------------------------------------------------------------------	
-	INSERT INTO HHHH.Tipo_Cuenta(Descripcion, Id_moneda_cuenta, Costo_transf, Duracion, Id_moneda_transf, Costo_cuenta)
-		VALUES ('Gratuita', 1,3,30,1,0),
-				('Bronce', 1,2,30,1,1),
-				('Plata', 1,1,30,1,2),
-				('Oro', 1,0,30,1,3)
 -------------------------------------------------------------------------------------------			
 	SET IDENTITY_INSERT HHHH.cuentas ON
-	INSERT INTO HHHH.cuentas(Id_cuenta, Id_pais, Fecha_apertura, Id_cliente,Id_moneda,Saldo,Estado,Id_tipo_cuenta)
+	INSERT INTO HHHH.cuentas(Id_cuenta, Id_pais, Fecha_apertura, Id_cliente,Id_moneda,Saldo)
 		SELECT DISTINCT M.Cuenta_Numero, M.Cuenta_Pais_Codigo, M.Cuenta_Fecha_Creacion, 
-				C.Id_cliente,1,100,'H',1
+				C.Id_cliente,1,100
 			FROM gd_esquema.Maestra M, HHHH.clientes C
 			WHERE C.Mail = M.Cli_Mail
 	SET IDENTITY_INSERT HHHH.cuentas OFF
@@ -480,6 +474,12 @@ BEGIN /* *************** MIGRACION *************** */
 	INSERT INTO HHHH.Rel_Rol_Funcionalidad(Id_rol, Id_funcionalidad)
 		VALUES (1,1), (1,2), (1,3), (1,4), (1,9), (1,10), (1,11),
 				(2,4), (2,5), (2,6), (2,7), (2,8), (2,9), (2,10)
+-------------------------------------------------------------------------------------------	
+	INSERT INTO HHHH.Tipo_Cuenta(Descripcion, Id_moneda_cuenta, Costo_transf, Duracion, Id_moneda_transf, Costo_cuenta)
+		VALUES ('Gratuita', 1,3,30,1,0),
+				('Bronce', 1,2,30,1,1),
+				('Plata', 1,1,30,1,2),
+				('Oro', 1,0,30,1,3)
 				
 END
 GO
@@ -513,7 +513,11 @@ AS
 			UPDATE HHHH.usuarios
 				SET intentosFallidos = 0
 				WHERE id_usuario = @id_usuario
-			SELECT @id_usuario,Id_cliente from HHHH.clientes where Id_usuario=@id_usuario			 --devuelvo el numero de usuario para agregarlo a la sesion
+				
+				IF(@id_usuario = 1)
+					SELECT 1, 0
+				ELSE
+					SELECT @id_usuario,convert(int,Id_cliente) from HHHH.clientes where Id_usuario=@id_usuario --devuelvo el numero de usuario para agregarlo a la sesion
 		END
 	ELSE
 		BEGIN	
@@ -638,52 +642,6 @@ AS
     END				
 		
 GO
-/*
-drop function HHHH.DetallarFactura go
-
-CREATE FUNCTION HHHH.Obtenerorigen(@idtrans numeric(18,0))
-	RETURNS nvarchar(max)
-	AS
-		BEGIN
-			DECLARE @RET nvarchar(255)
-			SELECT @RET = convert(varchar(255),cuenta_origen)
-							FROM HHHH.transferencias
-							WHERE Id_transferencia = @idtrans
-			RETURN @RET
-		END
-GO
-
-CREATE FUNCTION HHHH.Obtenerdestino(@idtrans numeric(18,0))
-	RETURNS nvarchar(max)
-	AS
-		BEGIN
-			DECLARE @RET nvarchar(255)
-			SELECT @RET = convert(varchar(255),cuenta_destino)
-							FROM HHHH.transferencias
-							WHERE Id_transferencia = @idtrans
-			RETURN @RET
-		END
-GO
-
-CREATE FUNCTION HHHH.DetallarFactura(
-@tmov char, 
-@costo numeric(18,2), 
-@fecha datetime,
-@transfnum numeric(18,0),
-@diascomp numeric(18,0),
-@cambio nvarchar(255))
-	RETURNS nvarchar(max)
-	AS
-	BEGIN 
-		IF (@tmov = 'T')
-			RETURN 'cod. '+convert(varchar(255),@transfnum)+' Transferencia de la cuenta '+convert(varchar(255),@id_origen)+' a la cuenta '
-					+convert(varchar(255),@id_destino)+' un total de '+convert(varchar(255),@costo)
-			
-		IF (@tmov = 'C')
-			RETURN 'SDDSS'
-		RETURN 'Nada'
-	END
-GO*/
 
 CREATE FUNCTION HHHH.obtenerUser(
 @cuenta numeric(18,0))
@@ -739,7 +697,12 @@ GO
 CREATE PROCEDURE HHHH.movSinFacturar
 @user_id int
 AS
-
+	IF  ((select COUNT(*) from HHHH.movimientos
+					where Id_factura is null and HHHH.obtenerUser(Id_cuenta) = @user_id) = 0)
+		BEGIN
+			RAISERROR ('No hay movimientos sin facturar',16,1)
+			RETURN
+		END
 	BEGIN
 		select convert(date,Fecha) AS Fecha, HHHH.GenerarDescripcion (mov.Tipo_movimiento,mov.Id_transferencia,mov.Dias_comprados,mov.Cambio_tipo_cuenta) AS Descripcion,
 				HHHH.impconmoneda(tr.Importe,mov.Id_moneda) AS Importe,HHHH.impconmoneda(mov.Costo,mov.Id_moneda) AS Costo_Final
@@ -748,3 +711,49 @@ AS
 			 and HHHH.obtenerUser(mov.Id_cuenta) = @user_id
 	END
 GO
+
+CREATE PROCEDURE HHHH.Facturar
+@user_id int,
+@fecha datetime
+AS
+		DECLARE @cliente_id int
+		SELECT @cliente_id = Id_cliente FROM HHHH.clientes WHERE Id_usuario = @user_id
+		
+		INSERT INTO HHHH.facturas(Fecha_factura,Id_cliente)
+			SELECT @fecha, @cliente_id
+			
+		UPDATE HHHH.movimientos
+		SET Id_factura = (SELECT IDENT_CURRENT('HHHH.facturas'))
+		FROM HHHH.movimientos mov, HHHH.transferencias tr
+			WHERE Id_factura is null and tr.Id_transferencia = mov.Id_transferencia
+			 and HHHH.obtenerUser(mov.Id_cuenta) = @user_id
+			 
+		UPDATE HHHH.facturas
+		SET Monto_total = (SELECT SUM(mov.Costo)
+			FROM HHHH.movimientos mov
+			WHERE mov.Id_factura = (SELECT IDENT_CURRENT('HHHH.facturas'))
+			 and HHHH.obtenerUser(mov.Id_cuenta) = @user_id)
+		WHERE Id_factura = (SELECT IDENT_CURRENT('HHHH.facturas'))
+		
+		SELECT fac.Id_factura, cli.Nombre+' '+cli.Apellido as nombre, us.Usuario, fac.Fecha_factura, fac.Monto_total
+				FROM HHHH.facturas fac, HHHH.clientes cli, HHHH.usuarios us
+				WHERE fac.Id_factura = (SELECT IDENT_CURRENT('HHHH.facturas')) 
+					  and fac.Id_cliente = cli.Id_cliente and cli.Id_usuario = us.Id_usuario
+
+	
+GO
+
+CREATE PROCEDURE HHHH.itemFactura(
+@id_factura numeric(18,0))
+AS
+	BEGIN
+		SELECT convert(date,tr.Fecha_transferencia) AS Fecha, HHHH.GenerarDescripcion (mov.Tipo_movimiento,mov.Id_transferencia,mov.Dias_comprados,mov.Cambio_tipo_cuenta) AS Descripcion,
+				HHHH.impconmoneda(tr.Importe,mov.Id_moneda) AS Importe,HHHH.impconmoneda(mov.Costo,mov.Id_moneda) AS Costo_Final
+			FROM HHHH.movimientos mov, HHHH.transferencias tr
+			WHERE mov.Id_factura = @id_factura and
+				  tr.Id_transferencia = mov.Id_transferencia
+	END
+GO
+
+update HHHH.cuentas
+set Id_tipo_cuenta =1, Estado = 'H'

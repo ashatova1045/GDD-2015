@@ -13,32 +13,52 @@ namespace PagoElectronico.Facturacion
 {
     public partial class Facturacion : Form
     {
+        private void actualizarMov(string usuario, int userID)
+        {
+            label3.Text = usuario;
+            DataTable movSinFacturar;
+            List<SqlParameter> listaDeParametros = new List<SqlParameter>();
+            listaDeParametros.Add(new SqlParameter("@user_id", userID));
+            dataGridView1.DataSource = null;
+            dataGridView1.Rows.Clear();
+            try 
+            {
+            movSinFacturar = ConexionDB.invocarStoreProcedure(Sesion.conexion, "movSinFacturar",listaDeParametros);
+            dataGridView1.DataSource = movSinFacturar;
+            dataGridView1.Visible = true;
+            label4.Visible = false;
+            button2.Enabled = true;
+            }
+            catch(SqlException ex)
+            {
+                dataGridView1.Visible = false;
+                label4.Text = ex.Message;
+                label4.Visible = true;
+                button2.Enabled = false;
+                return;
+            }
+        }
         public Facturacion()
         {
             InitializeComponent();
-            /*string query = "select cu.* from " +
-            "HHHH.clientes cli, " +
-            "HHHH.cuentas cu Where " +
-            Sesion.user_id.ToString() + " = cli.Id_usuario and " +
-            "cu.Id_cliente = cli.Id_cliente";
-
-            DataTable cuentasUser;
-            cuentasUser = ConexionDB.correrQuery(Sesion.conexion, query);
-            listBox1.DataSource = cuentasUser;
-            listBox1.DisplayMember = "Id_cuenta";*/
-            label3.Text = Sesion.usuario;
-            DataTable movSinFacturar;
-            List<SqlParameter> listaDeParametros = new List<SqlParameter>();
-            listaDeParametros.Add(new SqlParameter("@user_id", Sesion.user_id));
-            movSinFacturar = ConexionDB.invocarStoreProcedure(Sesion.conexion, "movSinFacturar",listaDeParametros);
-       
-            dataGridView1.DataSource = movSinFacturar;
+            if (Sesion.rol_id == 1)
+            {
+                label3.Visible = false;
+                comboBox1.Visible = true;
+                DataTable usuarios;
+                usuarios = ConexionDB.correrQuery(Sesion.conexion, "select Id_usuario,Usuario from HHHH.usuarios where Id_usuario <> 1");
+                comboBox1.DataSource = usuarios;
+                comboBox1.ValueMember = "Id_usuario";
+                comboBox1.DisplayMember = "Usuario";
+                comboBox1.Text = "Elija un usuario";
+                comboBox1.SelectedValue = 0;
+            }
+            else
+            {
+                actualizarMov(Sesion.usuario,Sesion.user_id);
+            }
+            
   
-        }
-
-        private void listBox1_SelectedIndexChanged(object sender, EventArgs e)
-        {
-
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -47,5 +67,31 @@ namespace PagoElectronico.Facturacion
             this.Close();
         }
 
+        private void button2_Click(object sender, EventArgs e)
+        {
+            
+            if (Sesion.rol_id != 1)
+            {
+                new Factura(Sesion.user_id).Show(Owner);
+                this.Close();
+            }
+            else 
+            {
+                new Factura(Convert.ToInt32(comboBox1.SelectedValue)).Show(this);
+                this.Hide();
+            }
+            
+        }
+        
+        private void comboBox1_SelectedValueChanged(object sender, EventArgs e)
+        {
+            try
+            {
+                int user = Convert.ToInt32(comboBox1.SelectedValue);
+                actualizarMov(comboBox1.SelectedText, user);
+            }
+            catch (NullReferenceException) { }
+            catch (InvalidCastException) { }
+        }
     }
 }
