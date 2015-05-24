@@ -89,7 +89,7 @@
             this.txtCodigo.Location = new System.Drawing.Point(126, 112);
             this.txtCodigo.MaxLength = 3;
             this.txtCodigo.Name = "txtCodigo";
-            this.txtCodigo.Size = new System.Drawing.Size(312, 20);
+            this.txtCodigo.Size = new System.Drawing.Size(80, 20);
             this.txtCodigo.TabIndex = 6;
             // 
             // label3
@@ -125,7 +125,7 @@
             this.btAsociar.Name = "btAsociar";
             this.btAsociar.Size = new System.Drawing.Size(97, 30);
             this.btAsociar.TabIndex = 13;
-            this.btAsociar.Text = "Asociar";
+            this.btAsociar.Text = "Guardar";
             this.btAsociar.UseVisualStyleBackColor = true;
             this.btAsociar.Click += new System.EventHandler(this.btAsociar_Click);
             // 
@@ -151,7 +151,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(450, 189);
+            this.ClientSize = new System.Drawing.Size(450, 185);
             this.Controls.Add(this.cbBanco);
             this.Controls.Add(this.btVolver);
             this.Controls.Add(this.btAsociar);
@@ -165,7 +165,7 @@
             this.Controls.Add(this.label1);
             this.Controls.Add(this.txttarjeta);
             this.Name = "AsociarTarjeta";
-            this.Text = "Asociar tarjeta";
+            this.Text = "Tarjeta";
             this.ResumeLayout(false);
             this.PerformLayout();
 

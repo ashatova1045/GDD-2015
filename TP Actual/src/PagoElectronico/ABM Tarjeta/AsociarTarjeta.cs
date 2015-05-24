@@ -9,7 +9,7 @@ namespace PagoElectronico.ABM_Tarjeta
 {
     public partial class AsociarTarjeta : Form
     {
-        public AsociarTarjeta()
+        public AsociarTarjeta(decimal idtarjeta)
         {
             InitializeComponent();
 
@@ -18,6 +18,14 @@ namespace PagoElectronico.ABM_Tarjeta
             cbBanco.ValueMember = "Id_banco";
             cbBanco.DataSource = banco;
             cbBanco.Update();
+
+            if (idtarjeta != 0)
+            {
+                DataRow tarjeta = ConexionDB.correrQuery(Sesion.conexion, "select Id_banco,Fecha_emision,Fecha_vencimiento from hhhh.tarjetas where id_tarjeta =" + idtarjeta).Rows[0];
+                cbBanco.SelectedValue = Convert.ToDecimal(tarjeta["Id_banco"]);
+                dtEmision.Value=Convert.ToDateTime(tarjeta["Fecha_emision"]);
+                dtVencimiento.Value = Convert.ToDateTime(tarjeta["Fecha_vencimiento"]);
+            }
         }
 
         private void dtEmision_ValueChanged(object sender, EventArgs e)
@@ -59,6 +67,7 @@ namespace PagoElectronico.ABM_Tarjeta
                 return;
             }
             MessageBox.Show("Tarjeta agregada correctamente");
+            btVolver.PerformClick();
         }
 
         private void btVolver_Click(object sender, EventArgs e)

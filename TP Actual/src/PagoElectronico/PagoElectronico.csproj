@@ -78,17 +78,17 @@
     <Compile Include="ABM Rol\NuevoNombreRol.Designer.cs">
       <DependentUpon>NuevoNombreRol.cs</DependentUpon>
     </Compile>
-    <Compile Include="ABM Tarjeta\ABMTarjeta.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="ABM Tarjeta\ABMTarjeta.Designer.cs">
-      <DependentUpon>ABMTarjeta.cs</DependentUpon>
-    </Compile>
     <Compile Include="ABM Tarjeta\AsociarTarjeta.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="ABM Tarjeta\AsociarTarjeta.Designer.cs">
       <DependentUpon>AsociarTarjeta.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ABM Tarjeta\mtar.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ABM Tarjeta\mtar.Designer.cs">
+      <DependentUpon>mtar.cs</DependentUpon>
     </Compile>
     <Compile Include="Consulta Saldos\Form1.cs">
       <SubType>Form</SubType>
@@ -155,11 +155,11 @@
     <EmbeddedResource Include="ABM Rol\NuevoNombreRol.resx">
       <DependentUpon>NuevoNombreRol.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="ABM Tarjeta\ABMTarjeta.resx">
-      <DependentUpon>ABMTarjeta.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="ABM Tarjeta\AsociarTarjeta.resx">
       <DependentUpon>AsociarTarjeta.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ABM Tarjeta\mtar.resx">
+      <DependentUpon>mtar.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Facturacion\Facturacion.resx">
       <DependentUpon>Facturacion.cs</DependentUpon>

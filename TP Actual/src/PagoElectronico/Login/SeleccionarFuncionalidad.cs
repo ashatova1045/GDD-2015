@@ -52,7 +52,7 @@ namespace PagoElectronico.Login
                     nuevoForm = new ABM_Cuenta.Form1();
                     break;
                 case "Asociar/Desasociar Tarjeta de Credito":
-                    nuevoForm = new ABM_Tarjeta.ABMTarjeta();
+                    nuevoForm = new ABM_Tarjeta.mtar();
                     break;
                 case "Depositos":
                     nuevoForm = new Depositos.Form1();

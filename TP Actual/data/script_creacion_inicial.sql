@@ -231,10 +231,12 @@ BEGIN /* *************** CREACION DE TABLAS *************** */
 	CREATE TABLE HHHH.tarjetas(
 		Id_tarjeta numeric(18,0) IDENTITY(1,1) PRIMARY KEY,
 		Numero binary(20) unique,
+		finalnumero char(4) not null,
 		Id_banco numeric(18,0) CONSTRAINT FK_tarjetas_banco FOREIGN KEY REFERENCES HHHH.bancos(Id_banco),
 		Fecha_emision datetime,
 		Fecha_vencimiento datetime,
 		Codigo_seguridad binary(20),
+		estado bit default 1,
 		Id_cliente numeric(18,0) CONSTRAINT FK_tarjetas_cliente FOREIGN KEY REFERENCES HHHH.clientes (Id_cliente)
 	)
 	
@@ -393,9 +395,9 @@ BEGIN /* *************** MIGRACION *************** */
 			WHERE M.Retiro_Codigo IS NOT NULL
 	SET IDENTITY_INSERT HHHH.retiros OFF
 -------------------------------------------------------------------------------------------	
-	INSERT INTO HHHH.tarjetas(Numero, Fecha_emision, Fecha_vencimiento, Codigo_seguridad, Id_cliente, Id_banco)
+	INSERT INTO HHHH.tarjetas(Numero, Fecha_emision, Fecha_vencimiento, Codigo_seguridad, Id_cliente,finalnumero, Id_banco)
 		SELECT distinct HashBytes('SHA1',T.Tarjeta_Numero), T.Tarjeta_Fecha_Emision, T.Tarjeta_Fecha_Vencimiento,
-			HashBytes('SHA1',T.Tarjeta_Codigo_Seg), C.id_cliente, 1 --Banco Migracion
+			HashBytes('SHA1',T.Tarjeta_Codigo_Seg), C.id_cliente,RIGHT(T.Tarjeta_Numero,4),1 --Banco Migracion
 		FROM (SELECT DISTINCT Tarjeta_Numero, Tarjeta_Fecha_Emision,
 							Tarjeta_Fecha_Vencimiento, Tarjeta_Codigo_Seg, Cuenta_Numero
 			  FROM gd_esquema.Maestra
@@ -653,8 +655,8 @@ AS
 				RAISERROR ('Ya existe esa tarjeta',16,1)
 				RETURN
 			END
-		INSERT INTO HHHH.tarjetas(Numero,Id_banco,Id_cliente,Fecha_vencimiento,Fecha_emision,Codigo_seguridad)
-			VALUES(HashBytes('SHA1',@tarjeta),@banco,(select Id_cliente from HHHH.clientes where Id_usuario=@idusuario),@vencimiento,@emision,HashBytes('SHA1',@codigo))
+		INSERT INTO HHHH.tarjetas(Numero,Id_banco,Id_cliente,Fecha_vencimiento,Fecha_emision,Codigo_seguridad,finalnumero)
+			VALUES(HashBytes('SHA1',@tarjeta),@banco,(select Id_cliente from HHHH.clientes where Id_usuario=@idusuario),@vencimiento,@emision,HashBytes('SHA1',@codigo),RIGHt(@tarjeta,4))
     END				
 		
 GO
