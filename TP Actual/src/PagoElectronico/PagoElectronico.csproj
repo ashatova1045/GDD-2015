@@ -84,11 +84,11 @@
     <Compile Include="ABM Tarjeta\Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
-    <Compile Include="Consulta Saldos\Form1.cs">
+    <Compile Include="Consulta Saldos\Consultar Saldo.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Consulta Saldos\Form1.Designer.cs">
-      <DependentUpon>Form1.cs</DependentUpon>
+    <Compile Include="Consulta Saldos\Consultar Saldo.Designer.cs">
+      <DependentUpon>Consultar Saldo.cs</DependentUpon>
     </Compile>
     <Compile Include="Facturacion\Factura.cs">
       <SubType>Form</SubType>
@@ -154,6 +154,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="ABM Rol\NuevoNombreRol.resx">
       <DependentUpon>NuevoNombreRol.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Consulta Saldos\Consultar Saldo.resx">
+      <DependentUpon>Consultar Saldo.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Facturacion\Factura.resx">
       <DependentUpon>Factura.cs</DependentUpon>

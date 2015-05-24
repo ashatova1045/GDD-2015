@@ -67,7 +67,7 @@ namespace PagoElectronico.Login
                     nuevoForm = new Facturacion.Facturacion();
                     break;
                 case "Consulta de Saldo de Cuentas":
-                    nuevoForm = new Consulta_Saldos.Form1();
+                    nuevoForm = new Consulta_Saldos.Consultar_Saldo();
                     break;
                 case "Listado Estadistico":
                     nuevoForm = new Listados.Form1();
