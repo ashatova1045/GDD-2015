@@ -16,7 +16,6 @@ namespace PagoElectronico.ABM_Tarjeta
         {
             InitializeComponent();
 
-            this.Shown += actualizar();
             actualizar();
         }
 
@@ -62,8 +61,8 @@ namespace PagoElectronico.ABM_Tarjeta
 
         protected void btAsociar_Click(object sender, EventArgs e)
         {
-            new AsociarTarjeta(0).Show(this);
-            this.Hide();
+            new AsociarTarjeta(0).ShowDialog(this);
+            actualizar();
         }
     }
 }

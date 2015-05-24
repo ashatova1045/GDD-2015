@@ -28,31 +28,13 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.cbTarjeta = new System.Windows.Forms.ComboBox();
-            this.label1 = new System.Windows.Forms.Label();
             this.btModificar = new System.Windows.Forms.Button();
             this.btDesasociar = new System.Windows.Forms.Button();
             this.btVolver = new System.Windows.Forms.Button();
             this.btAsociar = new System.Windows.Forms.Button();
+            this.cbTarjeta = new System.Windows.Forms.ComboBox();
+            this.label1 = new System.Windows.Forms.Label();
             this.SuspendLayout();
-            // 
-            // cbTarjeta
-            // 
-            this.cbTarjeta.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cbTarjeta.FormattingEnabled = true;
-            this.cbTarjeta.Location = new System.Drawing.Point(188, 6);
-            this.cbTarjeta.Name = "cbTarjeta";
-            this.cbTarjeta.Size = new System.Drawing.Size(256, 21);
-            this.cbTarjeta.TabIndex = 0;
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(69, 9);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(94, 13);
-            this.label1.TabIndex = 1;
-            this.label1.Text = "Numero de tarjeta:";
             // 
             // btModificar
             // 
@@ -96,6 +78,24 @@
             this.btAsociar.UseVisualStyleBackColor = true;
             this.btAsociar.Click += new System.EventHandler(this.btAsociar_Click);
             // 
+            // cbTarjeta
+            // 
+            this.cbTarjeta.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbTarjeta.FormattingEnabled = true;
+            this.cbTarjeta.Location = new System.Drawing.Point(188, 6);
+            this.cbTarjeta.Name = "cbTarjeta";
+            this.cbTarjeta.Size = new System.Drawing.Size(256, 21);
+            this.cbTarjeta.TabIndex = 0;
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(69, 9);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(94, 13);
+            this.label1.TabIndex = 1;
+            this.label1.Text = "Numero de tarjeta:";
+            // 
             // mtar
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -116,12 +116,12 @@
 
         #endregion
 
-        private System.Windows.Forms.ComboBox cbTarjeta;
-        private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Button btModificar;
         private System.Windows.Forms.Button btDesasociar;
         private System.Windows.Forms.Button btVolver;
         private System.Windows.Forms.Button btAsociar;
+        private System.Windows.Forms.ComboBox cbTarjeta;
+        private System.Windows.Forms.Label label1;
 
 
     }

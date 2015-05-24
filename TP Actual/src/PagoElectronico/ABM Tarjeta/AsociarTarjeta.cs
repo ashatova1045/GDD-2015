@@ -13,16 +13,20 @@ namespace PagoElectronico.ABM_Tarjeta
         {
             InitializeComponent();
 
-            DataTable banco = ConexionDB.correrQuery(Sesion.conexion, "SET CONCAT_NULL_YIELDS_NULL OFF;select distinct Id_banco,b.Descripcion +'. '+Calle+' '+convert(nvarchar(max),altura)+', '+localidad+', '+ p.Descripcion des from HHHH.bancos b left join HHHH.paises p on p.Codigo=Id_pais where Id_banco != 1");
-            cbBanco.DisplayMember = "des";
-            cbBanco.ValueMember = "Id_banco";
-            cbBanco.DataSource = banco;
-            cbBanco.Update();
+            DataTable banco = ConexionDB.correrQuery(Sesion.conexion, "select distinct Id_banco,b.Descripcion ,b.Calle,b.altura,b.localidad, p.Descripcion des from HHHH.bancos b left join HHHH.paises p on p.Codigo=Id_pais");
+            dgBanco.DataSource = banco;
+            dgBanco.Update();
 
             if (idtarjeta != 0)
             {
                 DataRow tarjeta = ConexionDB.correrQuery(Sesion.conexion, "select Id_banco,Fecha_emision,Fecha_vencimiento from hhhh.tarjetas where id_tarjeta =" + idtarjeta).Rows[0];
-                cbBanco.SelectedValue = Convert.ToDecimal(tarjeta["Id_banco"]);
+                foreach (DataGridViewRow r in dgBanco.Rows)
+                {
+                    if (Convert.ToDecimal(r.Cells["id"].Value)==Convert.ToDecimal(tarjeta["Id_banco"]))
+                    {
+                        dgBanco.CurrentCell = dgBanco.Rows[r.Index].Cells[0];
+                    }
+                }
                 dtEmision.Value=Convert.ToDateTime(tarjeta["Fecha_emision"]);
                 dtVencimiento.Value = Convert.ToDateTime(tarjeta["Fecha_vencimiento"]);
             }
@@ -56,7 +60,7 @@ namespace PagoElectronico.ABM_Tarjeta
             listaP.Add(new SqlParameter("@emision", dtEmision.Value));
             listaP.Add(new SqlParameter("@vencimiento", dtVencimiento.Value));
             listaP.Add(new SqlParameter("@codigo", txtCodigo.Text));
-            listaP.Add(new SqlParameter("@banco",Convert.ToDecimal(cbBanco.SelectedValue)));
+            listaP.Add(new SqlParameter("@banco",Convert.ToDecimal(dgBanco.SelectedRows[0].Cells["id"].Value)));
             try
             {
                 ConexionDB.invocarStoreProcedure(Sesion.conexion, "asociarTarjeta", listaP);

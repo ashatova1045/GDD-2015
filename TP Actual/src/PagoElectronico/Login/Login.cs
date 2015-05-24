@@ -36,8 +36,8 @@ namespace PagoElectronico.Login
                 return;
             }
 
-            Sesion.user_id = (int)DTUsuario.Rows[0][0];
-            Sesion.cliente_id = (int)DTUsuario.Rows[0][1]; 
+            Sesion.user_id = Convert.ToDecimal(DTUsuario.Rows[0][0]);
+            Sesion.cliente_id = Convert.ToDecimal(DTUsuario.Rows[0][1]); 
             Sesion.usuario = txtUsuario.Text;
 
             new SeleccionarRol().Show(this);

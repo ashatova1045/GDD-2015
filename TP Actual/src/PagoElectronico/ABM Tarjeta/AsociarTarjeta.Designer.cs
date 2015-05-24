@@ -39,7 +39,14 @@
             this.label6 = new System.Windows.Forms.Label();
             this.btAsociar = new System.Windows.Forms.Button();
             this.btVolver = new System.Windows.Forms.Button();
-            this.cbBanco = new System.Windows.Forms.ComboBox();
+            this.dgBanco = new System.Windows.Forms.DataGridView();
+            this.Nombre = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Pais = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Localidad = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Calle = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Altura = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.id = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            ((System.ComponentModel.ISupportInitialize)(this.dgBanco)).BeginInit();
             this.SuspendLayout();
             // 
             // txttarjeta
@@ -47,7 +54,7 @@
             this.txttarjeta.Location = new System.Drawing.Point(126, 2);
             this.txttarjeta.MaxLength = 16;
             this.txttarjeta.Name = "txttarjeta";
-            this.txttarjeta.Size = new System.Drawing.Size(312, 20);
+            this.txttarjeta.Size = new System.Drawing.Size(479, 20);
             this.txttarjeta.TabIndex = 0;
             // 
             // label1
@@ -70,23 +77,23 @@
             // 
             // dtEmision
             // 
-            this.dtEmision.Location = new System.Drawing.Point(126, 56);
+            this.dtEmision.Location = new System.Drawing.Point(126, 178);
             this.dtEmision.Name = "dtEmision";
-            this.dtEmision.Size = new System.Drawing.Size(312, 20);
+            this.dtEmision.Size = new System.Drawing.Size(479, 20);
             this.dtEmision.TabIndex = 4;
             this.dtEmision.ValueChanged += new System.EventHandler(this.dtEmision_ValueChanged);
             // 
             // dtVencimiento
             // 
-            this.dtVencimiento.Location = new System.Drawing.Point(126, 83);
+            this.dtVencimiento.Location = new System.Drawing.Point(126, 205);
             this.dtVencimiento.Name = "dtVencimiento";
-            this.dtVencimiento.Size = new System.Drawing.Size(312, 20);
+            this.dtVencimiento.Size = new System.Drawing.Size(479, 20);
             this.dtVencimiento.TabIndex = 5;
             this.dtVencimiento.ValueChanged += new System.EventHandler(this.dtVencimiento_ValueChanged);
             // 
             // txtCodigo
             // 
-            this.txtCodigo.Location = new System.Drawing.Point(126, 112);
+            this.txtCodigo.Location = new System.Drawing.Point(126, 234);
             this.txtCodigo.MaxLength = 3;
             this.txtCodigo.Name = "txtCodigo";
             this.txtCodigo.Size = new System.Drawing.Size(80, 20);
@@ -95,7 +102,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(6, 87);
+            this.label3.Location = new System.Drawing.Point(6, 209);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(115, 13);
             this.label3.TabIndex = 8;
@@ -104,7 +111,7 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(6, 60);
+            this.label4.Location = new System.Drawing.Point(6, 182);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(93, 13);
             this.label4.TabIndex = 7;
@@ -113,7 +120,7 @@
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(6, 115);
+            this.label6.Location = new System.Drawing.Point(6, 237);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(107, 13);
             this.label6.TabIndex = 9;
@@ -121,7 +128,7 @@
             // 
             // btAsociar
             // 
-            this.btAsociar.Location = new System.Drawing.Point(109, 138);
+            this.btAsociar.Location = new System.Drawing.Point(205, 255);
             this.btAsociar.Name = "btAsociar";
             this.btAsociar.Size = new System.Drawing.Size(97, 30);
             this.btAsociar.TabIndex = 13;
@@ -131,7 +138,7 @@
             // 
             // btVolver
             // 
-            this.btVolver.Location = new System.Drawing.Point(249, 138);
+            this.btVolver.Location = new System.Drawing.Point(345, 255);
             this.btVolver.Name = "btVolver";
             this.btVolver.Size = new System.Drawing.Size(97, 30);
             this.btVolver.TabIndex = 14;
@@ -139,20 +146,89 @@
             this.btVolver.UseVisualStyleBackColor = true;
             this.btVolver.Click += new System.EventHandler(this.btVolver_Click);
             // 
-            // cbBanco
+            // dgBanco
             // 
-            this.cbBanco.FormattingEnabled = true;
-            this.cbBanco.Location = new System.Drawing.Point(126, 30);
-            this.cbBanco.Name = "cbBanco";
-            this.cbBanco.Size = new System.Drawing.Size(312, 21);
-            this.cbBanco.TabIndex = 15;
+            this.dgBanco.AllowUserToAddRows = false;
+            this.dgBanco.AllowUserToDeleteRows = false;
+            this.dgBanco.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgBanco.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.Nombre,
+            this.Pais,
+            this.Localidad,
+            this.Calle,
+            this.Altura,
+            this.id});
+            this.dgBanco.Location = new System.Drawing.Point(126, 33);
+            this.dgBanco.MultiSelect = false;
+            this.dgBanco.Name = "dgBanco";
+            this.dgBanco.ReadOnly = true;
+            this.dgBanco.RowHeadersVisible = false;
+            this.dgBanco.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.dgBanco.Size = new System.Drawing.Size(479, 139);
+            this.dgBanco.TabIndex = 15;
+            
+            // 
+            // Nombre
+            // 
+            this.Nombre.DataPropertyName = "Descripcion";
+            this.Nombre.Frozen = true;
+            this.Nombre.HeaderText = "Banco";
+            this.Nombre.Name = "Nombre";
+            this.Nombre.ReadOnly = true;
+            this.Nombre.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // Pais
+            // 
+            this.Pais.DataPropertyName = "Pais";
+            this.Pais.Frozen = true;
+            this.Pais.HeaderText = "Pais";
+            this.Pais.Name = "Pais";
+            this.Pais.ReadOnly = true;
+            this.Pais.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // Localidad
+            // 
+            this.Localidad.DataPropertyName = "Localidad";
+            this.Localidad.Frozen = true;
+            this.Localidad.HeaderText = "Localidad";
+            this.Localidad.Name = "Localidad";
+            this.Localidad.ReadOnly = true;
+            this.Localidad.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // Calle
+            // 
+            this.Calle.DataPropertyName = "Calle";
+            this.Calle.Frozen = true;
+            this.Calle.HeaderText = "Calle";
+            this.Calle.Name = "Calle";
+            this.Calle.ReadOnly = true;
+            this.Calle.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // Altura
+            // 
+            this.Altura.DataPropertyName = "Altura";
+            this.Altura.Frozen = true;
+            this.Altura.HeaderText = "Altura";
+            this.Altura.Name = "Altura";
+            this.Altura.ReadOnly = true;
+            this.Altura.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // id
+            // 
+            this.id.DataPropertyName = "Id_banco";
+            this.id.Frozen = true;
+            this.id.HeaderText = "id";
+            this.id.Name = "id";
+            this.id.ReadOnly = true;
+            this.id.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.id.Visible = false;
             // 
             // AsociarTarjeta
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(450, 185);
-            this.Controls.Add(this.cbBanco);
+            this.ClientSize = new System.Drawing.Size(617, 297);
+            this.Controls.Add(this.dgBanco);
             this.Controls.Add(this.btVolver);
             this.Controls.Add(this.btAsociar);
             this.Controls.Add(this.label6);
@@ -166,6 +242,7 @@
             this.Controls.Add(this.txttarjeta);
             this.Name = "AsociarTarjeta";
             this.Text = "Tarjeta";
+            ((System.ComponentModel.ISupportInitialize)(this.dgBanco)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -184,6 +261,12 @@
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.Button btAsociar;
         private System.Windows.Forms.Button btVolver;
-        private System.Windows.Forms.ComboBox cbBanco;
+        private System.Windows.Forms.DataGridView dgBanco;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Nombre;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Pais;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Localidad;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Calle;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Altura;
+        private System.Windows.Forms.DataGridViewTextBoxColumn id;
     }
 }
