@@ -21,7 +21,7 @@ namespace PagoElectronico.ABM_Tarjeta
 
         public void actualizar()
         {
-            DataTable tarjetas = ConexionDB.correrQuery(Sesion.conexion, "select Id_tarjeta,finalnumero,c.Id_usuario from HHHH.tarjetas t, hhhh.clientes c where t.estado = 1 and t.Id_cliente=c.Id_cliente and  c.Id_usuario=" + Sesion.user_id);
+            DataTable tarjetas = ConexionDB.correrQuery(Sesion.conexion, "select Id_tarjeta,finalnumero from HHHH.tarjetas t where t.estado = 1 and t.Id_cliente=" + Sesion.cliente_id);
             cbTarjeta.DisplayMember = "finalnumero";
             cbTarjeta.ValueMember = "Id_tarjeta";
             cbTarjeta.DataSource = tarjetas;
@@ -54,7 +54,7 @@ namespace PagoElectronico.ABM_Tarjeta
 
         private void btDesasociar_Click(object sender, EventArgs e)
         {
-            ConexionDB.correrQuery(Sesion.conexion, "update HHHH.tarjetas set estado=0 where id_tarjeta = " + Convert.ToString(cbTarjeta.SelectedValue));
+            ConexionDB.correrQuery(Sesion.conexion, "update HHHH.tarjetas set estado=0 where id_tarjeta = " + Convert.ToDecimal(cbTarjeta.SelectedValue));
             MessageBox.Show("Tarjeta desasociada");
             actualizar();
         }
