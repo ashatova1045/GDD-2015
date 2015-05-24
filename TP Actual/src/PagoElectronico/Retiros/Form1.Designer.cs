@@ -48,11 +48,14 @@
             // 
             // Cuenta_CB
             // 
+            this.Cuenta_CB.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
+            this.Cuenta_CB.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
             this.Cuenta_CB.FormattingEnabled = true;
             this.Cuenta_CB.Location = new System.Drawing.Point(143, 23);
             this.Cuenta_CB.Name = "Cuenta_CB";
             this.Cuenta_CB.Size = new System.Drawing.Size(121, 21);
             this.Cuenta_CB.TabIndex = 0;
+            this.Cuenta_CB.Click += new System.EventHandler(this.Cuenta_CB_Click);
             // 
             // Cuenta_LB
             // 
@@ -79,6 +82,7 @@
             // 
             // Importe_NUD
             // 
+            this.Importe_NUD.DecimalPlaces = 2;
             this.Importe_NUD.Location = new System.Drawing.Point(144, 117);
             this.Importe_NUD.Name = "Importe_NUD";
             this.Importe_NUD.Size = new System.Drawing.Size(120, 20);
@@ -97,11 +101,14 @@
             // 
             // Moneda_CB
             // 
+            this.Moneda_CB.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.Moneda_CB.FormattingEnabled = true;
             this.Moneda_CB.Location = new System.Drawing.Point(142, 164);
             this.Moneda_CB.Name = "Moneda_CB";
             this.Moneda_CB.Size = new System.Drawing.Size(121, 21);
             this.Moneda_CB.TabIndex = 6;
+            this.Moneda_CB.SelectedIndexChanged += new System.EventHandler(this.Moneda_CB_SelectedIndexChanged);
+            this.Moneda_CB.Click += new System.EventHandler(this.Moneda_CB_Click);
             // 
             // Fecha_LB
             // 
@@ -127,24 +134,25 @@
             // 
             this.RealizarCheque_BTN.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
             this.RealizarCheque_BTN.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.RealizarCheque_BTN.Location = new System.Drawing.Point(47, 281);
+            this.RealizarCheque_BTN.Location = new System.Drawing.Point(77, 279);
             this.RealizarCheque_BTN.Name = "RealizarCheque_BTN";
             this.RealizarCheque_BTN.Size = new System.Drawing.Size(161, 32);
             this.RealizarCheque_BTN.TabIndex = 9;
             this.RealizarCheque_BTN.Text = "Realizar Cheque";
             this.RealizarCheque_BTN.UseVisualStyleBackColor = false;
-            this.RealizarCheque_BTN.Click += new System.EventHandler(this.button1_Click);
+            this.RealizarCheque_BTN.Click += new System.EventHandler(this.RealizarCheque_BTN_Click);
             // 
             // Cancelar_BTN
             // 
             this.Cancelar_BTN.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(128)))));
             this.Cancelar_BTN.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.Cancelar_BTN.Location = new System.Drawing.Point(247, 281);
+            this.Cancelar_BTN.Location = new System.Drawing.Point(277, 279);
             this.Cancelar_BTN.Name = "Cancelar_BTN";
             this.Cancelar_BTN.Size = new System.Drawing.Size(117, 32);
             this.Cancelar_BTN.TabIndex = 10;
             this.Cancelar_BTN.Text = "Cancelar";
             this.Cancelar_BTN.UseVisualStyleBackColor = false;
+            this.Cancelar_BTN.Click += new System.EventHandler(this.Cancelar_BTN_Click);
             // 
             // NoDoc_LB
             // 
@@ -162,6 +170,7 @@
             this.NoDoc_TXT.Name = "NoDoc_TXT";
             this.NoDoc_TXT.Size = new System.Drawing.Size(121, 20);
             this.NoDoc_TXT.TabIndex = 12;
+            this.NoDoc_TXT.TextChanged += new System.EventHandler(this.NoDoc_TXT_TextChanged);
             // 
             // pictureBox1
             // 
