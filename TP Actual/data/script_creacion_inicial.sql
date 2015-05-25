@@ -201,15 +201,30 @@ BEGIN /* *************** CREACION DE TABLAS *************** */
 		Fecha_nacimiento datetime,
 		Estado NVARCHAR CHECK (Estado IN ('H','I')) -- habilitado, inhabilitado
 	)
+	
+	CREATE TABLE HHHH.Monedas(
+		Id_moneda numeric(18,0) IDENTITY(1,1) PRIMARY KEY,
+		Descripcion nvarchar(30) NOT NULL
+	)
 
+	CREATE TABLE HHHH.tipo_cuenta(	
+		Id_tipo_cuenta numeric(18,0) IDENTITY(1,1) PRIMARY KEY,
+		Descripcion nvarchar(255),
+		Id_moneda_cuenta numeric(18,0) CONSTRAINT FK_tipo_cuenta__monedas_cuenta REFERENCES HHHH.monedas (Id_moneda),
+		Costo_transf numeric(18,2),
+		Duracion int, 
+		Id_moneda_transf numeric(18,0) CONSTRAINT FK_tipo_cuenta__monedas_transf REFERENCES HHHH.monedas (Id_moneda),
+		Costo_cuenta numeric(18,2),
+	)
+	
 	CREATE TABLE HHHH.cuentas(
 		Id_cuenta numeric(18,0) IDENTITY(1,1) PRIMARY KEY,
 		Id_pais numeric(18,0) CONSTRAINT FK_cuentas_pais FOREIGN KEY REFERENCES HHHH.paises(Codigo),
 		Id_moneda numeric(18,0),
 		Fecha_apertura datetime,
-		Id_tipo_cuenta numeric(18,0),
+		Id_tipo_cuenta numeric(18,0) CONSTRAINT FK_cuentas_tc FOREIGN KEY REFERENCES HHHH.tipo_cuenta(Id_tipo_cuenta),
 		Id_cliente numeric(18,0) NOT NULL CONSTRAINT FK_cuentas_cliente FOREIGN KEY REFERENCES HHHH.clientes(Id_cliente),
-		Estado NVARCHAR DEFAULT 'H' CHECK (Estado IN ('P','C','H','I')), -- pend act, cerrada, habilida, inhabilitada
+		Estado NVARCHAR DEFAULT 'P' CHECK (Estado IN ('P','C','H','I')), -- pend act, cerrada, habilida, inhabilitada
 		Saldo numeric(18,2)
 	)
 	
@@ -221,11 +236,6 @@ BEGIN /* *************** CREACION DE TABLAS *************** */
 		Fecha_vencimiento datetime,
 		Codigo_seguridad varchar(3),
 		Id_cliente numeric(18,0) CONSTRAINT FK_tarjetas_cliente FOREIGN KEY REFERENCES HHHH.clientes (Id_cliente)
-	)
-	
-	CREATE TABLE HHHH.Monedas(
-		Id_moneda numeric(18,0) IDENTITY(1,1) PRIMARY KEY,
-		Descripcion nvarchar(30) NOT NULL
 	)
 	
 	CREATE TABLE HHHH.retiros(
@@ -298,16 +308,6 @@ BEGIN /* *************** CREACION DE TABLAS *************** */
 		PRIMARY KEY (Id_rol, Id_funcionalidad)
 	)
 	
-	CREATE TABLE HHHH.tipo_cuenta(	
-		Id_tipo_cuenta numeric(18,0) IDENTITY(1,1) PRIMARY KEY,
-		Descripcion nvarchar(255),
-		Id_moneda_cuenta numeric(18,0) CONSTRAINT FK_tipo_cuenta__monedas_cuenta REFERENCES HHHH.monedas (Id_moneda),
-		Costo_transf numeric(18,2),
-		Duracion int, 
-		Id_moneda_transf numeric(18,0) CONSTRAINT FK_tipo_cuenta__monedas_transf REFERENCES HHHH.monedas (Id_moneda),
-		Costo_cuenta numeric(18,2),
-	)
-	
 	CREATE TABLE HHHH.movimientos(
 		Id_movimiento numeric(18,0) IDENTITY(1,1) PRIMARY KEY,
 		Id_factura numeric(18,0) CONSTRAINT FK_movimientos_facturas REFERENCES HHHH.facturas(Id_factura),
@@ -377,11 +377,17 @@ BEGIN /* *************** MIGRACION *************** */
 		SET Id_usuario = usuarios.id_usuario
 		FROM HHHH.usuarios
 			WHERE usuarios.usuario = HHHH.borrardominio(clientes.Mail)
+-------------------------------------------------------------------------------------------	
+	INSERT INTO HHHH.Tipo_Cuenta(Descripcion, Id_moneda_cuenta, Costo_transf, Duracion, Id_moneda_transf, Costo_cuenta)
+		VALUES ('Gratuita', 1,3,30,1,0),
+				('Bronce', 1,2,30,1,1),
+				('Plata', 1,1,30,1,2),
+				('Oro', 1,0,30,1,3)
 -------------------------------------------------------------------------------------------			
 	SET IDENTITY_INSERT HHHH.cuentas ON
-	INSERT INTO HHHH.cuentas(Id_cuenta, Id_pais, Fecha_apertura, Id_cliente)
+	INSERT INTO HHHH.cuentas(Id_cuenta, Id_pais, Fecha_apertura, Id_cliente,Id_moneda,Saldo,Estado,Id_tipo_cuenta)
 		SELECT DISTINCT M.Cuenta_Numero, M.Cuenta_Pais_Codigo, M.Cuenta_Fecha_Creacion, 
-				C.Id_cliente
+				C.Id_cliente,1,100,'H',1
 			FROM gd_esquema.Maestra M, HHHH.clientes C
 			WHERE C.Mail = M.Cli_Mail
 	SET IDENTITY_INSERT HHHH.cuentas OFF
@@ -474,12 +480,6 @@ BEGIN /* *************** MIGRACION *************** */
 	INSERT INTO HHHH.Rel_Rol_Funcionalidad(Id_rol, Id_funcionalidad)
 		VALUES (1,1), (1,2), (1,3), (1,4), (1,9), (1,10), (1,11),
 				(2,4), (2,5), (2,6), (2,7), (2,8), (2,9), (2,10)
--------------------------------------------------------------------------------------------	
-	INSERT INTO HHHH.Tipo_Cuenta(Descripcion, Id_moneda_cuenta, Costo_transf, Duracion, Id_moneda_transf, Costo_cuenta)
-		VALUES ('Gratuita', 1,3,30,1,0),
-				('Bronce', 1,2,30,1,1),
-				('Plata', 1,1,30,1,2),
-				('Oro', 1,0,30,1,3)
 				
 END
 GO
@@ -513,7 +513,10 @@ AS
 			UPDATE HHHH.usuarios
 				SET IntentosFallidos = 0
 				WHERE id_usuario = @id_usuario
-			SELECT @id_usuario			 --devuelvo el numero de usuario para agregarlo a la sesion
+			declare @idcli numeric(18,0)= (SELECT Id_cliente from HHHH.clientes where Id_usuario=@id_usuario)
+				SELECT @id_usuario,(select case when @idcli is not null	then @idcli
+										else -1
+										end)
 		END
 	ELSE
 		BEGIN	
@@ -610,7 +613,32 @@ AS
 						  F.Descripcion = @lstr
 			END
         RETURN 
-    END			
+    END
+GO
+		
+CREATE PROCEDURE HHHH.transferencia
+	@origen numeric(18,0),
+	@destino numeric(18,0),
+	@moneda numeric(18,0),
+	@importe numeric(18,2),
+	@costo numeric(18,2),
+	@fecha datetime 
+AS
+	BEGIN
+		INSERT INTO HHHH.transferencias(Cuenta_destino,Cuenta_origen,Fecha_transferencia,Id_moneda,Importe,Costo)
+			VALUES(@destino,@origen,@fecha,@moneda,@importe,@costo)
+		
+		INSERT INTO HHHH.movimientos(Id_cuenta,Fecha,Id_moneda,Id_transferencia,Tipo_movimiento,Costo)
+			VALUES (@origen,@fecha,@moneda,(SELECT IDENT_CURRENT('HHHH.transferencias')),'T',@costo+@importe)
+		
+		UPDATE HHHH.cuentas
+			SET Saldo -= @importe +@costo
+			WHERE Id_cuenta = @origen
+		
+		UPDATE HHHH.cuentas
+			SET Saldo += @importe
+			WHERE Id_cuenta = @destino
+    END				
 		
 GO
 

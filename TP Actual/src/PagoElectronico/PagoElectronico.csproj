@@ -90,16 +90,16 @@
     <Compile Include="Consulta Saldos\Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
+    <Compile Include="Facturacion\Facturacion.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Facturacion\Facturacion.Designer.cs">
+      <DependentUpon>Facturacion.cs</DependentUpon>
+    </Compile>
     <Compile Include="Listados\Form1.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Listados\Form1.Designer.cs">
-      <DependentUpon>Form1.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Facturacion\Form1.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Facturacion\Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
     <Compile Include="Login\SeleccionarFuncionalidad.cs">
@@ -117,11 +117,11 @@
     <Compile Include="OperacionesDB\Cifrado\Cifrador.cs" />
     <Compile Include="OperacionesDB\ConexionDB\ConexionDB.cs" />
     <Compile Include="Sesion.cs" />
-    <Compile Include="Transferencias\Form1.cs">
+    <Compile Include="Transferencias\Transferencias.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Transferencias\Form1.Designer.cs">
-      <DependentUpon>Form1.cs</DependentUpon>
+    <Compile Include="Transferencias\Transferencias.Designer.cs">
+      <DependentUpon>Transferencias.cs</DependentUpon>
     </Compile>
     <Compile Include="Retiros\Form1.cs">
       <SubType>Form</SubType>
@@ -151,6 +151,8 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Depositos\RealizarDeposito.resx">
       <DependentUpon>RealizarDeposito.cs</DependentUpon>
+    <EmbeddedResource Include="Facturacion\Facturacion.resx">
+      <DependentUpon>Facturacion.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Login\Login.resx">
       <DependentUpon>Login.cs</DependentUpon>
@@ -168,6 +170,8 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Retiros\Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
+    <EmbeddedResource Include="Transferencias\Transferencias.resx">
+      <DependentUpon>Transferencias.cs</DependentUpon>
     </EmbeddedResource>
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>

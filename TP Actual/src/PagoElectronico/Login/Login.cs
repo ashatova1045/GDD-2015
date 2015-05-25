@@ -35,9 +35,10 @@ namespace PagoElectronico.Login
                 MessageBox.Show(ex.Message);
                 return;
             }
-            Sesion.user_id = (int)DTUsuario.Rows[0][0];  //guardo el user en la sesion (es el unico dato que devolvi por lo que esta en la fila 0 columna 0)
+
+            Sesion.user_id = Convert.ToDecimal(DTUsuario.Rows[0][0]);
+            Sesion.cliente_id = Convert.ToDecimal(DTUsuario.Rows[0][1]); 
             Sesion.usuario = txtUsuario.Text;
-            DTUsuario.Dispose();
 
             new SeleccionarRol().Show(this);
             this.Hide();

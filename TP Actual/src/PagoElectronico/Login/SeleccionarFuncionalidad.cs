@@ -61,10 +61,10 @@ namespace PagoElectronico.Login
                     nuevoForm = new Retiros.Form1();
                     break;
                 case "Transferencia entre Cuentas":
-                    nuevoForm = new Transferencias.Form1();
+                    nuevoForm = new Transferencias.Transferencias();
                     break;
                 case "Facturacion de Costos":
-                    nuevoForm = new Facturacion.Form1();
+                    nuevoForm = new Facturacion.Facturacion();
                     break;
                 case "Consulta de Saldo de Cuentas":
                     nuevoForm = new Consulta_Saldos.Form1();

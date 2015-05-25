@@ -21,6 +21,7 @@ namespace PagoElectronico.ABM_Rol
             comboBox1.DisplayMember = "Nombre_rol";
             comboBox1.ValueMember = "Id_rol";
             comboBox1.Text = "Elija un Rol";
+            comboBox1.Update();
 
         }
 
