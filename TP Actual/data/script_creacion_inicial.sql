@@ -513,7 +513,10 @@ AS
 			UPDATE HHHH.usuarios
 				SET intentosFallidos = 0
 				WHERE id_usuario = @id_usuario
-			SELECT @id_usuario,Id_cliente from HHHH.clientes where Id_usuario=@id_usuario			 --devuelvo el numero de usuario para agregarlo a la sesion
+			declare @idcli numeric(18,0)= (SELECT Id_cliente from HHHH.clientes where Id_usuario=@id_usuario)
+				SELECT @id_usuario,(select case when @idcli is not null	then @idcli
+										else -1
+										end)
 		END
 	ELSE
 		BEGIN	
