@@ -230,11 +230,13 @@ BEGIN /* *************** CREACION DE TABLAS *************** */
 	
 	CREATE TABLE HHHH.tarjetas(
 		Id_tarjeta numeric(18,0) IDENTITY(1,1) PRIMARY KEY,
-		Numero varchar(16) unique,
+		Numero binary(20) unique,
+		finalnumero char(4) not null,
 		Id_banco numeric(18,0) CONSTRAINT FK_tarjetas_banco FOREIGN KEY REFERENCES HHHH.bancos(Id_banco),
 		Fecha_emision datetime,
 		Fecha_vencimiento datetime,
-		Codigo_seguridad varchar(3),
+		Codigo_seguridad binary(20),
+		estado bit default 1,
 		Id_cliente numeric(18,0) CONSTRAINT FK_tarjetas_cliente FOREIGN KEY REFERENCES HHHH.clientes (Id_cliente)
 	)
 	
@@ -399,9 +401,9 @@ BEGIN /* *************** MIGRACION *************** */
 			WHERE M.Retiro_Codigo IS NOT NULL
 	SET IDENTITY_INSERT HHHH.retiros OFF
 -------------------------------------------------------------------------------------------	
-	INSERT INTO HHHH.tarjetas(Numero, Fecha_emision, Fecha_vencimiento, Codigo_seguridad, Id_cliente, Id_banco)
-		SELECT distinct T.Tarjeta_Numero, T.Tarjeta_Fecha_Emision, T.Tarjeta_Fecha_Vencimiento,
-			T.Tarjeta_Codigo_Seg, C.id_cliente, 1 --Banco Migracion
+	INSERT INTO HHHH.tarjetas(Numero, Fecha_emision, Fecha_vencimiento, Codigo_seguridad, Id_cliente,finalnumero, Id_banco)
+		SELECT distinct HashBytes('SHA1',T.Tarjeta_Numero), T.Tarjeta_Fecha_Emision, T.Tarjeta_Fecha_Vencimiento,
+			HashBytes('SHA1',T.Tarjeta_Codigo_Seg), C.id_cliente,RIGHT(T.Tarjeta_Numero,4),1 --Banco Migracion
 		FROM (SELECT DISTINCT Tarjeta_Numero, Tarjeta_Fecha_Emision,
 							Tarjeta_Fecha_Vencimiento, Tarjeta_Codigo_Seg, Cuenta_Numero
 			  FROM gd_esquema.Maestra
@@ -513,7 +515,11 @@ AS
 			UPDATE HHHH.usuarios
 				SET intentosFallidos = 0
 				WHERE id_usuario = @id_usuario
-			SELECT @id_usuario,convert(Int,Id_cliente) from HHHH.clientes where Id_usuario=@id_usuario --devuelvo el numero de usuario para agregarlo a la sesion	
+				
+			declare @idcli numeric(18,0)= (SELECT Id_cliente from HHHH.clientes where Id_usuario=@id_usuario)
+				SELECT @id_usuario,(select case when @idcli is not null	then @idcli
+										else -1
+										end)
 		END
 	ELSE
 		BEGIN	
@@ -639,6 +645,7 @@ AS
 		
 GO
 
+
 CREATE PROCEDURE HHHH.retiro
 	@cuenta numeric(18,0),
 	@doc numeric(18,0),
@@ -664,5 +671,26 @@ AS
 GO	
 	
 	
+
+CREATE PROCEDURE HHHH.asociarTarjeta
+	@idusuario numeric(18,0),
+	@tarjeta varchar(16),
+	@banco numeric(18,0),
+	@emision datetime,
+	@vencimiento datetime,
+	@codigo nvarchar(3)
+AS
+	BEGIN
+		IF EXISTS (SELECT 1 from hhhh.tarjetas where Id_tarjeta = @tarjeta)
+			BEGIN
+				RAISERROR ('Ya existe esa tarjeta',16,1)
+				RETURN
+			END
+		INSERT INTO HHHH.tarjetas(Numero,Id_banco,Id_cliente,Fecha_vencimiento,Fecha_emision,Codigo_seguridad,finalnumero)
+			VALUES(HashBytes('SHA1',@tarjeta),@banco,(select Id_cliente from HHHH.clientes where Id_usuario=@idusuario),@vencimiento,@emision,HashBytes('SHA1',@codigo),RIGHt(@tarjeta,4))
+    END				
+		
+GO
+
 
  
