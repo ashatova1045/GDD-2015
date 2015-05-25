@@ -40,25 +40,21 @@ namespace PagoElectronico.Consulta_Saldos
         private void actualizarCuentas()
         {
             DataTable cuentas;
+            int user;
+            
+            try
+            {
             if (Sesion.rol_id == 1)
-            {
-                try
-                {
-                    int user = Convert.ToInt32(comboBox1.SelectedValue);
-                    cuentas = ConexionDB.correrQuery(Sesion.conexion, "select cue.* from HHHH.cuentas cue, HHHH.clientes cli where cli.Id_cliente = cue.Id_cliente and cli.Id_usuario = " + user);
-                    comboBox2.DataSource = cuentas;
-                    comboBox2.ValueMember = "Id_cuenta";
-                    comboBox2.DisplayMember = "Id_cuenta";
-                }
-                catch(InvalidCastException) { }
-            }
-            else
-            {
-                cuentas = ConexionDB.correrQuery(Sesion.conexion, "select cue.* from HHHH.cuentas cue, HHHH.clientes cli where cli.Id_cliente = cue.Id_cliente and cli.Id_usuario = " + Sesion.user_id);
+                {user = Convert.ToInt32(comboBox1.SelectedValue); }
+            else{ user = Sesion.user_id; }
+
+                cuentas = ConexionDB.correrQuery(Sesion.conexion, "select cue.* from HHHH.cuentas cue, HHHH.clientes cli where cli.Id_cliente = cue.Id_cliente and cli.Id_usuario = " + user);
                 comboBox2.DataSource = cuentas;
-                comboBox2.ValueMember = "Id_cuenta";
+                comboBox2.ValueMember = "Saldo";
                 comboBox2.DisplayMember = "Id_cuenta";
+                label8.Text = comboBox2.SelectedValue.ToString();
             }
+            catch (InvalidCastException) { label8.Text = ""; }
         }
 
         private void actualizarDepositos()
@@ -67,7 +63,7 @@ namespace PagoElectronico.Consulta_Saldos
            {
                 DataTable depositos;
                 depositos = ConexionDB.correrQuery(Sesion.conexion, "select TOP 5 Id_deposito, Fecha_deposito, HHHH.impconmoneda(Importe,Id_tipo_moneda) AS Importe, Id_tarjeta "+
-                                                                    "from HHHH.depositos where Id_cuenta = " +comboBox2.SelectedValue.ToString()+
+                                                                    "from HHHH.depositos where Id_cuenta = " +comboBox2.Text+
                                                                     " order by Fecha_deposito DESC");
                 dataGridView1.DataSource = depositos;
             }
@@ -80,7 +76,7 @@ namespace PagoElectronico.Consulta_Saldos
             {
                 DataTable retiros;
                 retiros = ConexionDB.correrQuery(Sesion.conexion, "select TOP 5 Id_retiro, Fecha_retiro, HHHH.impconmoneda(Importe,Id_moneda) AS Importe, Id_cheque "+
-                                                                     "from HHHH.retiros where Id_cuenta = "+comboBox2.SelectedValue.ToString()+
+                                                                     "from HHHH.retiros where Id_cuenta = " + comboBox2.Text +
                                                                      " order by Fecha_retiro DESC");
                 dataGridView2.DataSource = retiros;
             }
@@ -93,7 +89,7 @@ namespace PagoElectronico.Consulta_Saldos
             {
                 DataTable transferencias;
                 transferencias = ConexionDB.correrQuery(Sesion.conexion, "select TOP 10 Id_transferencia, Fecha_transferencia, HHHH.impconmoneda(Importe,Id_moneda) AS Importe, Cuenta_destino "+
-                                                                            "from HHHH.transferencias where Cuenta_origen = "+comboBox2.SelectedValue.ToString()+
+                                                                            "from HHHH.transferencias where Cuenta_origen = " + comboBox2.Text +
                                                                             " order by Fecha_transferencia DESC");
                 dataGridView3.DataSource = transferencias;
             }
@@ -111,14 +107,12 @@ namespace PagoElectronico.Consulta_Saldos
             this.Close();
         }
 
-        private void comboBox2_SelectedValueChanged(object sender, EventArgs e)
+        private void comboBox2_SelectedIndexChanged(object sender, EventArgs e)
         {
             actualizarDepositos();
             actualizarRetiros();
             actualizarTransferencias();
         }
-
-
 
     }
 }
