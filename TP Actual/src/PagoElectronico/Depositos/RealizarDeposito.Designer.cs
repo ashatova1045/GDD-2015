@@ -46,7 +46,7 @@
             this.seleccionCuenta.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.seleccionCuenta.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.seleccionCuenta.FormattingEnabled = true;
-            this.seleccionCuenta.Location = new System.Drawing.Point(98, 28);
+            this.seleccionCuenta.Location = new System.Drawing.Point(98, 31);
             this.seleccionCuenta.Name = "seleccionCuenta";
             this.seleccionCuenta.Size = new System.Drawing.Size(249, 21);
             this.seleccionCuenta.TabIndex = 0;
@@ -89,7 +89,7 @@
             // seleccionTarjeta
             // 
             this.seleccionTarjeta.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.seleccionTarjeta.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.seleccionTarjeta.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.seleccionTarjeta.FormattingEnabled = true;
             this.seleccionTarjeta.Location = new System.Drawing.Point(98, 160);
             this.seleccionTarjeta.Name = "seleccionTarjeta";
@@ -100,7 +100,7 @@
             // 
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.5F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Underline))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(37, 32);
+            this.label1.Location = new System.Drawing.Point(37, 35);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(52, 15);
             this.label1.TabIndex = 6;
@@ -138,30 +138,32 @@
             // 
             // volverFuncionalidades
             // 
-            this.volverFuncionalidades.Location = new System.Drawing.Point(39, 204);
+            this.volverFuncionalidades.BackColor = System.Drawing.Color.NavajoWhite;
+            this.volverFuncionalidades.Location = new System.Drawing.Point(51, 213);
             this.volverFuncionalidades.Name = "volverFuncionalidades";
-            this.volverFuncionalidades.Size = new System.Drawing.Size(93, 39);
+            this.volverFuncionalidades.Size = new System.Drawing.Size(93, 36);
             this.volverFuncionalidades.TabIndex = 12;
-            this.volverFuncionalidades.Text = "Volver";
-            this.volverFuncionalidades.UseVisualStyleBackColor = true;
+            this.volverFuncionalidades.Text = "<<Volver";
+            this.volverFuncionalidades.UseVisualStyleBackColor = false;
             this.volverFuncionalidades.Click += new System.EventHandler(this.volverFuncionalidades_Click_1);
             // 
             // botonConfirmar
             // 
-            this.botonConfirmar.Location = new System.Drawing.Point(138, 204);
+            this.botonConfirmar.BackColor = System.Drawing.Color.Moccasin;
+            this.botonConfirmar.Location = new System.Drawing.Point(236, 212);
             this.botonConfirmar.Name = "botonConfirmar";
-            this.botonConfirmar.Size = new System.Drawing.Size(205, 37);
+            this.botonConfirmar.Size = new System.Drawing.Size(204, 37);
             this.botonConfirmar.TabIndex = 13;
             this.botonConfirmar.Text = "Realizar el Deposito";
-            this.botonConfirmar.UseVisualStyleBackColor = true;
+            this.botonConfirmar.UseVisualStyleBackColor = false;
             this.botonConfirmar.Click += new System.EventHandler(this.botonConfirmar_Click_1);
             // 
             // RealizarDeposito
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackColor = System.Drawing.SystemColors.Control;
-            this.ClientSize = new System.Drawing.Size(365, 258);
+            this.BackColor = System.Drawing.Color.PaleGoldenrod;
+            this.ClientSize = new System.Drawing.Size(599, 265);
             this.Controls.Add(this.botonConfirmar);
             this.Controls.Add(this.volverFuncionalidades);
             this.Controls.Add(this.label4);
