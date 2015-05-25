@@ -209,8 +209,8 @@ BEGIN /* *************** CREACION DE TABLAS *************** */
 		Fecha_apertura datetime,
 		Id_tipo_cuenta numeric(18,0),
 		Id_cliente numeric(18,0) NOT NULL CONSTRAINT FK_cuentas_cliente FOREIGN KEY REFERENCES HHHH.clientes(Id_cliente),
-		Estado NVARCHAR DEFAULT 'P' CHECK (Estado IN ('P','C','H','I')), -- pend act, cerrada, habilida, inhabilitada
-		Saldo numeric(18,0)
+		Estado NVARCHAR DEFAULT 'H' CHECK (Estado IN ('P','C','H','I')), -- pend act, cerrada, habilida, inhabilitada
+		Saldo numeric(18,2)
 	)
 	
 	CREATE TABLE HHHH.tarjetas(
@@ -511,7 +511,7 @@ AS
 			INSERT INTO HHHH.logins (id_usuario, fecha, exito,numeroDeFallo)
 				VALUES (@id_usuario,GETDATE(),1,0)
 			UPDATE HHHH.usuarios
-				SET intentosFallidos = 0
+				SET IntentosFallidos = 0
 				WHERE id_usuario = @id_usuario
 			SELECT @id_usuario			 --devuelvo el numero de usuario para agregarlo a la sesion
 		END
@@ -613,5 +613,83 @@ AS
     END			
 		
 GO
+
+CREATE PROCEDURE HHHH.seleccionarCuentas
+	@idUsuarioLogeado int
+	
+	AS 
+		BEGIN
+		
+		SELECT cue.* FROM HHHH.cuentas cue, HHHH.clientes cli
+		WHERE cue.Id_cliente = cli.Id_cliente and cli.Id_usuario = @idUsuarioLogeado
+		
+		END
+		
+GO
+
+CREATE PROCEDURE HHHH.seleccionarTarjetas
+	@idUsuarioLogeado int
+	
+	AS 
+		BEGIN 
+		
+		SELECT tar.* FROM HHHH.tarjetas tar, HHHH.clientes cli
+		WHERE tar.Id_cliente = cli.Id_cliente and cli.Id_usuario = @idUsuarioLogeado
+		
+		END
+		
+GO
+		
+CREATE PROCEDURE HHHH.validarDeposito
+	@idUsuarioLogeado numeric (18,0),
+	@nroCuenta numeric (18,0),
+	@nroTarjeta numeric (18,0),
+	@importeIngresado numeric (18,2),
+	@tipoMoneda numeric (18,0),
+	@fechaAhora  datetime
+	
+	AS
+		BEGIN
+	
+		DECLARE @estaHabilitadaCuenta nvarchar (1)
+		SET @estaHabilitadaCuenta = (SELECT Estado FROM HHHH.cuentas WHERE Id_cuenta = @nroCuenta)
+		IF @estaHabilitadaCuenta != 'H'
+			BEGIN
+				RAISERROR ('La cuenta seleccionada no esta habilitada',16,1)
+			RETURN
+		END
+				DECLARE @esValidaTarjeta numeric (18,0) 
+		SET @esValidaTarjeta = (SELECT Id_tarjeta FROM HHHH.tarjetas
+								WHERE Numero = @nroTarjeta AND (Id_cliente = (SElECT Id_cliente 
+								FROM HHHH.clientes WHERE Id_usuario = @idUsuarioLogeado))
+								AND Fecha_vencimiento >= @fechaAhora)
+		IF @esValidaTarjeta IS NULL
+			BEGIN 
+				RAISERROR ('Tarjeta no valida', 16,1)
+			RETURN
+		END
+		
+		INSERT INTO HHHH.depositos(Id_cuenta, Importe, Id_tipo_moneda, Id_tarjeta, Fecha_deposito)
+			VALUES (@nroCuenta, @importeIngresado, @tipoMoneda, @esValidaTarjeta, @fechaAhora)
+			
+		
+		DECLARE @saldoActual numeric (18,2)
+			SET @saldoActual = (SELECT Saldo FROM HHHH.cuentas WHERE Id_cuenta = @nroCuenta)
+			IF @saldoActual is NULL
+				UPDATE HHHH.cuentas
+					SET Saldo = @importeIngresado
+					WHERE Id_cuenta = @nroCuenta	
+			IF @saldoActual is NOT NULL
+				UPDATE HHHH.cuentas
+					SET Saldo = Saldo + @importeIngresado
+					WHERE Id_cuenta = @nroCuenta							
+		END		
+		
+
+GO
+
+
+		
+
 
  

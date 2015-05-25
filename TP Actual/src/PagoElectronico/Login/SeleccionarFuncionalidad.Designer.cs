@@ -70,6 +70,7 @@
             this.cbFuncionalidad.Name = "cbFuncionalidad";
             this.cbFuncionalidad.Size = new System.Drawing.Size(271, 21);
             this.cbFuncionalidad.TabIndex = 4;
+            this.cbFuncionalidad.SelectedIndexChanged += new System.EventHandler(this.cbFuncionalidad_SelectedIndexChanged);
             // 
             // SeleccionarFuncionalidad
             // 

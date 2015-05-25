@@ -129,11 +129,11 @@
     <Compile Include="Retiros\Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
-    <Compile Include="Depositos\Form1.cs">
+    <Compile Include="Depositos\RealizarDeposito.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Depositos\Form1.Designer.cs">
-      <DependentUpon>Form1.cs</DependentUpon>
+    <Compile Include="Depositos\RealizarDeposito.Designer.cs">
+      <DependentUpon>RealizarDeposito.cs</DependentUpon>
     </Compile>
     <Compile Include="Login\Login.cs">
       <SubType>Form</SubType>
@@ -149,6 +149,9 @@
     <EmbeddedResource Include="ABM Rol\NuevoNombreRol.resx">
       <DependentUpon>NuevoNombreRol.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Depositos\RealizarDeposito.resx">
+      <DependentUpon>RealizarDeposito.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Login\Login.resx">
       <DependentUpon>Login.cs</DependentUpon>
     </EmbeddedResource>
@@ -162,6 +165,9 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Retiros\Form1.resx">
+      <DependentUpon>Form1.cs</DependentUpon>
     </EmbeddedResource>
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>

@@ -131,6 +131,7 @@
             this.Controls.Add(this.label1);
             this.Name = "AdministrarRoles";
             this.Text = "AdministrarRoles";
+            this.Load += new System.EventHandler(this.AdministrarRoles_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 

@@ -42,5 +42,10 @@ namespace PagoElectronico.Login
             new SeleccionarRol().Show(this);
             this.Hide();
          }
+
+        private void Login_Load(object sender, EventArgs e)
+        {
+
+        }
      }
 }
