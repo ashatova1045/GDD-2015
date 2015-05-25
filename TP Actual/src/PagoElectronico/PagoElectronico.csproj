@@ -151,7 +151,8 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Depositos\RealizarDeposito.resx">
       <DependentUpon>RealizarDeposito.cs</DependentUpon>
-    <EmbeddedResource Include="Facturacion\Facturacion.resx">
+    </EmbeddedResource>
+	<EmbeddedResource Include="Facturacion\Facturacion.resx">
       <DependentUpon>Facturacion.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Login\Login.resx">
@@ -170,6 +171,7 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Retiros\Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
+	</EmbeddedResource>
     <EmbeddedResource Include="Transferencias\Transferencias.resx">
       <DependentUpon>Transferencias.cs</DependentUpon>
     </EmbeddedResource>
