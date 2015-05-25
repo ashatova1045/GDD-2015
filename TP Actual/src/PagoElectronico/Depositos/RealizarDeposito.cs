@@ -19,9 +19,10 @@ namespace PagoElectronico.Depositos
         DataTable tablaTarjetas;
 
         decimal nroCuenta;
-        string nroTarjeta;
+        decimal idTarjeta;
         decimal importeIngresado;
         decimal tipoMoneda;
+
 
         public RealizarDeposito()
         {
@@ -48,9 +49,10 @@ namespace PagoElectronico.Depositos
                 MessageBox.Show("No tiene tarjetas");
                 volverFuncionalidades_Click_1(null, null);
             }
+
             seleccionTarjeta.DataSource = tablaTarjetas;
-            seleccionTarjeta.DisplayMember = "Numero";
-            seleccionTarjeta.ValueMember = "Numero";
+            seleccionTarjeta.DisplayMember = "finalnumero";
+            seleccionTarjeta.ValueMember = "Id_tarjeta";
 
             tablaMonedas = ConexionDB.correrQuery(Sesion.conexion, "select * from HHHH.monedas");
             seleccionMoneda.DataSource = tablaMonedas;
@@ -69,12 +71,12 @@ namespace PagoElectronico.Depositos
             importeIngresado = seleccionImporte.Value;
             nroCuenta = (decimal)seleccionCuenta.SelectedValue;
             tipoMoneda =  (decimal)seleccionMoneda.SelectedValue;
-            nroTarjeta = (string)seleccionTarjeta.SelectedValue;
+            idTarjeta = (decimal)seleccionTarjeta.SelectedValue;
 
             List<SqlParameter> listaParaValidar = new List<SqlParameter>();
             listaParaValidar.Add(new SqlParameter("@idUsuarioLogeado", Sesion.user_id));
             listaParaValidar.Add(new SqlParameter("@nroCuenta", nroCuenta));
-            listaParaValidar.Add(new SqlParameter("@nroTarjeta", nroTarjeta));
+            listaParaValidar.Add(new SqlParameter("@idTarjeta", idTarjeta));
             listaParaValidar.Add(new SqlParameter("@importeIngresado", importeIngresado));
             listaParaValidar.Add(new SqlParameter("@tipoMoneda", tipoMoneda));
             listaParaValidar.Add(new SqlParameter("@fechaAhora", Sesion.fecha));

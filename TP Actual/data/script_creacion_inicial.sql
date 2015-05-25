@@ -663,9 +663,11 @@ CREATE PROCEDURE HHHH.seleccionarTarjetas
 	
 	AS 
 		BEGIN 
-		
-		SELECT tar.* FROM HHHH.tarjetas tar, HHHH.clientes cli
+		SELECT tar.Id_tarjeta, 'XXXX-XXXX-XXXX-'+convert(nvarchar(max),tar.finalnumero) AS finalnumero FROM HHHH.tarjetas tar, HHHH.clientes cli
 		WHERE tar.Id_cliente = cli.Id_cliente and cli.Id_usuario = @idUsuarioLogeado
+
+		--SELECT tar.* FROM HHHH.tarjetas tar, HHHH.clientes cli
+		--WHERE tar.Id_cliente = cli.Id_cliente and cli.Id_usuario = @idUsuarioLogeado
 		
 		END
 		
@@ -674,7 +676,7 @@ GO
 CREATE PROCEDURE HHHH.validarDeposito
 	@idUsuarioLogeado numeric (18,0),
 	@nroCuenta numeric (18,0),
-	@nroTarjeta numeric (18,0),
+	@idTarjeta numeric (18,0),
 	@importeIngresado numeric (18,2),
 	@tipoMoneda numeric (18,0),
 	@fechaAhora  datetime
@@ -691,7 +693,7 @@ CREATE PROCEDURE HHHH.validarDeposito
 		END
 				DECLARE @esValidaTarjeta numeric (18,0) 
 		SET @esValidaTarjeta = (SELECT Id_tarjeta FROM HHHH.tarjetas
-								WHERE Numero = @nroTarjeta AND (Id_cliente = (SElECT Id_cliente 
+								WHERE Id_tarjeta = @idTarjeta AND (Id_cliente = (SElECT Id_cliente 
 								FROM HHHH.clientes WHERE Id_usuario = @idUsuarioLogeado))
 								AND Fecha_vencimiento >= @fechaAhora)
 		IF @esValidaTarjeta IS NULL
@@ -719,7 +721,6 @@ CREATE PROCEDURE HHHH.validarDeposito
 
 GO
 
-
 		
 
 CREATE PROCEDURE HHHH.asociarTarjeta
@@ -741,4 +742,6 @@ AS
     END				
 		
 GO
+
+
 
