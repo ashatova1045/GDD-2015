@@ -639,4 +639,30 @@ AS
 		
 GO
 
+CREATE PROCEDURE HHHH.retiro
+	@cuenta numeric(18,0),
+	@doc numeric(18,0),
+	@importe numeric(18,2),
+	@moneda numeric(18,0),
+	@fechaRetiro datetime,
+	@destinatarioNombre varchar(100),
+	@destinatarioApellido varchar(100),
+	@banco numeric(18,0)
+	
+AS
+	BEGIN
+		INSERT INTO HHHH.cheques(Fecha_cheque, Importe, Destinatario, Id_banco)
+			VALUES(@fechaRetiro, @importe, @destinatarioApellido + ', ' + @destinatarioNombre, @banco)
+			
+		INSERT INTO HHHH.retiros(Id_cuenta, Importe, Id_cheque, Fecha_retiro, Id_moneda)
+			VALUES(@cuenta, @importe, (SELECT IDENT_CURRENT('HHHH.cheques')), @fechaRetiro, @moneda)
+	
+		UPDATE HHHH.cuentas
+			SET Saldo -= @importe
+			WHERE Id_cuenta = @cuenta
+	END
+GO	
+	
+	
+
  
