@@ -9,6 +9,8 @@ namespace PagoElectronico.ABM_Tarjeta
 {
     public partial class AsociarTarjeta : Form
     {
+        bool modificacion = false;
+        decimal idt;
         public AsociarTarjeta(decimal idtarjeta)
         {
             InitializeComponent();
@@ -19,6 +21,8 @@ namespace PagoElectronico.ABM_Tarjeta
 
             if (idtarjeta != 0)
             {
+                modificacion = true;
+                idt = idtarjeta;
                 DataRow tarjeta = ConexionDB.correrQuery(Sesion.conexion, "select Id_banco,Fecha_emision,Fecha_vencimiento from hhhh.tarjetas where id_tarjeta =" + idtarjeta).Rows[0];
                 foreach (DataGridViewRow r in dgBanco.Rows)
                 {
@@ -55,11 +59,13 @@ namespace PagoElectronico.ABM_Tarjeta
                 return;
             }
             List<SqlParameter> listaP = new List<SqlParameter>();
-            listaP.Add(new SqlParameter("@idusuario",Sesion.user_id));
+            listaP.Add(new SqlParameter("@idcliente",Sesion.cliente_id));
+            listaP.Add(new SqlParameter("@idtarjeta", idt));
             listaP.Add(new SqlParameter("@tarjeta", txttarjeta.Text));
             listaP.Add(new SqlParameter("@emision", dtEmision.Value));
             listaP.Add(new SqlParameter("@vencimiento", dtVencimiento.Value));
             listaP.Add(new SqlParameter("@codigo", txtCodigo.Text));
+            listaP.Add(new SqlParameter("@modificacion", (modificacion?1:0)));
             listaP.Add(new SqlParameter("@banco",Convert.ToDecimal(dgBanco.SelectedRows[0].Cells["id"].Value)));
             try
             {
@@ -70,7 +76,7 @@ namespace PagoElectronico.ABM_Tarjeta
                 MessageBox.Show(ex.Message);
                 return;
             }
-            MessageBox.Show("Tarjeta agregada correctamente");
+            MessageBox.Show("Tarjeta "+ (modificacion?"modificada":"agregada") +" correctamente");
             btVolver.PerformClick();
         }
 

@@ -750,22 +750,48 @@ GO
 	
 
 CREATE PROCEDURE HHHH.asociarTarjeta
-	@idusuario numeric(18,0),
+	@idcliente numeric(18,0),
+	@idtarjeta numeric(18,0),
 	@tarjeta varchar(16),
 	@banco numeric(18,0),
 	@emision datetime,
 	@vencimiento datetime,
+	@modificacion bit,
 	@codigo nvarchar(3)
 AS
 	BEGIN
-		IF EXISTS (SELECT 1 from hhhh.tarjetas where Id_tarjeta = @tarjeta)
+		IF EXISTS (SELECT 1 from hhhh.tarjetas where ((Numero = HashBytes('SHA1',@tarjeta) and @modificacion = 0) or (Numero = HashBytes('SHA1',@tarjeta) and Id_cliente != @idcliente and @modificacion = 1)))
 			BEGIN
 				RAISERROR ('Ya existe esa tarjeta',16,1)
 				RETURN
 			END
-		INSERT INTO HHHH.tarjetas(Numero,Id_banco,Id_cliente,Fecha_vencimiento,Fecha_emision,Codigo_seguridad,finalnumero)
-			VALUES(HashBytes('SHA1',@tarjeta),@banco,(select Id_cliente from HHHH.clientes where Id_usuario=@idusuario),@vencimiento,@emision,HashBytes('SHA1',@codigo),RIGHt(@tarjeta,4))
-    END				
-		
+		IF @modificacion = 0
+			BEGIN
+				IF EXISTS (SELECT 1 from hhhh.tarjetas where Numero = HashBytes('SHA1',@tarjeta))
+					BEGIN
+						RAISERROR ('Ya existe esa tarjeta',16,1)
+						RETURN
+					END
+			INSERT INTO HHHH.tarjetas(Numero,Id_banco,Id_cliente,Fecha_vencimiento,Fecha_emision,Codigo_seguridad,finalnumero)
+				VALUES(HashBytes('SHA1',@tarjeta),@banco,@idcliente,@vencimiento,@emision,HashBytes('SHA1',@codigo),RIGHt(@tarjeta,4))
+			END
+		ELSE
+			BEGIN
+				IF EXISTS (SELECT 1 from hhhh.tarjetas where Numero = HashBytes('SHA1',@tarjeta) and Id_tarjeta != @idtarjeta)
+					BEGIN
+						RAISERROR ('Ya existe esa tarjeta',16,1)
+						RETURN
+					END		
+				UPDATE HHHH.tarjetas
+					SET Id_banco =@banco,
+						Numero=HashBytes('SHA1',@tarjeta),
+						Id_cliente=@idcliente,
+						Fecha_vencimiento=@vencimiento,
+						Fecha_emision=@emision,
+						Codigo_seguridad=HashBytes('SHA1',@codigo),
+						finalnumero = RIGHt(@tarjeta,4)
+					WHERE Id_tarjeta=@idtarjeta
+			END
+END					
 GO
 
