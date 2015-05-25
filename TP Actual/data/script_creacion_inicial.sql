@@ -513,11 +513,10 @@ AS
 			UPDATE HHHH.usuarios
 				SET intentosFallidos = 0
 				WHERE id_usuario = @id_usuario
-				
-				IF(@id_usuario = 1)
-					SELECT 1, 0
-				ELSE
-					SELECT @id_usuario,convert(int,Id_cliente) from HHHH.clientes where Id_usuario=@id_usuario --devuelvo el numero de usuario para agregarlo a la sesion
+			declare @idcli numeric(18,0)= (SELECT Id_cliente from HHHH.clientes where Id_usuario=@id_usuario)
+				SELECT @id_usuario,(select case when @idcli is not null	then @idcli
+										else -1
+										end)
 		END
 	ELSE
 		BEGIN	
@@ -757,3 +756,7 @@ GO
 
 update HHHH.cuentas
 set Id_tipo_cuenta =1, Estado = 'H'
+
+
+
+
