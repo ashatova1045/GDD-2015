@@ -159,7 +159,7 @@
     <EmbeddedResource Include="Depositos\RealizarDeposito.resx">
       <DependentUpon>RealizarDeposito.cs</DependentUpon>
     </EmbeddedResource>
-	<EmbeddedResource Include="Facturacion\Facturacion.resx">
+	//<EmbeddedResource Include="Facturacion\Facturacion.resx">
 
     <EmbeddedResource Include="ABM Tarjeta\AsociarTarjeta.resx">
       <DependentUpon>AsociarTarjeta.cs</DependentUpon>
