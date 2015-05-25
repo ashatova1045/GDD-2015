@@ -33,11 +33,21 @@ namespace PagoElectronico.Depositos
             listaParaTarjetas.Add(new SqlParameter("@idUsuarioLogeado", Sesion.user_id));
 
             tablaCuentas = ConexionDB.invocarStoreProcedure(Sesion.conexion, "seleccionarCuentas", listaParaCuentas);
+            if (tablaCuentas.Rows.Count == 0)
+            {
+                MessageBox.Show("No tiene cuentas");
+                volverFuncionalidades_Click_1(null, null);
+            }
             seleccionCuenta.DataSource = tablaCuentas;
             seleccionCuenta.DisplayMember = "Id_cuenta";
             seleccionCuenta.ValueMember = "Id_cuenta";
 
             tablaTarjetas = ConexionDB.invocarStoreProcedure(Sesion.conexion, "seleccionarTarjetas", listaParaTarjetas);
+            if (tablaTarjetas.Rows.Count == 0)
+            {
+                MessageBox.Show("No tiene tarjetas");
+                volverFuncionalidades_Click_1(null, null);
+            }
             seleccionTarjeta.DataSource = tablaTarjetas;
             seleccionTarjeta.DisplayMember = "Numero";
             seleccionTarjeta.ValueMember = "Numero";
@@ -53,21 +63,7 @@ namespace PagoElectronico.Depositos
             tablaClientes = ConexionDB.correrQuery(Sesion.conexion, "select * from HHHH.clientes");
         }
 
-        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            
-        }
-
-        private void label1_Click(object sender, EventArgs e)
-        {
-        }
-
-        private void pictureBox1_Click(object sender, EventArgs e)
-        {
-        }
-
-
-        private void botonConfirmar_Click(object sender, EventArgs e)
+        private void botonConfirmar_Click_1(object sender, EventArgs e)
         {
            
             importeIngresado = seleccionImporte.Value;
@@ -90,7 +86,8 @@ namespace PagoElectronico.Depositos
 
             catch (Exception errorDeposito)
             {
-                MessageBox.Show (errorDeposito.Message);   
+                MessageBox.Show (errorDeposito.Message);
+                return;
             }
 
 
@@ -103,28 +100,12 @@ namespace PagoElectronico.Depositos
             seleccionCuenta.DropDownStyle = ComboBoxStyle.DropDownList;
 
         }
-
-        private void seleccionImporte_ValueChanged(object sender, EventArgs e)
-        {        
-        }
-
-        private void seleccionTarjeta_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            seleccionTarjeta.DropDownStyle = ComboBoxStyle.DropDownList;
-        }
-
-        private void seleccionMoneda_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            seleccionMoneda.DropDownStyle = ComboBoxStyle.DropDownList;
-        }
-
-        private void volverFuncionalidades_Click(object sender, EventArgs e)
+        private void volverFuncionalidades_Click_1(object sender, EventArgs e)
         {
            
             Owner.Show();
             this.Close();
         }
-
 
     }
 }
