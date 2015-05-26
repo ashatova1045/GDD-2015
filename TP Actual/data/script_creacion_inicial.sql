@@ -664,8 +664,9 @@ CREATE PROCEDURE HHHH.seleccionarTarjetas
 	
 	AS 
 		BEGIN 
-		SELECT tar.Id_tarjeta, 'XXXX-XXXX-XXXX-'+convert(nvarchar(max),tar.finalnumero) AS finalnumero FROM HHHH.tarjetas tar, HHHH.clientes cli
-		WHERE tar.Id_cliente = cli.Id_cliente and cli.Id_usuario = @idUsuarioLogeado
+		SELECT tar.Id_tarjeta, 'XXXX-XXXX-XXXX-'+convert(nvarchar(max),tar.finalnumero) AS finalnumero 
+		FROM HHHH.tarjetas tar, HHHH.clientes cli
+		WHERE tar.Id_cliente = cli.Id_cliente and cli.Id_usuario = @idUsuarioLogeado and tar.estado = 1
 
 		--SELECT tar.* FROM HHHH.tarjetas tar, HHHH.clientes cli
 		--WHERE tar.Id_cliente = cli.Id_cliente and cli.Id_usuario = @idUsuarioLogeado

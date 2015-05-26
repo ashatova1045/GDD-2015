@@ -37,7 +37,7 @@ namespace PagoElectronico.Depositos
             if (tablaCuentas.Rows.Count == 0)
             {
                 MessageBox.Show("No tiene cuentas");
-                volverFuncionalidades_Click_1(null, null);
+                botonConfirmar.Enabled = false;
             }
             seleccionCuenta.DataSource = tablaCuentas;
             seleccionCuenta.DisplayMember = "Id_cuenta";
@@ -47,7 +47,7 @@ namespace PagoElectronico.Depositos
             if (tablaTarjetas.Rows.Count == 0)
             {
                 MessageBox.Show("No tiene tarjetas");
-                volverFuncionalidades_Click_1(null, null);
+                botonConfirmar.Enabled = false;
             }
 
             seleccionTarjeta.DataSource = tablaTarjetas;
