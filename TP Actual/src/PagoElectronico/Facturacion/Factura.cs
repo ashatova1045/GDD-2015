@@ -14,7 +14,7 @@ namespace PagoElectronico.Facturacion
     public partial class Factura : Form
     {
 
-        public Factura(int user)
+        public Factura(decimal user)
         {
             InitializeComponent();
             List<SqlParameter> listaDeParametros = new List<SqlParameter>();

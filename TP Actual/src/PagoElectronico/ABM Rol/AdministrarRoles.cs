@@ -134,5 +134,10 @@ namespace PagoElectronico.ABM_Rol
             Owner.Show();
             this.Close();
         }
+
+        private void AdministrarRoles_Load(object sender, EventArgs e)
+        {
+
+        }
     }
 }

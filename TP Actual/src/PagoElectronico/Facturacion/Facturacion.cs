@@ -13,7 +13,7 @@ namespace PagoElectronico.Facturacion
 {
     public partial class Facturacion : Form
     {
-        private void actualizarMov(string usuario, int userID)
+        private void actualizarMov(string usuario, decimal userID)
         {
             label3.Text = usuario;
             DataTable movSinFacturar;

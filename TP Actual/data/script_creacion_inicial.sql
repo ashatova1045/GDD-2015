@@ -756,3 +756,7 @@ GO
 
 update HHHH.cuentas
 set Id_tipo_cuenta =1, Estado = 'H'
+
+
+
+
