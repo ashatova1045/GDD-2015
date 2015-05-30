@@ -78,11 +78,23 @@
     <Compile Include="ABM Rol\NuevoNombreRol.Designer.cs">
       <DependentUpon>NuevoNombreRol.cs</DependentUpon>
     </Compile>
-    <Compile Include="ABM Tarjeta\Form1.cs">
+    <Compile Include="ABM Tarjeta\AsociarTarjeta.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="ABM Tarjeta\Form1.Designer.cs">
-      <DependentUpon>Form1.cs</DependentUpon>
+    <Compile Include="ABM Tarjeta\AsociarTarjeta.Designer.cs">
+      <DependentUpon>AsociarTarjeta.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ABM Tarjeta\mtar.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ABM Tarjeta\mtar.Designer.cs">
+      <DependentUpon>mtar.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ABM Tarjeta\mtar.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ABM Tarjeta\mtar.Designer.cs">
+      <DependentUpon>mtar.cs</DependentUpon>
     </Compile>
     <Compile Include="Consulta Saldos\Form1.cs">
       <SubType>Form</SubType>
@@ -135,11 +147,11 @@
     <Compile Include="Retiros\Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
-    <Compile Include="Depositos\Form1.cs">
+    <Compile Include="Depositos\RealizarDeposito.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Depositos\Form1.Designer.cs">
-      <DependentUpon>Form1.cs</DependentUpon>
+    <Compile Include="Depositos\RealizarDeposito.Designer.cs">
+      <DependentUpon>RealizarDeposito.cs</DependentUpon>
     </Compile>
     <Compile Include="Login\Login.cs">
       <SubType>Form</SubType>
@@ -155,8 +167,14 @@
     <EmbeddedResource Include="ABM Rol\NuevoNombreRol.resx">
       <DependentUpon>NuevoNombreRol.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Facturacion\Factura.resx">
-      <DependentUpon>Factura.cs</DependentUpon>
+    <EmbeddedResource Include="Depositos\RealizarDeposito.resx">
+      <DependentUpon>RealizarDeposito.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ABM Tarjeta\AsociarTarjeta.resx">
+      <DependentUpon>AsociarTarjeta.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ABM Tarjeta\mtar.resx">
+      <DependentUpon>mtar.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Facturacion\Facturacion.resx">
       <DependentUpon>Facturacion.cs</DependentUpon>
@@ -175,12 +193,16 @@
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="Retiros\Form1.resx">
+      <DependentUpon>Form1.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Transferencias\Transferencias.resx">
       <DependentUpon>Transferencias.cs</DependentUpon>
     </EmbeddedResource>
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
     </Compile>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -195,6 +217,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="config.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Resources\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

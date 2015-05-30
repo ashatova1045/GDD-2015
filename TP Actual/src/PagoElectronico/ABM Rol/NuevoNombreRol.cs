@@ -40,5 +40,10 @@ namespace PagoElectronico.ABM_Rol
             Owner.Show();
             this.Close();
         }
+
+        private void NuevoNombreRol_Load(object sender, EventArgs e)
+        {
+
+        }
     }
 }

@@ -52,13 +52,13 @@ namespace PagoElectronico.Login
                     nuevoForm = new ABM_Cuenta.Form1();
                     break;
                 case "Asociar/Desasociar Tarjeta de Credito":
-                    nuevoForm = new ABM_Tarjeta.Form1();
+                    nuevoForm = new ABM_Tarjeta.mtar();
                     break;
                 case "Depositos":
-                    nuevoForm = new Depositos.Form1();
+                    nuevoForm = new Depositos.RealizarDeposito();
                     break;
                 case "Retiro de Efectivo":
-                    nuevoForm = new Retiros.Form1();
+                    nuevoForm = new Retiros.RetiroEfectivo_FRM();
                     break;
                 case "Transferencia entre Cuentas":
                     nuevoForm = new Transferencias.Transferencias();
@@ -76,6 +76,11 @@ namespace PagoElectronico.Login
 
             nuevoForm.Show(this);
             this.Hide();
+
+        }
+
+        private void cbFuncionalidad_SelectedIndexChanged(object sender, EventArgs e)
+        {
 
         }
     }
