@@ -40,7 +40,7 @@ namespace PagoElectronico.Consulta_Saldos
         private void actualizarCuentas()
         {
             DataTable cuentas;
-            int user;
+            decimal user;
             
             try
             {
