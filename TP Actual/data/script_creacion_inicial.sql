@@ -415,7 +415,7 @@ BEGIN /* *************** MIGRACION *************** */
 		SELECT DISTINCT Deposito_Codigo, Cuenta_Numero, Deposito_Importe, 
 				T.Id_tarjeta, Deposito_Fecha,1
 		FROM gd_esquema.Maestra M, HHHH.tarjetas T
-		WHERE M.Deposito_Codigo IS NOT NULL AND M.Tarjeta_Numero = T.Numero
+		WHERE M.Deposito_Codigo IS NOT NULL AND HashBytes('SHA1',M.Tarjeta_Numero) = T.Numero
 	SET IDENTITY_INSERT HHHH.depositos OFF
 -------------------------------------------------------------------------------------------	
 	INSERT INTO HHHH.roles(Nombre_rol, Estado)
