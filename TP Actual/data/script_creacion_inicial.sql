@@ -694,7 +694,7 @@ AS
 GO
 
 CREATE PROCEDURE HHHH.movSinFacturar
-@user_id int
+@user_id numeric(18,0)
 AS
 	IF  ((select COUNT(*) from HHHH.movimientos
 					where Id_factura is null and HHHH.obtenerUser(Id_cuenta) = @user_id) = 0)
@@ -712,7 +712,7 @@ AS
 GO
 
 CREATE PROCEDURE HHHH.Facturar
-@user_id int,
+@user_id numeric(18,0),
 @fecha datetime
 AS
 		DECLARE @cliente_id int
