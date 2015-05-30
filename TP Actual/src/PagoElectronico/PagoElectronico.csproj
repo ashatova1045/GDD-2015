@@ -161,6 +161,9 @@
     <EmbeddedResource Include="ABM Rol\NuevoNombreRol.resx">
       <DependentUpon>NuevoNombreRol.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Consulta Saldos\Consultar Saldo.resx">
+      <DependentUpon>Consultar Saldo.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Depositos\RealizarDeposito.resx">
       <DependentUpon>RealizarDeposito.cs</DependentUpon>
     </EmbeddedResource>

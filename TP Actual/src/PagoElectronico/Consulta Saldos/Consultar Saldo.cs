@@ -52,7 +52,7 @@ namespace PagoElectronico.Consulta_Saldos
                 comboBox2.DataSource = cuentas;
                 comboBox2.ValueMember = "Saldo";
                 comboBox2.DisplayMember = "Id_cuenta";
-                label8.Text = comboBox2.SelectedValue.ToString();
+                label8.Text = "";
             }
             catch (InvalidCastException) { label8.Text = ""; }
         }
@@ -112,6 +112,7 @@ namespace PagoElectronico.Consulta_Saldos
             actualizarDepositos();
             actualizarRetiros();
             actualizarTransferencias();
+            label8.Text = comboBox2.SelectedValue.ToString();
         }
 
     }

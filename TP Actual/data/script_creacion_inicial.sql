@@ -224,17 +224,19 @@ BEGIN /* *************** CREACION DE TABLAS *************** */
 		Fecha_apertura datetime,
 		Id_tipo_cuenta numeric(18,0) CONSTRAINT FK_cuentas_tc FOREIGN KEY REFERENCES HHHH.tipo_cuenta(Id_tipo_cuenta),
 		Id_cliente numeric(18,0) NOT NULL CONSTRAINT FK_cuentas_cliente FOREIGN KEY REFERENCES HHHH.clientes(Id_cliente),
-		Estado NVARCHAR DEFAULT 'H' CHECK (Estado IN ('P','C','H','I')), -- pend act, cerrada, habilida, inhabilitada
+		Estado NVARCHAR DEFAULT 'P' CHECK (Estado IN ('P','C','H','I')), -- pend act, cerrada, habilida, inhabilitada
 		Saldo numeric(18,2)
 	)
 	
 	CREATE TABLE HHHH.tarjetas(
 		Id_tarjeta numeric(18,0) IDENTITY(1,1) PRIMARY KEY,
-		Numero varchar(16) unique,
+		Numero binary(20) unique,
+		finalnumero char(4) not null,
 		Id_banco numeric(18,0) CONSTRAINT FK_tarjetas_banco FOREIGN KEY REFERENCES HHHH.bancos(Id_banco),
 		Fecha_emision datetime,
 		Fecha_vencimiento datetime,
-		Codigo_seguridad varchar(3),
+		Codigo_seguridad binary(20),
+		estado bit default 1,
 		Id_cliente numeric(18,0) CONSTRAINT FK_tarjetas_cliente FOREIGN KEY REFERENCES HHHH.clientes (Id_cliente)
 	)
 	
@@ -377,11 +379,17 @@ BEGIN /* *************** MIGRACION *************** */
 		SET Id_usuario = usuarios.id_usuario
 		FROM HHHH.usuarios
 			WHERE usuarios.usuario = HHHH.borrardominio(clientes.Mail)
+-------------------------------------------------------------------------------------------	
+	INSERT INTO HHHH.Tipo_Cuenta(Descripcion, Id_moneda_cuenta, Costo_transf, Duracion, Id_moneda_transf, Costo_cuenta)
+		VALUES ('Gratuita', 1,3,30,1,0),
+				('Bronce', 1,2,30,1,1),
+				('Plata', 1,1,30,1,2),
+				('Oro', 1,0,30,1,3)
 -------------------------------------------------------------------------------------------			
 	SET IDENTITY_INSERT HHHH.cuentas ON
-	INSERT INTO HHHH.cuentas(Id_cuenta, Id_pais, Fecha_apertura, Id_cliente,Id_moneda,Saldo)
+	INSERT INTO HHHH.cuentas(Id_cuenta, Id_pais, Fecha_apertura, Id_cliente,Id_moneda,Saldo,Estado,Id_tipo_cuenta)
 		SELECT DISTINCT M.Cuenta_Numero, M.Cuenta_Pais_Codigo, M.Cuenta_Fecha_Creacion, 
-				C.Id_cliente,1,100
+				C.Id_cliente,1,100,'H',1
 			FROM gd_esquema.Maestra M, HHHH.clientes C
 			WHERE C.Mail = M.Cli_Mail
 	SET IDENTITY_INSERT HHHH.cuentas OFF
@@ -393,9 +401,9 @@ BEGIN /* *************** MIGRACION *************** */
 			WHERE M.Retiro_Codigo IS NOT NULL
 	SET IDENTITY_INSERT HHHH.retiros OFF
 -------------------------------------------------------------------------------------------	
-	INSERT INTO HHHH.tarjetas(Numero, Fecha_emision, Fecha_vencimiento, Codigo_seguridad, Id_cliente, Id_banco)
-		SELECT distinct T.Tarjeta_Numero, T.Tarjeta_Fecha_Emision, T.Tarjeta_Fecha_Vencimiento,
-			T.Tarjeta_Codigo_Seg, C.id_cliente, 1 --Banco Migracion
+	INSERT INTO HHHH.tarjetas(Numero, Fecha_emision, Fecha_vencimiento, Codigo_seguridad, Id_cliente,finalnumero, Id_banco)
+		SELECT distinct HashBytes('SHA1',T.Tarjeta_Numero), T.Tarjeta_Fecha_Emision, T.Tarjeta_Fecha_Vencimiento,
+			HashBytes('SHA1',T.Tarjeta_Codigo_Seg), C.id_cliente,RIGHT(T.Tarjeta_Numero,4),1 --Banco Migracion
 		FROM (SELECT DISTINCT Tarjeta_Numero, Tarjeta_Fecha_Emision,
 							Tarjeta_Fecha_Vencimiento, Tarjeta_Codigo_Seg, Cuenta_Numero
 			  FROM gd_esquema.Maestra
@@ -474,12 +482,6 @@ BEGIN /* *************** MIGRACION *************** */
 	INSERT INTO HHHH.Rel_Rol_Funcionalidad(Id_rol, Id_funcionalidad)
 		VALUES (1,1), (1,2), (1,3), (1,4), (1,9), (1,10), (1,11),
 				(2,4), (2,5), (2,6), (2,7), (2,8), (2,9), (2,10)
--------------------------------------------------------------------------------------------	
-	INSERT INTO HHHH.Tipo_Cuenta(Descripcion, Id_moneda_cuenta, Costo_transf, Duracion, Id_moneda_transf, Costo_cuenta)
-		VALUES ('Gratuita', 1,3,30,1,0),
-				('Bronce', 1,2,30,1,1),
-				('Plata', 1,1,30,1,2),
-				('Oro', 1,0,30,1,3)
 				
 END
 GO
@@ -511,8 +513,9 @@ AS
 			INSERT INTO HHHH.logins (id_usuario, fecha, exito,numeroDeFallo)
 				VALUES (@id_usuario,GETDATE(),1,0)
 			UPDATE HHHH.usuarios
-				SET intentosFallidos = 0
+				SET IntentosFallidos = 0
 				WHERE id_usuario = @id_usuario
+				
 			declare @idcli numeric(18,0)= (SELECT Id_cliente from HHHH.clientes where Id_usuario=@id_usuario)
 				SELECT @id_usuario,(select case when @idcli is not null	then @idcli
 										else -1
@@ -642,6 +645,157 @@ AS
 		
 GO
 
+
+CREATE PROCEDURE HHHH.seleccionarCuentas
+	@idUsuarioLogeado int
+	
+	AS 
+		BEGIN
+		
+		SELECT cue.* FROM HHHH.cuentas cue, HHHH.clientes cli
+		WHERE cue.Id_cliente = cli.Id_cliente and cli.Id_usuario = @idUsuarioLogeado
+		
+		END
+		
+GO
+
+CREATE PROCEDURE HHHH.seleccionarTarjetas
+	@idUsuarioLogeado int
+	
+	AS 
+		BEGIN 
+		SELECT tar.Id_tarjeta, 'XXXX-XXXX-XXXX-'+convert(nvarchar(max),tar.finalnumero) AS finalnumero 
+		FROM HHHH.tarjetas tar, HHHH.clientes cli
+		WHERE tar.Id_cliente = cli.Id_cliente and cli.Id_usuario = @idUsuarioLogeado and tar.estado = 1
+
+		--SELECT tar.* FROM HHHH.tarjetas tar, HHHH.clientes cli
+		--WHERE tar.Id_cliente = cli.Id_cliente and cli.Id_usuario = @idUsuarioLogeado
+		
+		END
+		
+GO
+		
+CREATE PROCEDURE HHHH.validarDeposito
+	@idUsuarioLogeado numeric (18,0),
+	@nroCuenta numeric (18,0),
+	@idTarjeta numeric (18,0),
+	@importeIngresado numeric (18,2),
+	@tipoMoneda numeric (18,0),
+	@fechaAhora  datetime
+	
+	AS
+		BEGIN
+	
+		DECLARE @estaHabilitadaCuenta nvarchar (1)
+		SET @estaHabilitadaCuenta = (SELECT Estado FROM HHHH.cuentas WHERE Id_cuenta = @nroCuenta)
+		IF @estaHabilitadaCuenta != 'H'
+			BEGIN
+				RAISERROR ('La cuenta seleccionada no esta habilitada',16,1)
+			RETURN
+		END
+				DECLARE @esValidaTarjeta numeric (18,0) 
+		SET @esValidaTarjeta = (SELECT Id_tarjeta FROM HHHH.tarjetas
+								WHERE Id_tarjeta = @idTarjeta AND (Id_cliente = (SElECT Id_cliente 
+								FROM HHHH.clientes WHERE Id_usuario = @idUsuarioLogeado))
+								AND Fecha_vencimiento >= @fechaAhora)
+		IF @esValidaTarjeta IS NULL
+			BEGIN 
+				RAISERROR ('Tarjeta no valida', 16,1)
+			RETURN
+		END
+		
+		INSERT INTO HHHH.depositos(Id_cuenta, Importe, Id_tipo_moneda, Id_tarjeta, Fecha_deposito)
+			VALUES (@nroCuenta, @importeIngresado, @tipoMoneda, @esValidaTarjeta, @fechaAhora)
+			
+		
+		DECLARE @saldoActual numeric (18,2)
+			SET @saldoActual = (SELECT Saldo FROM HHHH.cuentas WHERE Id_cuenta = @nroCuenta)
+			IF @saldoActual is NULL
+				UPDATE HHHH.cuentas
+					SET Saldo = @importeIngresado
+					WHERE Id_cuenta = @nroCuenta	
+			IF @saldoActual is NOT NULL
+				UPDATE HHHH.cuentas
+					SET Saldo = Saldo + @importeIngresado
+					WHERE Id_cuenta = @nroCuenta							
+		END		
+		
+
+GO
+
+
+CREATE PROCEDURE HHHH.retiro
+	@cuenta numeric(18,0),
+	@doc numeric(18,0),
+	@importe numeric(18,2),
+	@moneda numeric(18,0),
+	@fechaRetiro datetime,
+	@destinatarioNombre varchar(100),
+	@destinatarioApellido varchar(100),
+	@banco numeric(18,0)
+	
+AS
+	BEGIN
+		INSERT INTO HHHH.cheques(Fecha_cheque, Importe, Destinatario, Id_banco)
+			VALUES(@fechaRetiro, @importe, @destinatarioApellido + ', ' + @destinatarioNombre, @banco)
+			
+		INSERT INTO HHHH.retiros(Id_cuenta, Importe, Id_cheque, Fecha_retiro, Id_moneda)
+			VALUES(@cuenta, @importe, (SELECT IDENT_CURRENT('HHHH.cheques')), @fechaRetiro, @moneda)
+	
+		UPDATE HHHH.cuentas
+			SET Saldo -= @importe
+			WHERE Id_cuenta = @cuenta
+	END
+GO	
+	
+	
+
+CREATE PROCEDURE HHHH.asociarTarjeta
+	@idcliente numeric(18,0),
+	@idtarjeta numeric(18,0),
+	@tarjeta varchar(16),
+	@banco numeric(18,0),
+	@emision datetime,
+	@vencimiento datetime,
+	@modificacion bit,
+	@codigo nvarchar(3)
+AS
+	BEGIN
+		IF EXISTS (SELECT 1 from hhhh.tarjetas where ((Numero = HashBytes('SHA1',@tarjeta) and @modificacion = 0) or (Numero = HashBytes('SHA1',@tarjeta) and Id_cliente != @idcliente and @modificacion = 1)))
+			BEGIN
+				RAISERROR ('Ya existe esa tarjeta',16,1)
+				RETURN
+			END
+		IF @modificacion = 0
+			BEGIN
+				IF EXISTS (SELECT 1 from hhhh.tarjetas where Numero = HashBytes('SHA1',@tarjeta))
+					BEGIN
+						RAISERROR ('Ya existe esa tarjeta',16,1)
+						RETURN
+					END
+			INSERT INTO HHHH.tarjetas(Numero,Id_banco,Id_cliente,Fecha_vencimiento,Fecha_emision,Codigo_seguridad,finalnumero)
+				VALUES(HashBytes('SHA1',@tarjeta),@banco,@idcliente,@vencimiento,@emision,HashBytes('SHA1',@codigo),RIGHt(@tarjeta,4))
+			END
+		ELSE
+			BEGIN
+				IF EXISTS (SELECT 1 from hhhh.tarjetas where Numero = HashBytes('SHA1',@tarjeta) and Id_tarjeta != @idtarjeta)
+					BEGIN
+						RAISERROR ('Ya existe esa tarjeta',16,1)
+						RETURN
+					END		
+				UPDATE HHHH.tarjetas
+					SET Id_banco =@banco,
+						Numero=HashBytes('SHA1',@tarjeta),
+						Id_cliente=@idcliente,
+						Fecha_vencimiento=@vencimiento,
+						Fecha_emision=@emision,
+						Codigo_seguridad=HashBytes('SHA1',@codigo),
+						finalnumero = RIGHt(@tarjeta,4)
+					WHERE Id_tarjeta=@idtarjeta
+			END
+END					
+GO
+
 CREATE FUNCTION HHHH.obtenerUser(
 @cuenta numeric(18,0))
 RETURNS numeric(18,0)
@@ -756,7 +910,3 @@ GO
 
 update HHHH.cuentas
 set Id_tipo_cuenta =1, Estado = 'H'
-
-
-
-
