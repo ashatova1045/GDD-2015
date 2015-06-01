@@ -30,7 +30,7 @@ namespace PagoElectronico.Consulta_Saldos
                 comboBox1.ValueMember = "Id_usuario";
                 comboBox1.DisplayMember = "Usuario";
                 comboBox1.Text = "Elija un usuario";
-                comboBox1.TabIndex = 0;
+                comboBox1.SelectedIndex = -1;
                 comboBox2.Enabled = false;
             }
             else
@@ -40,7 +40,7 @@ namespace PagoElectronico.Consulta_Saldos
                 comboBox1.Visible = false;
                 actualizarCuentas();
                 comboBox2.Text = "Elija una cuenta";
-                comboBox2.TabIndex = 0;
+                comboBox2.SelectedIndex = -1;
             }
         }
 
@@ -127,8 +127,8 @@ namespace PagoElectronico.Consulta_Saldos
             dataGridView3.DataSource = null;
             actualizarCuentas();
             comboBox2.Enabled = true;
-            comboBox2.Text = "Elija una cuenta";
-            comboBox2.TabIndex = 0;
+            comboBox2.SelectedText = "Elija una cuenta";
+            comboBox2.SelectedIndex = -1;
         }
 
         private void button1_Click(object sender, EventArgs e)

@@ -28,43 +28,39 @@ namespace PagoElectronico.ABM_Rol
         public AdministrarRoles()
         {
             InitializeComponent();
+        }
 
+        private void AdministrarRoles_Load(object sender, EventArgs e)
+        {
             this.ActualizarRoles();
             DataTable funcionalidades = ConexionDB.correrQuery(Sesion.conexion, "select * from HHHH.funcionalidades");
             foreach (DataRow row in funcionalidades.Rows)
             {
-               // foreach (DataColumn item in funcionalidades.Columns)
+                // foreach (DataColumn item in funcionalidades.Columns)
                 //{
-                 //   if (item.ToString() == "Descripcion")
-                        checkedListBox1.Items.Add(row["Descripcion"].ToString());
-                 //  }
+                //   if (item.ToString() == "Descripcion")
+                checkedListBox1.Items.Add(row["Descripcion"].ToString());
+                //  }
             }
-
+            comboBox1.SelectedIndex = -1;
         }
-        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
-        {
 
-            foreach (DataRow rol in rolesActuales.Rows)
-            {
-                if(rol["Nombre_rol"].ToString() == comboBox1.Text)
-                {
-                    if (rol["Estado"].ToString() == "A")
-                    {
-                        checkBox1.Checked = true;
-                        checkBox1.Text = "Habilitado";
-                    }
-                    else
-                    {
-                        checkBox1.Checked = false;
-                        checkBox1.Text = "Deshabilitado";
-                    }
-                }
-            
+        private void comboBox1_SelectionChangeCommitted(object sender, EventArgs e)
+        {
+            DataRow[] rowRol = rolesActuales.Select("Id_rol = " + comboBox1.SelectedValue);
+            try 
+            { 
+                if(rowRol[0][2].ToString() == "A")
+                    checkBox1.Checked = true;
+                else
+                    checkBox1.Checked = false;
             }
+            catch (IndexOutOfRangeException) { }
+     
             button1.Enabled = false;
 
             List<SqlParameter> listaDeParametros = new List<SqlParameter>();
-            listaDeParametros.Add(new SqlParameter("@nombre", comboBox1.Text));
+            listaDeParametros.Add(new SqlParameter("@nombre", comboBox1.SelectedValue));
             DataTable funcsActivas = ConexionDB.invocarStoreProcedure(Sesion.conexion, "funcionesdelrol", listaDeParametros);
 
             for (int i = 0; i < checkedListBox1.Items.Count; i++)
@@ -133,11 +129,6 @@ namespace PagoElectronico.ABM_Rol
         {
             Owner.Show();
             this.Close();
-        }
-
-        private void AdministrarRoles_Load(object sender, EventArgs e)
-        {
-
         }
     }
 }
