@@ -153,7 +153,7 @@ BEGIN /* *************** CREACION DE TABLAS *************** */
 		Usuario NVARCHAR(255) UNIQUE NOT NULL,
 		Contrasena CHAR(44) NOT NULL,
 		IntentosFallidos INT DEFAULT 0,
-		Estado NVARCHAR CHECK (Estado IN ('H','I','B')) -- habilitado, inhabilitado, baja
+		Estado NVARCHAR CHECK (Estado IN ('H','I') -- habilitado, inhabilitado
 	)
 	
 	CREATE TABLE HHHH.paises(
@@ -925,7 +925,8 @@ CREATE PROCEDURE HHHH.nuevoCliente(
 @Usuario nvarchar(255),
 @Contrasena nvarchar(255),
 @Pregunta nvarchar(255),
-@Respuesta nvarchar(255))
+@Respuesta nvarchar(255),
+@Estado char)
 AS
 	BEGIN
 	
@@ -953,7 +954,10 @@ AS
 			END
 			
 		INSERT INTO HHHH.usuarios(Usuario,Contrasena,IntentosFallidos,Estado)
-			VALUES(@Usuario,@Contrasena,0,'H')
+			VALUES(@Usuario,@Contrasena,0,@Estado)
+			
+		INSERT INTO HHHH.rel_rol_usuario(Id_rol,Id_usuario)
+			VALUES(2,IDENT_CURRENT('HHHH.usuarios'))
 			
 		INSERT INTO HHHH.clientes(Id_usuario,Nombre,Apellido,Nro_Documento,Id_tipo_documento,
 									Mail,Id_pais,Altura,Calle,Piso,Departamento,Localidad,
@@ -999,7 +1003,8 @@ CREATE PROCEDURE HHHH.modificarCliente(
 @Departamento varchar(10),
 @Localidad varchar(255),
 @Nacionalidad numeric(18,0),
-@FechaNac datetime)
+@FechaNac datetime,
+@Estado char)
 AS
 	BEGIN
 	
@@ -1032,7 +1037,8 @@ AS
 			Departamento = @Departamento,
 			Localidad = @Localidad,
 			Id_nacionalidad = @Nacionalidad,
-			Fecha_nacimiento = @FechaNac
+			Fecha_nacimiento = @FechaNac,
+			Estado = @Estado
 			FROM HHHH.clientes
 			WHERE Id_cliente = @Id_cliente
 			

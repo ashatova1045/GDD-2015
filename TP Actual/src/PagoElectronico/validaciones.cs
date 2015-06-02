@@ -5,10 +5,10 @@ namespace PagoElectronico
     public static class ValidadorHelper
     {
         static Regex regexSoloNumeros = new Regex(@"^[0-9]+$");
-        static Regex regexSoloLetras = new Regex(@"^[a-zA-Záéíóú]+$");
+        static Regex regexSoloLetras = new Regex(@"^[a-zA-ZáéíóúÁÉÍÓÚ]+$");
         static Regex regexMail = new Regex(@"^[-0-9a-zA-Z.+_]+@[-0-9a-zA-Z.+_]+\.[a-zA-Z]{2,4}$");
-        static Regex regexSolofrases = new Regex(@"^[a-zA-Záéíóú ]+$");
-        static Regex regexLetrasGuiones = new Regex(@"^[-_a-zA-Záéíóú]+$");
+        static Regex regexSolofrases = new Regex(@"^[a-zA-ZáéíóúÁÉÍÓÚ ]+$");
+        static Regex regexLetrasGuiones = new Regex(@"^[-_a-zA-ZáéíóúÁÉÍÓÚ]+$");
 
         public static bool validar16Numeros(string numero)
         {

@@ -54,7 +54,16 @@ namespace PagoElectronico.ABM_Cliente
 
         private void textBoxDoc_TextChanged(object sender, EventArgs e)
         {
-            ActulizarResultados();
+            if (ValidadorHelper.validarSoloNumeros(textBoxDoc.Text))
+            {
+                ActulizarResultados();
+                errorProvider1.Clear();
+            }
+            else
+            {
+                dataGridView1.DataSource = null;
+                errorProvider1.SetError(textBoxDoc, "El Documento solo puede contener numeros");
+            }
         }
 
         private void comboBoxTipoDoc_SelectionChangeCommitted(object sender, EventArgs e)

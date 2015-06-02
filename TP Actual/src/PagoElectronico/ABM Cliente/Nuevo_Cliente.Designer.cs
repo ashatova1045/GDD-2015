@@ -60,16 +60,18 @@
             this.errorProvider1 = new System.Windows.Forms.ErrorProvider(this.components);
             this.button2 = new System.Windows.Forms.Button();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.button4 = new System.Windows.Forms.Button();
+            this.button3 = new System.Windows.Forms.Button();
+            this.label17 = new System.Windows.Forms.Label();
+            this.textBoxRes = new System.Windows.Forms.TextBox();
             this.textBoxPreg = new System.Windows.Forms.TextBox();
             this.label16 = new System.Windows.Forms.Label();
             this.textBoxPW = new System.Windows.Forms.TextBox();
             this.label15 = new System.Windows.Forms.Label();
             this.textBoxUser = new System.Windows.Forms.TextBox();
             this.label14 = new System.Windows.Forms.Label();
-            this.textBoxRes = new System.Windows.Forms.TextBox();
-            this.label17 = new System.Windows.Forms.Label();
-            this.button3 = new System.Windows.Forms.Button();
-            this.button4 = new System.Windows.Forms.Button();
+            this.labelEstado = new System.Windows.Forms.Label();
+            this.checkBoxEstado = new System.Windows.Forms.CheckBox();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).BeginInit();
             this.groupBox2.SuspendLayout();
@@ -336,6 +338,7 @@
             // 
             // errorProvider1
             // 
+            this.errorProvider1.BlinkStyle = System.Windows.Forms.ErrorBlinkStyle.NeverBlink;
             this.errorProvider1.ContainerControl = this;
             // 
             // button2
@@ -350,6 +353,8 @@
             // 
             // groupBox2
             // 
+            this.groupBox2.Controls.Add(this.checkBoxEstado);
+            this.groupBox2.Controls.Add(this.labelEstado);
             this.groupBox2.Controls.Add(this.button4);
             this.groupBox2.Controls.Add(this.button3);
             this.groupBox2.Controls.Add(this.label17);
@@ -366,6 +371,42 @@
             this.groupBox2.TabIndex = 3;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Datos de la cuenta";
+            // 
+            // button4
+            // 
+            this.button4.Location = new System.Drawing.Point(338, 88);
+            this.button4.Name = "button4";
+            this.button4.Size = new System.Drawing.Size(118, 23);
+            this.button4.TabIndex = 9;
+            this.button4.Text = "Limpiar";
+            this.button4.UseVisualStyleBackColor = true;
+            this.button4.Click += new System.EventHandler(this.button4_Click);
+            // 
+            // button3
+            // 
+            this.button3.Location = new System.Drawing.Point(338, 59);
+            this.button3.Name = "button3";
+            this.button3.Size = new System.Drawing.Size(118, 23);
+            this.button3.TabIndex = 8;
+            this.button3.Text = "Buscar Cliente";
+            this.button3.UseVisualStyleBackColor = true;
+            this.button3.Click += new System.EventHandler(this.button3_Click);
+            // 
+            // label17
+            // 
+            this.label17.AutoSize = true;
+            this.label17.Location = new System.Drawing.Point(7, 98);
+            this.label17.Name = "label17";
+            this.label17.Size = new System.Drawing.Size(58, 13);
+            this.label17.TabIndex = 7;
+            this.label17.Text = "Respuesta";
+            // 
+            // textBoxRes
+            // 
+            this.textBoxRes.Location = new System.Drawing.Point(68, 95);
+            this.textBoxRes.Name = "textBoxRes";
+            this.textBoxRes.Size = new System.Drawing.Size(183, 20);
+            this.textBoxRes.TabIndex = 6;
             // 
             // textBoxPreg
             // 
@@ -415,41 +456,24 @@
             this.label14.TabIndex = 0;
             this.label14.Text = "Username";
             // 
-            // textBoxRes
+            // labelEstado
             // 
-            this.textBoxRes.Location = new System.Drawing.Point(68, 95);
-            this.textBoxRes.Name = "textBoxRes";
-            this.textBoxRes.Size = new System.Drawing.Size(183, 20);
-            this.textBoxRes.TabIndex = 6;
+            this.labelEstado.AutoSize = true;
+            this.labelEstado.Location = new System.Drawing.Point(292, 20);
+            this.labelEstado.Name = "labelEstado";
+            this.labelEstado.Size = new System.Drawing.Size(102, 13);
+            this.labelEstado.TabIndex = 10;
+            this.labelEstado.Text = "Estado de la cuenta";
             // 
-            // label17
+            // checkBoxEstado
             // 
-            this.label17.AutoSize = true;
-            this.label17.Location = new System.Drawing.Point(7, 98);
-            this.label17.Name = "label17";
-            this.label17.Size = new System.Drawing.Size(58, 13);
-            this.label17.TabIndex = 7;
-            this.label17.Text = "Respuesta";
-            // 
-            // button3
-            // 
-            this.button3.Location = new System.Drawing.Point(338, 59);
-            this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(118, 23);
-            this.button3.TabIndex = 8;
-            this.button3.Text = "Buscar Cliente";
-            this.button3.UseVisualStyleBackColor = true;
-            this.button3.Click += new System.EventHandler(this.button3_Click);
-            // 
-            // button4
-            // 
-            this.button4.Location = new System.Drawing.Point(338, 88);
-            this.button4.Name = "button4";
-            this.button4.Size = new System.Drawing.Size(118, 23);
-            this.button4.TabIndex = 9;
-            this.button4.Text = "Limpiar";
-            this.button4.UseVisualStyleBackColor = true;
-            this.button4.Click += new System.EventHandler(this.button4_Click);
+            this.checkBoxEstado.AutoSize = true;
+            this.checkBoxEstado.Location = new System.Drawing.Point(401, 20);
+            this.checkBoxEstado.Name = "checkBoxEstado";
+            this.checkBoxEstado.Size = new System.Drawing.Size(15, 14);
+            this.checkBoxEstado.TabIndex = 11;
+            this.checkBoxEstado.UseVisualStyleBackColor = true;
+            this.checkBoxEstado.CheckedChanged += new System.EventHandler(this.checkBoxEstado_CheckedChanged);
             // 
             // Nuevo_Cliente
             // 
@@ -515,5 +539,7 @@
         private System.Windows.Forms.TextBox textBoxRes;
         private System.Windows.Forms.Button button4;
         private System.Windows.Forms.Button button3;
+        private System.Windows.Forms.CheckBox checkBoxEstado;
+        private System.Windows.Forms.Label labelEstado;
     }
 }

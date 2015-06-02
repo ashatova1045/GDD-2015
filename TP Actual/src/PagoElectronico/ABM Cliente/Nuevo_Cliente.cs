@@ -19,7 +19,7 @@ namespace PagoElectronico.ABM_Cliente
             InitializeComponent();
         }
         
-        private bool validacion(bool camposUsuario)
+        private bool validacion()
         {
             errorProvider1.Clear();
             bool correcto = true;
@@ -78,7 +78,7 @@ namespace PagoElectronico.ABM_Cliente
                 correcto = false;
             }
 
-            if (!ValidadorHelper.validarSoloLetras(textBoxDepto.Text) && textBoxDepto.Text.Length > 10)
+            if (!ValidadorHelper.validarSoloLetras(textBoxDepto.Text) || textBoxDepto.Text.Length > 10)
             {
                 errorProvider1.SetError(textBoxDepto, "Departamento no válido");
                 correcto = false;
@@ -90,7 +90,7 @@ namespace PagoElectronico.ABM_Cliente
                 correcto = false;
             }
 
-            if (camposUsuario)
+            if (textBoxUser.Enabled)
             {
 
                 if (!ValidadorHelper.ValidarLetrasGuiones(textBoxUser.Text))
@@ -123,7 +123,7 @@ namespace PagoElectronico.ABM_Cliente
 
         private void button1_Click(object sender, EventArgs e)
         {
-            if (validacion(true))
+            if (validacion())
             {
                 List<SqlParameter> listaDeParametros = new List<SqlParameter>();
                 listaDeParametros.Add(new SqlParameter("@Nombre", textBoxNombre.Text));
@@ -143,6 +143,7 @@ namespace PagoElectronico.ABM_Cliente
                 listaDeParametros.Add(new SqlParameter("@Contrasena", Cifrador.Cifrar(textBoxPW.Text)));
                 listaDeParametros.Add(new SqlParameter("@Pregunta", textBoxPreg.Text));
                 listaDeParametros.Add(new SqlParameter("@Respuesta", Cifrador.Cifrar(textBoxRes.Text)));
+                listaDeParametros.Add(new SqlParameter("@Estado", checkBoxEstado.Checked ? "H" : "I"));
 
                 try
                 {
@@ -218,6 +219,11 @@ namespace PagoElectronico.ABM_Cliente
             textBoxRes.Text = "******";
             textBoxRes.Enabled = false;
 
+            if (cell[15].Value.ToString() == "H")
+                checkBoxEstado.Checked = true;
+            else
+                checkBoxEstado.Checked = false;
+
             idCliente = Convert.ToDecimal(cell[0].Value);
             button1.Text = "Modificar cliente";
             button1.Click -=new EventHandler(button1_Click);
@@ -228,7 +234,7 @@ namespace PagoElectronico.ABM_Cliente
 
         private void button1_Click_Modificar(object sender, EventArgs e)
         {
-            if (validacion(false))
+            if (validacion())
             {
                 List<SqlParameter> listaDeParametros = new List<SqlParameter>();
                 listaDeParametros.Add(new SqlParameter("@Id_cliente", idCliente));
@@ -245,6 +251,7 @@ namespace PagoElectronico.ABM_Cliente
                 listaDeParametros.Add(new SqlParameter("@Localidad", textBox9.Text));
                 listaDeParametros.Add(new SqlParameter("@Nacionalidad", Convert.ToDecimal(comboBoxNac.SelectedValue)));
                 listaDeParametros.Add(new SqlParameter("@FechaNac", dateTimePicker1.Value));
+                listaDeParametros.Add(new SqlParameter("@Estado", checkBoxEstado.Checked ? "H" : "I"));
 
                 try
                 {
@@ -262,6 +269,14 @@ namespace PagoElectronico.ABM_Cliente
         {
             new Nuevo_Cliente().Show(Owner);
             this.Close();
+        }
+
+        private void checkBoxEstado_CheckedChanged(object sender, EventArgs e)
+        {
+            if (checkBoxEstado.Checked)
+                checkBoxEstado.Text = "Habilitada";
+            else
+                checkBoxEstado.Text = "Deshabilitada";
         }
     }
 }
