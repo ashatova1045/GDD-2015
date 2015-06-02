@@ -60,16 +60,22 @@
     <Compile Include="ABM Cliente\Nuevo_Cliente.Designer.cs">
       <DependentUpon>Nuevo_Cliente.cs</DependentUpon>
     </Compile>
+    <Compile Include="ABM Cuenta\AdministrarCuentas.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ABM Cuenta\AdministrarCuentas.Designer.cs">
+      <DependentUpon>AdministrarCuentas.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ABM Cuenta\EdicionCuenta.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ABM Cuenta\EdicionCuenta.Designer.cs">
+      <DependentUpon>EdicionCuenta.cs</DependentUpon>
+    </Compile>
     <Compile Include="ABM de Usuario\Form1.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="ABM de Usuario\Form1.Designer.cs">
-      <DependentUpon>Form1.cs</DependentUpon>
-    </Compile>
-    <Compile Include="ABM Cuenta\Form1.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="ABM Cuenta\Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
     <Compile Include="ABM Rol\AdministrarRoles.cs">
@@ -166,6 +172,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="ABM Cliente\Nuevo_Cliente.resx">
       <DependentUpon>Nuevo_Cliente.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ABM Cuenta\AdministrarCuentas.resx">
+      <DependentUpon>AdministrarCuentas.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ABM Cuenta\EdicionCuenta.resx">
+      <DependentUpon>EdicionCuenta.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="ABM Rol\AdministrarRoles.resx">
       <DependentUpon>AdministrarRoles.cs</DependentUpon>
