@@ -51,7 +51,7 @@ namespace PagoElectronico.Facturacion
                 comboBox1.ValueMember = "Id_usuario";
                 comboBox1.DisplayMember = "Usuario";
                 comboBox1.Text = "Elija un usuario";
-                comboBox1.TabIndex =0;
+                comboBox1.SelectedIndex = -1;
             }
             else
             {

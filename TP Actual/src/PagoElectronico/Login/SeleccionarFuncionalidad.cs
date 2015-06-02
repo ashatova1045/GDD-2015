@@ -46,7 +46,7 @@ namespace PagoElectronico.Login
                     nuevoForm = new ABM_Usuario.Form1();
                     break;
                 case "ABM Cliente":
-                    nuevoForm = new ABM_Cliente.Form1();
+                    nuevoForm = new ABM_Cliente.Nuevo_Cliente();
                     break;
                 case "ABM Cuenta":
                     nuevoForm = new ABM_Cuenta.Form1();

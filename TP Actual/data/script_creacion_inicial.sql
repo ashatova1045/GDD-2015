@@ -551,7 +551,7 @@ AS
 		FROM HHHH.funcionalidades Fun, HHHH.roles Rol, HHHH.rel_rol_funcionalidad Rel
 		WHERE Rel.Id_rol = Rol.Id_rol AND
 			Rel.Id_funcionalidad = Fun.Id_funcionalidad AND
-			Rol.Nombre_rol = @nombre
+			Rol.Id_rol = @nombre
 	GO
 	
 CREATE PROCEDURE HHHH.agregarNuevoRol
@@ -905,6 +905,83 @@ AS
 			FROM HHHH.movimientos mov, HHHH.transferencias tr
 			WHERE mov.Id_factura = @id_factura and
 				  tr.Id_transferencia = mov.Id_transferencia
+	END
+GO
+
+CREATE PROCEDURE HHHH.nuevoCliente(
+@Nombre varchar(max),
+@Apellido varchar(max),
+@Documento numeric(18,0),
+@TipoDoc int,
+@Mail varchar(255),
+@Id_pais numeric(18,0),
+@Calle varchar(255),
+@Altura int,
+@Piso int,
+@Departamento varchar(10),
+@Localidad varchar(255),
+@Nacionalidad numeric(18,0),
+@FechaNac datetime,
+@Usuario nvarchar(255),
+@Contrasena nvarchar(255),
+@Pregunta nvarchar(255),
+@Respuesta nvarchar(255))
+AS
+	BEGIN
+	
+		DECLARE @error nvarchar(max)
+		
+		IF EXISTS (SELECT 1 FROM HHHH.usuarios WHERE Usuario = @Usuario)
+			BEGIN
+				SET @error = 'El usuario '+@usuario+' ya se encuentra registrado. Intente otro'
+				RAISERROR(@error,16,1)
+				RETURN
+			END
+			
+		IF EXISTS (SELECT 1 FROM HHHH.clientes WHERE Mail = @Mail)
+			BEGIN
+				SET @error = 'El mail '+@Mail+' ya se encuentra registrado. Intente otro'
+				RAISERROR(@error,16,1)
+				RETURN
+			END
+			
+		IF EXISTS (SELECT 1 FROM HHHH.clientes WHERE Nro_Documento = @Documento)
+			BEGIN
+				SET @error = 'El numero de documento '+convert(nvarchar(max),@Documento)+' ya se encuentra registrado'
+				RAISERROR(@error,16,1)
+				RETURN
+			END
+			
+		INSERT INTO HHHH.usuarios(Usuario,Contrasena,IntentosFallidos,Estado)
+			VALUES(@Usuario,@Contrasena,0,'H')
+			
+		INSERT INTO HHHH.clientes(Id_usuario,Nombre,Apellido,Nro_Documento,Id_tipo_documento,
+									Mail,Id_pais,Altura,Calle,Piso,Departamento,Localidad,
+									Id_nacionalidad,Fecha_nacimiento,Estado)
+			VALUES((SELECT IDENT_CURRENT('HHHH.usuarios')),@Nombre,@Apellido,@Documento,@TipoDoc,
+					@Mail,@Id_pais,@Altura,@Calle,@Piso,@Departamento,@Localidad,@Nacionalidad,
+					@FechaNac,'H')
+			
+	END
+GO
+
+CREATE PROCEDURE HHHH.buscarCliente(
+@Nombre varchar(255),
+@Apellido varchar(255),
+@Documento varchar(255),
+@TipoDoc varchar(255),
+@Mail varchar(255))
+AS
+	BEGIN
+		SELECT cli.*, us.* 
+			FROM HHHH.clientes cli, HHHH.usuarios us
+			WHERE Nombre like '%'+@Nombre+'%' and
+				  Apellido like '%'+@Apellido+'%' and
+				  Nro_Documento like '%'+@Documento+'%' and
+				  Id_tipo_documento like '%'+@TipoDoc+'%' and
+				  Mail like '%'+@Mail+'%'and
+				  cli.Id_usuario = us.Id_usuario
+		RETURN
 	END
 GO
 
