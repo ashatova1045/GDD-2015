@@ -192,6 +192,8 @@ namespace PagoElectronico.ABM_Cliente
             new BuscarCliente().Show(this);
         }
 
+        private decimal idCliente;
+
         public void recDatos(DataGridViewCellCollection cell)
         {
             textBoxNombre.Text = cell[2].Value.ToString();
@@ -216,9 +218,11 @@ namespace PagoElectronico.ABM_Cliente
             textBoxRes.Text = "******";
             textBoxRes.Enabled = false;
 
+            idCliente = Convert.ToDecimal(cell[0].Value);
             button1.Text = "Modificar cliente";
             button1.Click -=new EventHandler(button1_Click);
             button1.Click += new EventHandler(button1_Click_Modificar);
+
 
         }
 
@@ -226,7 +230,31 @@ namespace PagoElectronico.ABM_Cliente
         {
             if (validacion(false))
             {
-                //aca actualizar
+                List<SqlParameter> listaDeParametros = new List<SqlParameter>();
+                listaDeParametros.Add(new SqlParameter("@Id_cliente", idCliente));
+                listaDeParametros.Add(new SqlParameter("@Nombre", textBoxNombre.Text));
+                listaDeParametros.Add(new SqlParameter("@Apellido", textBoxApellido.Text));
+                listaDeParametros.Add(new SqlParameter("@Documento", Convert.ToDecimal(textBoxDocumento.Text)));
+                listaDeParametros.Add(new SqlParameter("@tipoDoc", Convert.ToInt32(comboBoxTipoDoc.SelectedValue)));
+                listaDeParametros.Add(new SqlParameter("@Mail", textBoxMail.Text));
+                listaDeParametros.Add(new SqlParameter("@Id_pais", Convert.ToDecimal(comboBoxPais.SelectedValue)));
+                listaDeParametros.Add(new SqlParameter("@Calle", textBoxCalle.Text));
+                listaDeParametros.Add(new SqlParameter("@Altura", Convert.ToInt32(textBoxAltura.Text)));
+                listaDeParametros.Add(new SqlParameter("@Piso", Convert.ToInt32(textBoxPiso.Text)));
+                listaDeParametros.Add(new SqlParameter("@Departamento", textBoxDepto.Text));
+                listaDeParametros.Add(new SqlParameter("@Localidad", textBox9.Text));
+                listaDeParametros.Add(new SqlParameter("@Nacionalidad", Convert.ToDecimal(comboBoxNac.SelectedValue)));
+                listaDeParametros.Add(new SqlParameter("@FechaNac", dateTimePicker1.Value));
+
+                try
+                {
+                    ConexionDB.invocarStoreProcedure(Sesion.conexion, "modificarCliente", listaDeParametros);
+                    MessageBox.Show("El usuario " + textBoxUser.Text + " ha sido modificado satisfactoriamente");
+                }
+                catch (SqlException ex)
+                {
+                    MessageBox.Show(ex.Message);
+                }
             }
         }
 

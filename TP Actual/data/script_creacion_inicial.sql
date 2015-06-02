@@ -985,5 +985,59 @@ AS
 	END
 GO
 
+CREATE PROCEDURE HHHH.modificarCliente(
+@Id_cliente numeric(18,0),
+@Nombre varchar(max),
+@Apellido varchar(max),
+@Documento numeric(18,0),
+@TipoDoc int,
+@Mail varchar(255),
+@Id_pais numeric(18,0),
+@Calle varchar(255),
+@Altura int,
+@Piso int,
+@Departamento varchar(10),
+@Localidad varchar(255),
+@Nacionalidad numeric(18,0),
+@FechaNac datetime)
+AS
+	BEGIN
+	
+		DECLARE @error nvarchar(max)
+				
+		IF EXISTS (SELECT 1 FROM HHHH.clientes WHERE Mail = @Mail and Id_cliente != @Id_cliente)
+			BEGIN
+				SET @error = 'El mail '+@Mail+' ya se encuentra registrado. Intente otro'
+				RAISERROR(@error,16,1)
+				RETURN
+			END
+			
+		IF EXISTS (SELECT 1 FROM HHHH.clientes WHERE Nro_Documento = @Documento and Id_cliente != @Id_cliente)
+			BEGIN
+				SET @error = 'El numero de documento '+convert(nvarchar(max),@Documento)+' ya se encuentra registrado'
+				RAISERROR(@error,16,1)
+				RETURN
+			END
+			
+		
+		UPDATE HHHH.clientes
+		SET Nombre = @Nombre,
+			Apellido = @Apellido,
+			Nro_Documento = @Documento,
+			Id_tipo_documento = @TipoDoc,
+			Mail = @Mail,
+			Altura = @Altura,
+			Calle = @Calle,
+			Piso = @Piso,
+			Departamento = @Departamento,
+			Localidad = @Localidad,
+			Id_nacionalidad = @Nacionalidad,
+			Fecha_nacimiento = @FechaNac
+			FROM HHHH.clientes
+			WHERE Id_cliente = @Id_cliente
+			
+	END
+GO
+
 update HHHH.cuentas
 set Id_tipo_cuenta =1, Estado = 'H'
