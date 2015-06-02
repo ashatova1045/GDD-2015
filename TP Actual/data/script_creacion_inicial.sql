@@ -153,7 +153,7 @@ BEGIN /* *************** CREACION DE TABLAS *************** */
 		Usuario NVARCHAR(255) UNIQUE NOT NULL,
 		Contrasena CHAR(44) NOT NULL,
 		IntentosFallidos INT DEFAULT 0,
-		Estado NVARCHAR CHECK (Estado IN ('H','I') -- habilitado, inhabilitado
+		Estado NVARCHAR CHECK (Estado IN ('H','I')) -- habilitado, inhabilitado
 	)
 	
 	CREATE TABLE HHHH.paises(
@@ -954,7 +954,7 @@ AS
 			END
 			
 		INSERT INTO HHHH.usuarios(Usuario,Contrasena,IntentosFallidos,Estado)
-			VALUES(@Usuario,@Contrasena,0,@Estado)
+			VALUES(@Usuario,@Contrasena,0,'H')
 			
 		INSERT INTO HHHH.rel_rol_usuario(Id_rol,Id_usuario)
 			VALUES(2,IDENT_CURRENT('HHHH.usuarios'))
@@ -964,7 +964,7 @@ AS
 									Id_nacionalidad,Fecha_nacimiento,Estado)
 			VALUES((SELECT IDENT_CURRENT('HHHH.usuarios')),@Nombre,@Apellido,@Documento,@TipoDoc,
 					@Mail,@Id_pais,@Altura,@Calle,@Piso,@Departamento,@Localidad,@Nacionalidad,
-					@FechaNac,'H')
+					@FechaNac,@Estado)
 			
 	END
 GO
