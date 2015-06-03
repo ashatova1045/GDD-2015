@@ -632,7 +632,7 @@ AS
 			VALUES(@destino,@origen,@fecha,@moneda,@importe,@costo)
 		
 		INSERT INTO HHHH.movimientos(Id_cuenta,Fecha,Id_moneda,Id_transferencia,Tipo_movimiento,Costo)
-			VALUES (@origen,@fecha,@moneda,(SELECT IDENT_CURRENT('HHHH.transferencias')),'T',@costo+@importe)
+			VALUES (@origen,@fecha,@moneda,(SELECT IDENT_CURRENT('HHHH.transferencias')),'T',@costo)
 		
 		UPDATE HHHH.cuentas
 			SET Saldo -= @importe +@costo
