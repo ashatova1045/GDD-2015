@@ -70,7 +70,7 @@ namespace PagoElectronico.Login
                     nuevoForm = new Consulta_Saldos.Consultar_Saldo();
                     break;
                 case "Listado Estadistico":
-                    nuevoForm = new Listados.Form1();
+                    nuevoForm = new Listados.ListadosEstadisticos();
                     break;
             }
 
