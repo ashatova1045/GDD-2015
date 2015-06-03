@@ -33,7 +33,7 @@
             this.label3 = new System.Windows.Forms.Label();
             this.TrimestreCBox = new System.Windows.Forms.ComboBox();
             this.TListadoCBox = new System.Windows.Forms.ComboBox();
-            this.button1 = new System.Windows.Forms.Button();
+            this.generarB = new System.Windows.Forms.Button();
             this.volverFuncionalidades = new System.Windows.Forms.Button();
             this.AnioTextBox = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
@@ -69,15 +69,11 @@
             // 
             this.TrimestreCBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.TrimestreCBox.FormattingEnabled = true;
-            this.TrimestreCBox.Items.AddRange(new object[] {
-            "ENERO - FEBRERO - MARZO",
-            "ABRIL - MAYO - JUNIO",
-            "JULIO - AGOSTO - SEPTIEMBRE",
-            "OCTUBRE - NOVIEMBRE - DICIEMBRE"});
             this.TrimestreCBox.Location = new System.Drawing.Point(197, 69);
             this.TrimestreCBox.Name = "TrimestreCBox";
             this.TrimestreCBox.Size = new System.Drawing.Size(225, 21);
             this.TrimestreCBox.TabIndex = 4;
+            this.TrimestreCBox.SelectedIndexChanged += new System.EventHandler(this.TrimestreCBox_SelectedIndexChanged);
             // 
             // TListadoCBox
             // 
@@ -89,15 +85,15 @@
             this.TListadoCBox.TabIndex = 5;
             this.TListadoCBox.SelectedIndexChanged += new System.EventHandler(this.TListadoCBox_SelectedIndexChanged);
             // 
-            // button1
+            // generarB
             // 
-            this.button1.Location = new System.Drawing.Point(457, 195);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(132, 44);
-            this.button1.TabIndex = 6;
-            this.button1.Text = "Generar Listado";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
+            this.generarB.Location = new System.Drawing.Point(457, 195);
+            this.generarB.Name = "generarB";
+            this.generarB.Size = new System.Drawing.Size(132, 44);
+            this.generarB.TabIndex = 6;
+            this.generarB.Text = "Generar Listado";
+            this.generarB.UseVisualStyleBackColor = true;
+            this.generarB.Click += new System.EventHandler(this.generarB_Click);
             // 
             // volverFuncionalidades
             // 
@@ -125,7 +121,7 @@
             this.ClientSize = new System.Drawing.Size(855, 284);
             this.Controls.Add(this.AnioTextBox);
             this.Controls.Add(this.volverFuncionalidades);
-            this.Controls.Add(this.button1);
+            this.Controls.Add(this.generarB);
             this.Controls.Add(this.TListadoCBox);
             this.Controls.Add(this.TrimestreCBox);
             this.Controls.Add(this.label3);
@@ -145,7 +141,7 @@
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.ComboBox TrimestreCBox;
         private System.Windows.Forms.ComboBox TListadoCBox;
-        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button generarB;
         private System.Windows.Forms.Button volverFuncionalidades;
         private System.Windows.Forms.TextBox AnioTextBox;
     }

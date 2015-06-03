@@ -6,13 +6,17 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using System.Data.SqlClient;
+using PagoElectronico.OperacionesDB.ConexionDB;
 
 namespace PagoElectronico.Listados
 {
     public partial class ListadosEstadisticos : Form
 
     {
-        string anioIngresado;
+        int anioIngresado;
+        int tListado;
+        int trimestre;
 
         public ListadosEstadisticos()
         {
@@ -29,8 +33,36 @@ namespace PagoElectronico.Listados
             TrimestreCBox.Items.Add("Julio-Agosto-Septiembre");
             TrimestreCBox.Items.Add("Octubre-Noviembre-Diciembre");
 
+            TListadoCBox.SelectedIndex = 0;
+            TrimestreCBox.SelectedIndex = 0;
          
         }
+
+        
+        private void AnioTextBox_TextChanged(object sender, EventArgs e)
+        {
+            if (System.Text.RegularExpressions.Regex.IsMatch(AnioTextBox.Text, "[^0-9]"))
+            {
+                MessageBox.Show("Solamente numeros!!!");
+                AnioTextBox.Text.Remove(AnioTextBox.Text.Length - 1);
+            }
+
+            AnioTextBox.MaxLength = 4;
+            anioIngresado = Convert.ToInt32( AnioTextBox.Text);
+        }
+
+
+        private void TrimestreCBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            trimestre = TrimestreCBox.SelectedIndex; //le asigno el index
+        }
+
+
+        private void TListadoCBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            tListado = TListadoCBox.SelectedIndex; //Le asigno el index
+        }
+
 
         private void volverFuncionalidades_Click_1(object sender, EventArgs e)
         {
@@ -38,52 +70,11 @@ namespace PagoElectronico.Listados
             this.Close();
         }
 
-        private void TListadoCBox_SelectedIndexChanged(object sender, EventArgs e)
+
+        private void generarB_Click(object sender, EventArgs e)
         {
-
-        }
-
-        private void button1_Click(object sender, EventArgs e)
-        {
-            Form nuevoForm = null;
-            switch (TListadoCBox.SelectedIndex)
-            {
-               
-                case 0:
-                    nuevoForm = new Listados.Listado0();
-                    break;
-                case 1:
-                    nuevoForm = new Listados.Listado1();
-                    break;
-                case 2:
-                    nuevoForm = new Listados.Listado2();
-                    break;
-                case 3:
-                    nuevoForm = new Listados.Listado3();
-                    break;
-                case 4:
-                    nuevoForm = new Listados.Listado4();
-                    break;              
-            }
-
-            nuevoForm.Show(this);
             this.Hide();
-
-        }
-
-        private void AnioTextBox_TextChanged(object sender, EventArgs e)
-        {
-            anioIngresado = AnioTextBox.Text;
-     
-       }
-        private void AnioTextBox_TextChanged(object sender, KeyPressEventArgs e)
-        {
-            if (!(char.IsNumber(e.KeyChar)) && (e.KeyChar != (char)Keys.Back))
-            {
-                MessageBox.Show("Solo se permiten numeros", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                e.Handled = true;
-                return;
-            }
+            new ListadoGenerado(anioIngresado, tListado, trimestre).Show(this);
         }
 
 

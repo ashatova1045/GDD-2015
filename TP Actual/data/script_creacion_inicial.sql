@@ -310,6 +310,8 @@ BEGIN /* *************** CREACION DE TABLAS *************** */
 		PRIMARY KEY (Id_rol, Id_funcionalidad)
 	)
 	
+
+	
 	CREATE TABLE HHHH.movimientos(
 		Id_movimiento numeric(18,0) IDENTITY(1,1) PRIMARY KEY,
 		Id_factura numeric(18,0) CONSTRAINT FK_movimientos_facturas REFERENCES HHHH.facturas(Id_factura),
@@ -1044,6 +1046,39 @@ AS
 			
 	END
 GO
+
+
+DROP PROCEDURE HHHH.generarListado1
+go
+
+-----------------LISTADOS ANA------------------------
+CREATE PROCEDURE HHHH.generarListado1
+@anio int,
+@primerMes int,
+@ultimoMes int
+AS
+
+	BEGIN 
+	select cli.Nombre,cli.Apellido,top5.TotalMovFact from(
+		select top 5 cue.Id_cliente, sum(movFact.cantMov) as TotalMovFact from
+			(select mov.Id_cuenta, COUNT (*)as 
+			cantMov from HHHH.movimientos mov
+			join HHHH.facturas fac
+			on mov.Id_factura = fac.Id_factura
+			where mov.Id_factura is not null and
+			Year(fac.Fecha_factura)=@anio and
+			Month(fac.Fecha_factura) between @primerMes and @ultimoMes
+			Group by mov.Id_cuenta) movFact
+			join HHHH.cuentas cue
+			on cue.Id_cuenta = movFact.Id_cuenta
+			group by cue.Id_cliente
+			order by TotalMovFact desc) top5
+			join HHHH.clientes cli
+			on top5.Id_cliente = cli.Id_cliente
+
+		END
+GO
+----------------------------------------------------------------------------------------------
 
 update HHHH.cuentas
 set Id_tipo_cuenta =1, Estado = 'H'

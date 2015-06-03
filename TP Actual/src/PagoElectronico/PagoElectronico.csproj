@@ -120,35 +120,11 @@
     <Compile Include="Facturacion\Facturacion.Designer.cs">
       <DependentUpon>Facturacion.cs</DependentUpon>
     </Compile>
-    <Compile Include="Listados\Listado0.cs">
+    <Compile Include="Listados\ListadoGenerado.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Listados\Listado0.Designer.cs">
-      <DependentUpon>Listado0.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Listados\Listado1.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Listados\Listado1.Designer.cs">
-      <DependentUpon>Listado1.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Listados\Listado2.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Listados\Listado2.Designer.cs">
-      <DependentUpon>Listado2.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Listados\Listado3.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Listados\Listado3.Designer.cs">
-      <DependentUpon>Listado3.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Listados\Listado4.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Listados\Listado4.Designer.cs">
-      <DependentUpon>Listado4.cs</DependentUpon>
+    <Compile Include="Listados\ListadoGenerado.Designer.cs">
+      <DependentUpon>ListadoGenerado.cs</DependentUpon>
     </Compile>
     <Compile Include="Listados\ListadosEstadisticos.cs">
       <SubType>Form</SubType>
@@ -230,20 +206,8 @@
     <EmbeddedResource Include="Facturacion\Facturacion.resx">
       <DependentUpon>Facturacion.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Listados\Listado0.resx">
-      <DependentUpon>Listado0.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Listados\Listado1.resx">
-      <DependentUpon>Listado1.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Listados\Listado2.resx">
-      <DependentUpon>Listado2.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Listados\Listado3.resx">
-      <DependentUpon>Listado3.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Listados\Listado4.resx">
-      <DependentUpon>Listado4.cs</DependentUpon>
+    <EmbeddedResource Include="Listados\ListadoGenerado.resx">
+      <DependentUpon>ListadoGenerado.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Listados\ListadosEstadisticos.resx">
       <DependentUpon>ListadosEstadisticos.cs</DependentUpon>
