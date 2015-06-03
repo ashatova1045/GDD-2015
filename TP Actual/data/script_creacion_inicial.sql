@@ -977,14 +977,24 @@ CREATE PROCEDURE HHHH.buscarCliente(
 @Mail varchar(255))
 AS
 	BEGIN
-		SELECT cli.*, us.* 
-			FROM HHHH.clientes cli, HHHH.usuarios us
-			WHERE Nombre like '%'+@Nombre+'%' and
-				  Apellido like '%'+@Apellido+'%' and
-				  Nro_Documento like '%'+@Documento+'%' and
-				  Id_tipo_documento like '%'+@TipoDoc+'%' and
-				  Mail like '%'+@Mail+'%'and
-				  cli.Id_usuario = us.Id_usuario
+		SELECT cli.Id_cliente,cli.Nombre, cli.Apellido, cli.Nro_Documento,cli.Id_tipo_documento, tDoc.Descripcion as 'Tipo Documento',
+				cli.Mail, cli.Id_pais, pa.Descripcion as 'Pais', cli.Calle, cli.Altura,cli.Piso,cli.Departamento,cli.Localidad,
+				cli.Id_nacionalidad, nac.Descripcion as 'Nacionalidad', cli.Fecha_nacimiento as 'Fecha de Nacimiento', us.Usuario,us.Estado as 'Estado Cuenta'
+			FROM HHHH.clientes cli 
+			JOIN HHHH.usuarios us
+			ON cli.Id_usuario = us.Id_usuario
+			JOIN HHHH.tipos_documentos tDoc
+			ON cli.id_tipo_documento = tDoc.Id_tipo_documento
+			JOIN HHHH.paises pa
+			ON cli.Id_pais = pa.Codigo
+			LEFT JOIN HHHH.paises nac
+			ON cli.Id_nacionalidad = nac.Codigo
+			WHERE cli.Nombre like '%'+@Nombre+'%' and
+			cli.Apellido like '%'+@Apellido+'%' and
+			cli.Nro_Documento like '%'+@Documento+'%' and
+			cli.Id_tipo_documento like '%'+@TipoDoc+'%' and
+			cli.Mail like '%'+@Mail+'%'
+			
 		RETURN
 	END
 GO

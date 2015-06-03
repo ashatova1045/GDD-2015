@@ -197,29 +197,28 @@ namespace PagoElectronico.ABM_Cliente
 
         public void recDatos(DataGridViewCellCollection cell)
         {
-            textBoxNombre.Text = cell[2].Value.ToString();
-            textBoxApellido.Text =cell[3].Value.ToString();
-            textBoxDocumento.Text = cell[4].Value.ToString();
-            comboBoxTipoDoc.SelectedValue = cell[5].Value;
+            textBoxNombre.Text = cell[1].Value.ToString();
+            textBoxApellido.Text =cell[2].Value.ToString();
+            textBoxDocumento.Text = cell[3].Value.ToString();
+            comboBoxTipoDoc.SelectedValue = cell[4].Value;
             textBoxMail.Text = cell[6].Value.ToString();
             comboBoxPais.SelectedValue = cell[7].Value;
-            textBoxAltura.Text = cell[8].Value.ToString();
+            textBoxAltura.Text = cell[10].Value.ToString();
             textBoxCalle.Text = cell[9].Value.ToString();
-            textBoxPiso.Text = cell[10].Value.ToString();
-            textBoxDepto.Text = cell[11].Value.ToString();
-            textBox9.Text = cell[12].Value.ToString();
-            comboBoxNac.SelectedValue = cell[13].Value;
-            dateTimePicker1.Value = (DateTime)cell[14].Value;
+            textBoxPiso.Text = cell[11].Value.ToString();
+            textBoxDepto.Text = cell[12].Value.ToString();
+            textBox9.Text = cell[13].Value.ToString();
+            comboBoxNac.SelectedValue = cell[14].Value;
+            dateTimePicker1.Value = (DateTime)cell[16].Value;
             textBoxUser.Text = cell[17].Value.ToString();
             textBoxUser.Enabled = false;
             textBoxPW.Text = "******";
             textBoxPW.Enabled = false;
-            //textBoxPreg.Text = cell[16].Value.ToString();
             textBoxPreg.Enabled = false;
             textBoxRes.Text = "******";
             textBoxRes.Enabled = false;
 
-            if (cell[15].Value.ToString() == "H")
+            if (cell[18].Value.ToString() == "H")
                 checkBoxEstado.Checked = true;
             else
                 checkBoxEstado.Checked = false;

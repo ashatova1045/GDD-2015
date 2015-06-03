@@ -35,6 +35,12 @@ namespace PagoElectronico.ABM_Cliente
             listaDeParametros.Add(new SqlParameter("@Mail", textBoxMail.Text));
             dataGridView1.DataSource = ConexionDB.invocarStoreProcedure(Sesion.conexion, "buscarCliente",listaDeParametros);
             labelCantRes.Text = ((DataTable)dataGridView1.DataSource).Rows.Count.ToString();
+
+            int[] columnasOcultas = { 0, 4, 7, 9, 10, 11, 12, 14 };
+                foreach(int i in columnasOcultas)
+                {
+                    dataGridView1.Columns[i].Visible = false;
+                }
         }
 
         private void textBoxNombre_TextChanged(object sender, EventArgs e)

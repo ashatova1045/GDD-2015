@@ -13,9 +13,11 @@ namespace PagoElectronico.ABM_Cuenta
 {
     public partial class EdicionCuenta : Form
     {
-        public EdicionCuenta(DataGridViewCellCollection cell)
+        decimal user;
+        public EdicionCuenta(DataGridViewCellCollection cell, decimal usuario)
         {
             InitializeComponent();
+            user = usuario;
             Inicio();
             if(cell != null)
                 cargarDatos(cell);
@@ -48,5 +50,32 @@ namespace PagoElectronico.ABM_Cuenta
             comboBox3.SelectedIndex = -1;
         }
 
+        private void button2_Click(object sender, EventArgs e)
+        {
+            Owner.Show();
+            this.Close();
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            List<SqlParameter> listaDeParametros = new List<SqlParameter>();
+            listaDeParametros.Add(new SqlParameter("@Id_usuario", user));
+            listaDeParametros.Add(new SqlParameter("@Id_cuenta", Convert.ToDecimal(textBox1.Text)));
+            listaDeParametros.Add(new SqlParameter("@Id_pais", comboBox1.SelectedValue ));
+            listaDeParametros.Add(new SqlParameter("@FecApertura", dateTimePicker1.Value));
+            listaDeParametros.Add(new SqlParameter("@Id_moneda", comboBox2.SelectedValue));
+            listaDeParametros.Add(new SqlParameter("@Id_tipo_cuenta", comboBox3.SelectedValue));
+
+            try
+            {
+                ConexionDB.invocarStoreProcedure(Sesion.conexion,"nvaCuenta",listaDeParametros);
+            }
+            catch(SqlException ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
+
     }
 }
+
