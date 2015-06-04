@@ -873,25 +873,44 @@ AS
 		SELECT @cliente_id = Id_cliente FROM HHHH.clientes WHERE Id_usuario = @user_id
 		
 		INSERT INTO HHHH.facturas(Fecha_factura,Id_cliente)
-			SELECT @fecha, @cliente_id
-			
+		SELECT @fecha, @cliente_id
+		
+		
+		DECLARE @FacturaActual numeric(18,0)
+		SET @FacturaActual = (SELECT IDENT_CURRENT('HHHH.facturas'))
+		
+		
 		UPDATE HHHH.movimientos
-		SET Id_factura = (SELECT IDENT_CURRENT('HHHH.facturas'))
+		SET Id_factura = @FacturaActual
 		FROM HHHH.movimientos mov, HHHH.transferencias tr
-			WHERE Id_factura is null and tr.Id_transferencia = mov.Id_transferencia
-			 and HHHH.obtenerUser(mov.Id_cuenta) = @user_id
+		WHERE Id_factura is null and tr.Id_transferencia = mov.Id_transferencia
+			  and HHHH.obtenerUser(mov.Id_cuenta) = @user_id
+			  
 			 
 		UPDATE HHHH.facturas
 		SET Monto_total = (SELECT SUM(mov.Costo)
-			FROM HHHH.movimientos mov
-			WHERE mov.Id_factura = (SELECT IDENT_CURRENT('HHHH.facturas'))
-			 and HHHH.obtenerUser(mov.Id_cuenta) = @user_id)
-		WHERE Id_factura = (SELECT IDENT_CURRENT('HHHH.facturas'))
+						   FROM HHHH.movimientos mov
+						   WHERE mov.Id_factura = @FacturaActual
+								 and HHHH.obtenerUser(mov.Id_cuenta) = @user_id)
+		WHERE Id_factura = @FacturaActual
 		
+		
+		UPDATE HHHH.Cuentas
+		SET estado = 'I' FROM 
+			(SELECT * FROM
+				(SELECT id_cuenta ,COUNT(*) AS cant FROM HHHH.movimientos
+				 WHERE Id_factura = @FacturaActual AND
+					Tipo_movimiento = 'T' 
+				 GROUP BY Id_cuenta) CantMovXCuenta
+			WHERE CantMovXCuenta.cant > 5) cue
+		WHERE HHHH.Cuentas.Id_cuenta = cue.Id_cuenta
+				
 		SELECT fac.Id_factura, cli.Nombre+' '+cli.Apellido as nombre, us.Usuario, fac.Fecha_factura, fac.Monto_total
-				FROM HHHH.facturas fac, HHHH.clientes cli, HHHH.usuarios us
-				WHERE fac.Id_factura = (SELECT IDENT_CURRENT('HHHH.facturas')) 
-					  and fac.Id_cliente = cli.Id_cliente and cli.Id_usuario = us.Id_usuario
+		FROM HHHH.facturas fac, HHHH.clientes cli, HHHH.usuarios us
+		WHERE fac.Id_factura = @FacturaActual 
+			  and fac.Id_cliente = cli.Id_cliente and cli.Id_usuario = us.Id_usuario
+					  
+
 
 	
 GO
