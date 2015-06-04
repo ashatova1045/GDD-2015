@@ -1078,6 +1078,29 @@ AS
 
 		END
 GO
+
+CREATE PROCEDURE HHHH.generarListado2
+
+@anio int,
+@primerMes int,
+@ultimoMes int
+AS
+	BEGIN
+
+	select cli.Nombre, cli.Apellido, trnsxcli.cantTransac from
+		(select top 5 cue.Id_cliente, COUNT(*) as cantTransac from HHHH.cuentas cue
+		JOIN  HHHH.transferencias trans 
+		on trans.Cuenta_origen = cue.Id_cuenta and
+		YEAR (trans.fecha_transferencia)=@anio and
+		MONTH (trans.fecha_transferencia) BETWEEN @primerMes AND @ultimoMes
+		where trans.Cuenta_destino = cue.Id_cuenta 
+		group by cue.Id_cliente 
+		order by cantTransac desc) trnsxcli
+			JOIN HHHH.clientes cli
+		ON cli.Id_cliente = trnsxcli.Id_cliente
+
+	END
+GO
 ----------------------------------------------------------------------------------------------
 
 update HHHH.cuentas
