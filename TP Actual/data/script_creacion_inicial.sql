@@ -206,6 +206,11 @@ BEGIN /* *************** CREACION DE TABLAS *************** */
 		Id_moneda numeric(18,0) IDENTITY(1,1) PRIMARY KEY,
 		Descripcion nvarchar(30) NOT NULL
 	)
+	
+	CREATE TABLE HHHH.Tipo_de_cambio(
+		Id_moneda numeric(18,0) PRIMARY KEY references hhhh.Monedas,
+		cambio numeric(18,2) NOT NULL
+	)
 
 	CREATE TABLE HHHH.tipo_cuenta(	
 		Id_tipo_cuenta numeric(18,0) IDENTITY(1,1) PRIMARY KEY,
@@ -329,7 +334,10 @@ GO
 BEGIN /* *************** MIGRACION *************** */
 	INSERT INTO HHHH.Monedas (Descripcion)
 		VALUES('USD');
--------------------------------------------------------------------------------------------			
+-------------------------------------------------------------------------------------------
+	INSERT INTO HHHH.tipo_de_cambio (Id_moneda,cambio)
+		VALUES(1,1);
+-------------------------------------------------------------------------------------------				
 	INSERT INTO HHHH.paises(Codigo,Descripcion)
 		SELECT DISTINCT Cli_Pais_Codigo, Cli_Pais_Desc
 			FROM gd_esquema.Maestra
