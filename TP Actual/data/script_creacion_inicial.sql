@@ -1048,8 +1048,6 @@ AS
 GO
 
 
-DROP PROCEDURE HHHH.generarListado1
-go
 
 -----------------LISTADOS ANA------------------------
 CREATE PROCEDURE HHHH.generarListado1
@@ -1087,8 +1085,8 @@ CREATE PROCEDURE HHHH.generarListado2
 AS
 	BEGIN
 
-	select cli.Nombre, cli.Apellido, trnsxcli.cantTransac from
-		(select top 5 cue.Id_cliente, COUNT(*) as cantTransac from HHHH.cuentas cue
+	SELECT cli.Nombre, cli.Apellido, trnsxcli.cantTransac FROM
+		(SELECT TOP 5 cue.Id_cliente, COUNT(*) AS cantTransac FROM HHHH.cuentas cue
 		JOIN  HHHH.transferencias trans 
 		on trans.Cuenta_origen = cue.Id_cuenta and
 		YEAR (trans.fecha_transferencia)=@anio and
@@ -1101,6 +1099,32 @@ AS
 
 	END
 GO
+
+CREATE PROCEDURE HHHH.generarListado3
+
+@anio int,
+@primerMes int,
+@ultimoMes int
+AS
+	BEGIN
+
+	SELECT pa.Descripcion AS 'PAIS', pa.Codigo AS 'COD_PAIS', top5.cantMov AS 'CANT MOVIMIENTOS' FROM
+		(SELECT top 5 cue.Id_pais, cue.Id_cuenta, cue.Id_cliente, movXcue.cantMov FROM
+			(SELECT  mov.Id_cuenta, COUNT (*) AS cantMov FROM HHHH.movimientos mov
+				JOIN HHHH.cuentas cue
+				ON cue.Id_cuenta = mov.Id_cuenta 
+				WHERE YEAR (mov.fecha) = @anio AND
+				MONTH (mov.fecha) BETWEEN @primerMes AND @ultimoMes
+				GROUP BY mov.Id_cuenta) movXcue
+			JOIN HHHH.cuentas cue
+			ON movXcue.Id_cuenta = cue.Id_cuenta
+			order by movXcue.cantMov desc) top5
+		JOIN HHHH.paises pa
+		ON top5.Id_pais = pa.Codigo
+		
+	END
+GO
+
 ----------------------------------------------------------------------------------------------
 
 update HHHH.cuentas
