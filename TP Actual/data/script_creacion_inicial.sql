@@ -145,6 +145,21 @@ GO
 	BEGIN 
 		RETURN substring(@mail,0,charindex('@gmail.com',@mail))
 	END
+	go
+	
+	CREATE FUNCTION HHHH.convertirmoneda(@monedaOriginal numeric(18,0),@monedaConvertida numeric(18,0),@monto numeric(18,2))
+	RETURNS numeric(18,2)
+	AS
+	BEGIN
+		declare @valorEnUSD numeric(18,2)=	(select @monto*cambio
+												from hhhh.tipo_de_cambio
+												where id_moneda=@monedaOriginal)
+		declare @valorconvertido numeric(18,2) =(select @valorEnUSD/cambio
+													from hhhh.tipo_de_cambio
+													where id_moneda = @monedaConvertida)
+		RETURN @valorconvertido
+	END
+GO
 GO
 
 BEGIN /* *************** CREACION DE TABLAS *************** */
@@ -1062,6 +1077,3 @@ AS
 			
 	END
 GO
-
-update HHHH.cuentas
-set Id_tipo_cuenta =1, Estado = 'H'
