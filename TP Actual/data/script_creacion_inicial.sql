@@ -1175,6 +1175,25 @@ AS
 	END
 GO
 
+CREATE PROCEDURE HHHH.ModCuenta
+@id_usuario numeric(18,0),
+@Id_cuenta numeric(18,0),
+@Id_pais numeric(18,0),
+@Id_moneda numeric(18,0),
+@FechaApert datetime,
+@id_tipoCta numeric(18,0)
+AS
+	BEGIN
+		UPDATE HHHH.cuentas
+		SET Id_pais = @Id_pais,
+			Id_moneda = @Id_moneda,
+			Fecha_apertura = @FechaApert,
+			Id_tipo_cuenta = @id_tipoCta
+		WHERE Id_cuenta = @Id_cuenta
+	END
+GO
+
+
 update HHHH.cuentas
 set Id_tipo_cuenta =1, Estado = 'H'
 
