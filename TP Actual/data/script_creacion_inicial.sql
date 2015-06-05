@@ -145,6 +145,21 @@ GO
 	BEGIN 
 		RETURN substring(@mail,0,charindex('@gmail.com',@mail))
 	END
+	go
+	
+	CREATE FUNCTION HHHH.convertirmoneda(@monedaOriginal numeric(18,0),@monedaConvertida numeric(18,0),@monto numeric(18,2))
+	RETURNS numeric(18,2)
+	AS
+	BEGIN
+		declare @valorEnUSD numeric(18,2)=	(select @monto*cambio
+												from hhhh.tipo_de_cambio
+												where id_moneda=@monedaOriginal)
+		declare @valorconvertido numeric(18,2) =(select @valorEnUSD/cambio
+													from hhhh.tipo_de_cambio
+													where id_moneda = @monedaConvertida)
+		RETURN @valorconvertido
+	END
+GO
 GO
 
 BEGIN /* *************** CREACION DE TABLAS *************** */
@@ -205,6 +220,11 @@ BEGIN /* *************** CREACION DE TABLAS *************** */
 	CREATE TABLE HHHH.Monedas(
 		Id_moneda numeric(18,0) IDENTITY(1,1) PRIMARY KEY,
 		Descripcion nvarchar(30) NOT NULL
+	)
+	
+	CREATE TABLE HHHH.Tipo_de_cambio(
+		Id_moneda numeric(18,0) PRIMARY KEY references hhhh.Monedas,
+		cambio numeric(18,2) NOT NULL
 	)
 
 	CREATE TABLE HHHH.tipo_cuenta(	
@@ -329,7 +349,10 @@ GO
 BEGIN /* *************** MIGRACION *************** */
 	INSERT INTO HHHH.Monedas (Descripcion)
 		VALUES('USD');
--------------------------------------------------------------------------------------------			
+-------------------------------------------------------------------------------------------
+	INSERT INTO HHHH.tipo_de_cambio (Id_moneda,cambio)
+		VALUES(1,1);
+-------------------------------------------------------------------------------------------				
 	INSERT INTO HHHH.paises(Codigo,Descripcion)
 		SELECT DISTINCT Cli_Pais_Codigo, Cli_Pais_Desc
 			FROM gd_esquema.Maestra
@@ -632,7 +655,7 @@ AS
 			VALUES(@destino,@origen,@fecha,@moneda,@importe,@costo)
 		
 		INSERT INTO HHHH.movimientos(Id_cuenta,Fecha,Id_moneda,Id_transferencia,Tipo_movimiento,Costo)
-			VALUES (@origen,@fecha,@moneda,(SELECT IDENT_CURRENT('HHHH.transferencias')),'T',@costo+@importe)
+			VALUES (@origen,@fecha,@moneda,(SELECT IDENT_CURRENT('HHHH.transferencias')),'T',@costo)
 		
 		UPDATE HHHH.cuentas
 			SET Saldo -= @importe +@costo
@@ -1076,3 +1099,4 @@ GO
 
 update HHHH.cuentas
 set Id_tipo_cuenta =1, Estado = 'H'
+
