@@ -916,8 +916,8 @@ AS
 						   WHERE mov.Id_factura = @FacturaActual
 								 and HHHH.obtenerUser(mov.Id_cuenta) = @user_id)
 		WHERE Id_factura = @FacturaActual
-		
-		
+
+
 		UPDATE HHHH.Cuentas
 		SET estado = 'I' FROM 
 			(SELECT * FROM
