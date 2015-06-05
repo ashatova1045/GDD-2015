@@ -72,13 +72,13 @@ namespace PagoElectronico.ABM_Cliente
                 correcto = false;
             }
 
-            if (!ValidadorHelper.validarSoloNumeros(textBoxPiso.Text))
+            if (!ValidadorHelper.validarSoloNumeros(textBoxPiso.Text) /*&& textBoxPiso.Text != ""*/)
             {
                 errorProvider1.SetError(textBoxPiso, "Piso no válido");
                 correcto = false;
             }
 
-            if (!ValidadorHelper.validarSoloLetras(textBoxDepto.Text) || textBoxDepto.Text.Length > 10)
+            if ((!ValidadorHelper.validarSoloLetras(textBoxDepto.Text) || textBoxDepto.Text.Length > 10) /*&& textBoxDepto.Text != ""*/)
             {
                 errorProvider1.SetError(textBoxDepto, "Departamento no válido");
                 correcto = false;
@@ -105,9 +105,9 @@ namespace PagoElectronico.ABM_Cliente
                     correcto = false;
                 }
 
-                if (!ValidadorHelper.validarSoloLetras(textBoxPreg.Text))
+                if (comboBoxPreg.SelectedValue == null)
                 {
-                    errorProvider1.SetError(textBoxPreg, "Pregunta no válida");
+                    errorProvider1.SetError(comboBoxPreg, "Elija una pregunta");
                     correcto = false;
                 }
 
@@ -141,7 +141,7 @@ namespace PagoElectronico.ABM_Cliente
                 listaDeParametros.Add(new SqlParameter("@FechaNac", dateTimePicker1.Value));
                 listaDeParametros.Add(new SqlParameter("@Usuario", textBoxUser.Text));
                 listaDeParametros.Add(new SqlParameter("@Contrasena", Cifrador.Cifrar(textBoxPW.Text)));
-                listaDeParametros.Add(new SqlParameter("@Pregunta", textBoxPreg.Text));
+                listaDeParametros.Add(new SqlParameter("@Id_pregunta", Convert.ToDecimal(comboBoxPreg.SelectedValue)));
                 listaDeParametros.Add(new SqlParameter("@Respuesta", Cifrador.Cifrar(textBoxRes.Text)));
                 listaDeParametros.Add(new SqlParameter("@Estado", checkBoxEstado.Checked ? "H" : "I"));
 
@@ -187,7 +187,10 @@ namespace PagoElectronico.ABM_Cliente
             dateTimePicker1.Value = Sesion.fecha;
             dateTimePicker1.MaxDate = Sesion.fecha;
 
-            textBoxPW.PasswordChar = '*';
+            comboBoxPreg.DataSource = ConexionDB.correrQuery(Sesion.conexion, "select * from HHHH.preguntas");
+            comboBoxPreg.DisplayMember = "Pregunta";
+            comboBoxPreg.ValueMember = "Id_pregunta";
+            comboBoxPreg.SelectedIndex = -1;
         }
 
         private void button3_Click(object sender, EventArgs e)
@@ -217,7 +220,8 @@ namespace PagoElectronico.ABM_Cliente
             textBoxUser.Enabled = false;
             textBoxPW.Text = "******";
             textBoxPW.Enabled = false;
-            textBoxPreg.Enabled = false;
+            comboBoxPreg.SelectedValue = cell["id_pregunta"].Value;
+            comboBoxPreg.Enabled = false;
             textBoxRes.Text = "******";
             textBoxRes.Enabled = false;
 

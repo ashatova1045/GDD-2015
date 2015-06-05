@@ -163,11 +163,17 @@ GO
 GO
 
 BEGIN /* *************** CREACION DE TABLAS *************** */
+	CREATE TABLE HHHH.preguntas(
+		Id_pregunta numeric(18,0) IDENTITY(1,1) PRIMARY KEY,
+		Pregunta nvarchar(255) not null unique
+	)
+		
 	CREATE TABLE HHHH.usuarios(
 		Id_usuario numeric(18,0) IDENTITY(1,1) PRIMARY KEY,
 		Usuario NVARCHAR(255) UNIQUE NOT NULL,
 		Contrasena CHAR(44) NOT NULL,
 		IntentosFallidos INT DEFAULT 0,
+		Id_pregunta numeric(18,0) CONSTRAINT FK_usuarios_preguntas FOREIGN KEY REFERENCES HHHH.preguntas(id_pregunta),
 		Estado NVARCHAR CHECK (Estado IN ('H','I')) -- habilitado, inhabilitado
 	)
 	
@@ -505,7 +511,9 @@ BEGIN /* *************** MIGRACION *************** */
 	INSERT INTO HHHH.Rel_Rol_Funcionalidad(Id_rol, Id_funcionalidad)
 		VALUES (1,1), (1,2), (1,3), (1,4), (1,9), (1,10), (1,11),
 				(2,4), (2,5), (2,6), (2,7), (2,8), (2,9), (2,10)
-				
+-------------------------------------------------------------------------------------------	
+	INSERT INTO HHHH.preguntas(pregunta)
+		VALUES('¿Sos puto?')
 END
 GO
 
@@ -966,7 +974,7 @@ CREATE PROCEDURE HHHH.nuevoCliente(
 @FechaNac datetime,
 @Usuario nvarchar(255),
 @Contrasena nvarchar(255),
-@Pregunta nvarchar(255),
+@Id_Pregunta nvarchar(255),
 @Respuesta nvarchar(255),
 @Estado char)
 AS
@@ -995,8 +1003,8 @@ AS
 				RETURN
 			END
 			
-		INSERT INTO HHHH.usuarios(Usuario,Contrasena,IntentosFallidos,Estado)
-			VALUES(@Usuario,@Contrasena,0,'H')
+		INSERT INTO HHHH.usuarios(Usuario,Contrasena,IntentosFallidos,Estado,Id_pregunta)
+			VALUES(@Usuario,@Contrasena,0,'H',@Id_Pregunta)
 			
 		INSERT INTO HHHH.rel_rol_usuario(Id_rol,Id_usuario)
 			VALUES(2,IDENT_CURRENT('HHHH.usuarios'))
@@ -1022,7 +1030,8 @@ AS
 	BEGIN
 		SELECT cli.Id_cliente,cli.Nombre, cli.Apellido, cli.Nro_Documento as 'Documento',cli.Id_tipo_documento, tDoc.Descripcion as 'Tipo documento',
 				cli.Mail, cli.Id_pais, pa.Descripcion as 'Pais', cli.Estado as 'Estado cliente',cli.Calle, cli.Altura,cli.Piso,cli.Departamento,cli.Localidad,
-				cli.Id_nacionalidad, nac.Descripcion as 'Nacionalidad', cli.Fecha_nacimiento as 'Fecha de nacimiento', us.Usuario,us.Estado as 'Estado usuario'
+				cli.Id_nacionalidad, nac.Descripcion as 'Nacionalidad', cli.Fecha_nacimiento as 'Fecha de nacimiento', us.Usuario,us.Estado as 'Estado usuario',
+				us.Id_pregunta
 			FROM HHHH.clientes cli 
 			JOIN HHHH.usuarios us
 			ON cli.Id_usuario = us.Id_usuario

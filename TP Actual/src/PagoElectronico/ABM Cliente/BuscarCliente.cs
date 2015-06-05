@@ -36,7 +36,7 @@ namespace PagoElectronico.ABM_Cliente
             dataGridView1.DataSource = ConexionDB.invocarStoreProcedure(Sesion.conexion, "buscarCliente",listaDeParametros);
             labelCantRes.Text = ((DataTable)dataGridView1.DataSource).Rows.Count.ToString();
 
-            int[] columnasOcultas = { 0, 4, 7, 10, 11, 12, 13, 14, 15 };
+            int[] columnasOcultas = { 0, 4, 7, 10, 11, 12, 13, 14, 15, 20 };
                 foreach(int i in columnasOcultas)
                 {
                     dataGridView1.Columns[i].Visible = false;
