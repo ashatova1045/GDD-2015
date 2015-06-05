@@ -127,8 +127,6 @@ namespace PagoElectronico.ABM_Cuenta
             }
         }
 
-
-
         private void nuevaCuenta(object sender, EventArgs e)
         {
             if (validarDatos())
@@ -136,6 +134,8 @@ namespace PagoElectronico.ABM_Cuenta
                 try
                 {
                     ConexionDB.invocarStoreProcedure(Sesion.conexion, "nvaCuenta", cargarLista());
+                    MessageBox.Show("Cuenta creada exitosamente");
+                    button2_Click(null, null);
                 }
                 catch (SqlException ex)
                 {

@@ -244,7 +244,7 @@ BEGIN /* *************** CREACION DE TABLAS *************** */
 	)
 	
 	CREATE TABLE HHHH.cuentas(
-		Id_cuenta numeric(18,0) IDENTITY(1,1) PRIMARY KEY,
+		Id_cuenta numeric(18,0) /*IDENTITY(1,1)*/ PRIMARY KEY,
 		Id_pais numeric(18,0) CONSTRAINT FK_cuentas_pais FOREIGN KEY REFERENCES HHHH.paises(Codigo),
 		Id_moneda numeric(18,0),
 		Fecha_apertura datetime,
@@ -417,13 +417,13 @@ BEGIN /* *************** MIGRACION *************** */
 				('Plata', 1,1,30,1,2),
 				('Oro', 1,0,30,1,3)
 -------------------------------------------------------------------------------------------			
-	SET IDENTITY_INSERT HHHH.cuentas ON
+	--SET IDENTITY_INSERT HHHH.cuentas ON
 	INSERT INTO HHHH.cuentas(Id_cuenta, Id_pais, Fecha_apertura, Id_cliente,Id_moneda,Saldo,Estado,Id_tipo_cuenta)
 		SELECT DISTINCT M.Cuenta_Numero, M.Cuenta_Pais_Codigo, M.Cuenta_Fecha_Creacion, 
 				C.Id_cliente,1,100,'H',1
 			FROM gd_esquema.Maestra M, HHHH.clientes C
 			WHERE C.Mail = M.Cli_Mail
-	SET IDENTITY_INSERT HHHH.cuentas OFF
+	--SET IDENTITY_INSERT HHHH.cuentas OFF
 -------------------------------------------------------------------------------------------	
 	SET IDENTITY_INSERT HHHH.retiros ON
 	INSERT INTO HHHH.retiros(Id_retiro, Id_cuenta, importe, Id_cheque, fecha_retiro, Id_moneda)
@@ -1195,6 +1195,31 @@ AS
 	END
 GO
 
+CREATE PROCEDURE HHHH.nvaCuenta
+@id_usuario numeric(18,0),
+@Id_cuenta numeric(18,0),
+@Id_pais numeric(18,0),
+@Id_moneda numeric(18,0),
+@FechaApert datetime,
+@id_tipoCta numeric(18,0)
+AS
+	BEGIN
+		DECLARE @Id_cliente numeric(18,0)
+		SELECT @Id_cliente = Id_cliente 
+		FROM HHHH.clientes
+		WHERE Id_usuario = @id_usuario
+	
+		IF EXISTS (SELECT 1 FROM HHHH.cuentas WHERE Id_cuenta = @Id_cuenta)
+			BEGIN
+				RAISERROR('Ya existe una cuenta con ese numero. Intente otro',16,1)
+			END
+		ELSE
+			BEGIN
+				INSERT HHHH.cuentas(Id_cuenta,Id_cliente,Id_moneda,Id_pais,Id_tipo_cuenta,Fecha_apertura,Saldo,Estado)
+					VALUES(@Id_cuenta,@Id_cliente,@Id_moneda,@Id_pais,@id_tipoCta,@FechaApert,0,'P')
+			END
+	END
+GO
 
 
 -----------------LISTADOS ANA------------------------
