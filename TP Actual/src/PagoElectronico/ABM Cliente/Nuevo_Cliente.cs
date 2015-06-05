@@ -197,20 +197,20 @@ namespace PagoElectronico.ABM_Cliente
 
         public void recDatos(DataGridViewCellCollection cell)
         {
-            textBoxNombre.Text = cell[1].Value.ToString();
-            textBoxApellido.Text =cell[2].Value.ToString();
-            textBoxDocumento.Text = cell[3].Value.ToString();
-            comboBoxTipoDoc.SelectedValue = cell[4].Value;
-            textBoxMail.Text = cell[6].Value.ToString();
-            comboBoxPais.SelectedValue = cell[7].Value;
-            textBoxAltura.Text = cell[10].Value.ToString();
-            textBoxCalle.Text = cell[9].Value.ToString();
-            textBoxPiso.Text = cell[11].Value.ToString();
-            textBoxDepto.Text = cell[12].Value.ToString();
-            textBox9.Text = cell[13].Value.ToString();
-            comboBoxNac.SelectedValue = cell[14].Value;
-            dateTimePicker1.Value = (DateTime)cell[16].Value;
-            textBoxUser.Text = cell[17].Value.ToString();
+            textBoxNombre.Text = cell["Nombre"].Value.ToString();
+            textBoxApellido.Text =cell["Apellido"].Value.ToString();
+            textBoxDocumento.Text = cell["Documento"].Value.ToString();
+            comboBoxTipoDoc.SelectedValue = cell["Id_tipo_documento"].Value;
+            textBoxMail.Text = cell["Mail"].Value.ToString();
+            comboBoxPais.SelectedValue = cell["Id_pais"].Value;
+            textBoxAltura.Text = cell["Altura"].Value.ToString();
+            textBoxCalle.Text = cell["Calle"].Value.ToString();
+            textBoxPiso.Text = cell["Piso"].Value.ToString();
+            textBoxDepto.Text = cell["Departamento"].Value.ToString();
+            textBox9.Text = cell["Localidad"].Value.ToString();
+            comboBoxNac.SelectedValue = cell["id_nacionalidad"].Value;
+            dateTimePicker1.Value = (DateTime)cell["Fecha de nacimiento"].Value;
+            textBoxUser.Text = cell["Usuario"].Value.ToString();
             textBoxUser.Enabled = false;
             textBoxPW.Text = "******";
             textBoxPW.Enabled = false;
@@ -218,12 +218,12 @@ namespace PagoElectronico.ABM_Cliente
             textBoxRes.Text = "******";
             textBoxRes.Enabled = false;
 
-            if (cell[18].Value.ToString() == "H")
+            if (cell["Estado cuenta"].Value.ToString() == "H")
                 checkBoxEstado.Checked = true;
             else
                 checkBoxEstado.Checked = false;
 
-            idCliente = Convert.ToDecimal(cell[0].Value);
+            idCliente = Convert.ToDecimal(cell["id_cliente"].Value);
             button1.Text = "Modificar cliente";
             button1.Click -=new EventHandler(button1_Click);
             button1.Click += new EventHandler(button1_Click_Modificar);
