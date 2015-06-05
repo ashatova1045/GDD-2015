@@ -186,6 +186,8 @@ namespace PagoElectronico.ABM_Cliente
 
             dateTimePicker1.Value = Sesion.fecha;
             dateTimePicker1.MaxDate = Sesion.fecha;
+
+            textBoxPW.PasswordChar = '*';
         }
 
         private void button3_Click(object sender, EventArgs e)
@@ -219,10 +221,8 @@ namespace PagoElectronico.ABM_Cliente
             textBoxRes.Text = "******";
             textBoxRes.Enabled = false;
 
-            if (cell["Estado cuenta"].Value.ToString() == "H")
-                checkBoxEstado.Checked = true;
-            else
-                checkBoxEstado.Checked = false;
+            checkBoxEstado.Checked = (cell["Estado usuario"].Value.ToString() == "H");
+            checkBoxCliente.Checked = (cell["Estado cliente"].Value.ToString() == "H");
 
             idCliente = Convert.ToDecimal(cell["id_cliente"].Value);
             button1.Text = "Modificar cliente";
@@ -251,8 +251,10 @@ namespace PagoElectronico.ABM_Cliente
                 listaDeParametros.Add(new SqlParameter("@Localidad", textBox9.Text));
                 listaDeParametros.Add(new SqlParameter("@Nacionalidad", Convert.ToDecimal(comboBoxNac.SelectedValue)));
                 listaDeParametros.Add(new SqlParameter("@FechaNac", dateTimePicker1.Value));
-                listaDeParametros.Add(new SqlParameter("@Estado", checkBoxEstado.Checked ? "H" : "I"));
+                listaDeParametros.Add(new SqlParameter("@EstadoUsuario", checkBoxEstado.Checked ? "H" : "I"));
+                listaDeParametros.Add(new SqlParameter("@EstadoCliente", checkBoxCliente.Checked ? "H" : "I"));
 
+                
                 try
                 {
                     ConexionDB.invocarStoreProcedure(Sesion.conexion, "modificarCliente", listaDeParametros);
@@ -275,9 +277,17 @@ namespace PagoElectronico.ABM_Cliente
         private void checkBoxEstado_CheckedChanged(object sender, EventArgs e)
         {
             if (checkBoxEstado.Checked)
-                checkBoxEstado.Text = "Habilitada";
+                checkBoxEstado.Text = "Habilitado";
             else
-                checkBoxEstado.Text = "Deshabilitada";
+                checkBoxEstado.Text = "Deshabilitado";
+        }
+
+        private void checkBoxCliente_CheckedChanged(object sender, EventArgs e)
+        {
+            if (checkBoxCliente.Checked)
+                checkBoxCliente.Text = "Habilitado";
+            else
+                checkBoxCliente.Text = "Deshabilitado";
         }
     }
 }

@@ -72,6 +72,8 @@
             this.label15 = new System.Windows.Forms.Label();
             this.textBoxUser = new System.Windows.Forms.TextBox();
             this.label14 = new System.Windows.Forms.Label();
+            this.checkBoxCliente = new System.Windows.Forms.CheckBox();
+            this.label18 = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).BeginInit();
             this.groupBox2.SuspendLayout();
@@ -79,6 +81,8 @@
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.label18);
+            this.groupBox1.Controls.Add(this.checkBoxCliente);
             this.groupBox1.Controls.Add(this.dateTimePicker1);
             this.groupBox1.Controls.Add(this.comboBoxNac);
             this.groupBox1.Controls.Add(this.label13);
@@ -375,7 +379,7 @@
             // checkBoxEstado
             // 
             this.checkBoxEstado.AutoSize = true;
-            this.checkBoxEstado.Location = new System.Drawing.Point(401, 20);
+            this.checkBoxEstado.Location = new System.Drawing.Point(433, 20);
             this.checkBoxEstado.Name = "checkBoxEstado";
             this.checkBoxEstado.Size = new System.Drawing.Size(15, 14);
             this.checkBoxEstado.TabIndex = 11;
@@ -385,11 +389,11 @@
             // labelEstado
             // 
             this.labelEstado.AutoSize = true;
-            this.labelEstado.Location = new System.Drawing.Point(292, 20);
+            this.labelEstado.Location = new System.Drawing.Point(325, 20);
             this.labelEstado.Name = "labelEstado";
-            this.labelEstado.Size = new System.Drawing.Size(102, 13);
+            this.labelEstado.Size = new System.Drawing.Size(96, 13);
             this.labelEstado.TabIndex = 10;
-            this.labelEstado.Text = "Estado de la cuenta";
+            this.labelEstado.Text = "Estado del Usuario";
             // 
             // buttonLimpiar
             // 
@@ -475,6 +479,25 @@
             this.label14.TabIndex = 0;
             this.label14.Text = "Username";
             // 
+            // checkBoxCliente
+            // 
+            this.checkBoxCliente.AutoSize = true;
+            this.checkBoxCliente.Location = new System.Drawing.Point(433, 139);
+            this.checkBoxCliente.Name = "checkBoxCliente";
+            this.checkBoxCliente.Size = new System.Drawing.Size(15, 14);
+            this.checkBoxCliente.TabIndex = 28;
+            this.checkBoxCliente.UseVisualStyleBackColor = true;
+            this.checkBoxCliente.CheckedChanged += new System.EventHandler(this.checkBoxCliente_CheckedChanged);
+            // 
+            // label18
+            // 
+            this.label18.AutoSize = true;
+            this.label18.Location = new System.Drawing.Point(325, 139);
+            this.label18.Name = "label18";
+            this.label18.Size = new System.Drawing.Size(91, 13);
+            this.label18.TabIndex = 29;
+            this.label18.Text = "Estado del cliente";
+            // 
             // Nuevo_Cliente
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -541,5 +564,7 @@
         private System.Windows.Forms.Button button3;
         private System.Windows.Forms.CheckBox checkBoxEstado;
         private System.Windows.Forms.Label labelEstado;
+        private System.Windows.Forms.Label label18;
+        private System.Windows.Forms.CheckBox checkBoxCliente;
     }
 }

@@ -1057,7 +1057,8 @@ CREATE PROCEDURE HHHH.modificarCliente(
 @Localidad varchar(255),
 @Nacionalidad numeric(18,0),
 @FechaNac datetime,
-@Estado char)
+@EstadoUsuario char,
+@EstadoCliente char)
 AS
 	BEGIN
 	
@@ -1091,9 +1092,15 @@ AS
 			Localidad = @Localidad,
 			Id_nacionalidad = @Nacionalidad,
 			Fecha_nacimiento = @FechaNac,
-			Estado = @Estado
+			Estado = @EstadoCliente
 			FROM HHHH.clientes
 			WHERE Id_cliente = @Id_cliente
+			
+		UPDATE HHHH.usuarios
+		SET Estado = @EstadoUsuario
+		FROM HHHH.usuarios US, HHHH.clientes CLI
+		WHERE CLI.Id_cliente = @Id_cliente AND
+			  US.Id_usuario = CLI.Id_usuario
 			
 	END
 GO
