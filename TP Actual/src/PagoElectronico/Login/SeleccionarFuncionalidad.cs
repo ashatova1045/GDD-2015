@@ -92,10 +92,5 @@ namespace PagoElectronico.Login
             this.Hide();
 
         }
-
-        private void cbFuncionalidad_SelectedIndexChanged(object sender, EventArgs e)
-        {
-
-        }
     }
 }
