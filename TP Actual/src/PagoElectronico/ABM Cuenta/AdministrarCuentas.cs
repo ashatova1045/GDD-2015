@@ -32,12 +32,14 @@ namespace PagoElectronico.ABM_Cuenta
                 dataGridView1.Columns[i].Visible = false;
             }
 
+            button1.Enabled = true;
         }
 
         private void AdministrarCuentas_Load(object sender, EventArgs e)
         {
             button3.Enabled = false;
             button4.Enabled = false;
+            button1.Enabled = false;
 
             if (Sesion.rol_id == 1)
             {
@@ -64,7 +66,6 @@ namespace PagoElectronico.ABM_Cuenta
                 comboBox1.ValueMember = "id";
 
                 comboBox1.SelectedValue = Sesion.user_id.ToString();
-                MessageBox.Show(comboBox1.SelectedValue.ToString());
                 comboBox1_SelectionChangeCommitted(null, null);
 
                 comboBox1.Enabled = false;
