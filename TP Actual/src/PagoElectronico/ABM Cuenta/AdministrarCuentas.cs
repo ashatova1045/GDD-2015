@@ -20,10 +20,17 @@ namespace PagoElectronico.ABM_Cuenta
 
         private void comboBox1_SelectionChangeCommitted(object sender, EventArgs e)
         {
-            
-            dataGridView1.DataSource = ConexionDB.correrQuery(Sesion.conexion,"select cue.* from HHHH.cuentas cue join HHHH.clientes cli "+
-                                                                                "on cli.Id_cliente = cue.Id_cliente and "+
-	                                                                            "cli.Id_usuario = "+comboBox1.SelectedValue.ToString());
+            List<SqlParameter> listaDeParametros = new List<SqlParameter>();
+            listaDeParametros.Add(new SqlParameter("@Id_usuario", Convert.ToDecimal(comboBox1.SelectedValue)));
+
+            dataGridView1.DataSource = ConexionDB.invocarStoreProcedure(Sesion.conexion, "ObtenerCuentas", listaDeParametros);
+
+            string[] ColOcultas = { "Id_pais", "Id_moneda", "Id_moneda" };
+
+            foreach (string i in ColOcultas)
+            {
+                dataGridView1.Columns[i].Visible = false;
+            }
 
         }
 

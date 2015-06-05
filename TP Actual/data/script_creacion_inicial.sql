@@ -1055,5 +1055,24 @@ AS
 	END
 GO
 
+CREATE PROCEDURE HHHH.ObtenerCuentas
+@Id_usuario numeric(18,0)
+AS
+	BEGIN
+		SELECT cue.Id_cuenta, pa.Descripcion, tp.Descripcion, cue.Fecha_apertura,
+				mon.Descripcion, cue.Saldo, cue.Estado
+		FROM HHHH.cuentas cue 
+		JOIN HHHH.clientes cli 
+        ON cli.Id_cliente = cue.Id_cliente and 
+	     cli.Id_usuario = @Id_usuario
+	    JOIN HHHH.paises pa
+	    ON pa.Codigo = cue.Id_pais
+	    JOIN HHHH.tipo_cuenta tp
+	    on tp.Id_tipo_cuenta = cue.Id_tipo_cuenta
+	    JOIN HHHH.Monedas mon
+	    ON mon.Id_moneda = cue.Id_moneda
+	END
+GO
+
 update HHHH.cuentas
 set Id_tipo_cuenta =1, Estado = 'H'

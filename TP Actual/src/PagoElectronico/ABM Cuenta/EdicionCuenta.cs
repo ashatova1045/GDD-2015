@@ -25,29 +25,29 @@ namespace PagoElectronico.ABM_Cuenta
         }
         private void cargarDatos(DataGridViewCellCollection cell)
         {
-            textBox1.Text = cell[0].Value.ToString();
-            comboBox1.SelectedValue = cell[1].Value;
-            comboBox2.SelectedValue = cell[2].Value;
-            dateTimePicker1.Value = (DateTime)cell[3].Value;
-            comboBox3.SelectedValue = cell[4].Value;
+            textBoxNumero.Text = cell["Cuenta"].Value.ToString();
+            comboBoxPais.SelectedValue = cell["Id_pais"].Value;
+            comboBoxMoneda.SelectedValue = cell["Id_moneda"].Value;
+            dateTimePicker1.Value = (DateTime)cell["Fecha apertura"].Value;
+            comboBoxTipoCuenta.SelectedValue = cell["Id_moneda"].Value;
         }
 
         private void Inicio()
         {
-            comboBox1.DataSource = ConexionDB.correrQuery(Sesion.conexion, "select * from HHHH.paises");
-            comboBox1.DisplayMember = "Descripcion";
-            comboBox1.ValueMember = "Codigo";
-            comboBox1.SelectedIndex = -1;
+            comboBoxPais.DataSource = ConexionDB.correrQuery(Sesion.conexion, "select * from HHHH.paises");
+            comboBoxPais.DisplayMember = "Descripcion";
+            comboBoxPais.ValueMember = "Codigo";
+            comboBoxPais.SelectedIndex = -1;
 
-            comboBox2.DataSource = ConexionDB.correrQuery(Sesion.conexion, "select * from HHHH.monedas");
-            comboBox2.DisplayMember = "Descripcion";
-            comboBox2.ValueMember = "Id_moneda";
-            comboBox2.SelectedIndex = -1;
+            comboBoxMoneda.DataSource = ConexionDB.correrQuery(Sesion.conexion, "select * from HHHH.monedas");
+            comboBoxMoneda.DisplayMember = "Descripcion";
+            comboBoxMoneda.ValueMember = "Id_moneda";
+            comboBoxMoneda.SelectedIndex = -1;
 
-            comboBox3.DataSource = ConexionDB.correrQuery(Sesion.conexion, "select * from HHHH.tipo_cuenta");
-            comboBox3.DisplayMember = "Descripcion";
-            comboBox3.ValueMember = "Id_tipo_cuenta";
-            comboBox3.SelectedIndex = -1;
+            comboBoxTipoCuenta.DataSource = ConexionDB.correrQuery(Sesion.conexion, "select * from HHHH.tipo_cuenta");
+            comboBoxTipoCuenta.DisplayMember = "Descripcion";
+            comboBoxTipoCuenta.ValueMember = "Id_tipo_cuenta";
+            comboBoxTipoCuenta.SelectedIndex = -1;
         }
 
         private void button2_Click(object sender, EventArgs e)
@@ -60,11 +60,11 @@ namespace PagoElectronico.ABM_Cuenta
         {
             List<SqlParameter> listaDeParametros = new List<SqlParameter>();
             listaDeParametros.Add(new SqlParameter("@Id_usuario", user));
-            listaDeParametros.Add(new SqlParameter("@Id_cuenta", Convert.ToDecimal(textBox1.Text)));
-            listaDeParametros.Add(new SqlParameter("@Id_pais", comboBox1.SelectedValue ));
+            listaDeParametros.Add(new SqlParameter("@Id_cuenta", Convert.ToDecimal(textBoxNumero.Text)));
+            listaDeParametros.Add(new SqlParameter("@Id_pais", comboBoxPais.SelectedValue ));
             listaDeParametros.Add(new SqlParameter("@FecApertura", dateTimePicker1.Value));
-            listaDeParametros.Add(new SqlParameter("@Id_moneda", comboBox2.SelectedValue));
-            listaDeParametros.Add(new SqlParameter("@Id_tipo_cuenta", comboBox3.SelectedValue));
+            listaDeParametros.Add(new SqlParameter("@Id_moneda", comboBoxMoneda.SelectedValue));
+            listaDeParametros.Add(new SqlParameter("@Id_tipo_cuenta", comboBoxTipoCuenta.SelectedValue));
 
             try
             {
