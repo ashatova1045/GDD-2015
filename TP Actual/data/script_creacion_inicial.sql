@@ -1079,12 +1079,12 @@ AS
 GO
 
 
-CREATE PROCEDURE HHHH.ObtenerCuentas
+REATE PROCEDURE HHHH.ObtenerCuentas
 @Id_usuario numeric(18,0)
 AS
 	BEGIN
-		SELECT cue.Id_cuenta, pa.Descripcion, tp.Descripcion, cue.Fecha_apertura,
-				mon.Descripcion, cue.Saldo, cue.Estado
+		SELECT cue.Id_cuenta as 'Cuenta', pa.Descripcion as 'Pais', cue.Id_pais, tp.Descripcion as 'Tipo cuenta', cue.Id_moneda,
+				 cue.Fecha_apertura as 'Fecha apertura', mon.Descripcion, cue.Saldo, cue.Estado
 		FROM HHHH.cuentas cue 
 		JOIN HHHH.clientes cli 
         ON cli.Id_cliente = cue.Id_cliente and 
@@ -1100,7 +1100,6 @@ GO
 
 update HHHH.cuentas
 set Id_tipo_cuenta =1, Estado = 'H'
-
 
 
 
