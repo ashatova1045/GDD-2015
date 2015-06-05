@@ -917,6 +917,7 @@ AS
 								 and HHHH.obtenerUser(mov.Id_cuenta) = @user_id)
 		WHERE Id_factura = @FacturaActual
 
+--No me rompas las pelotas git hub
 
 		UPDATE HHHH.Cuentas
 		SET estado = 'I' FROM 
@@ -1098,7 +1099,7 @@ AS
 	END
 GO
 
-
+-- Aca me dejas esto la puta que te pario
 
 REATE PROCEDURE HHHH.ObtenerCuentas
 @Id_usuario numeric(18,0)
@@ -1121,8 +1122,4 @@ GO
 
 update HHHH.cuentas
 set Id_tipo_cuenta =1, Estado = 'H'
-
-
-
-
 
