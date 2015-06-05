@@ -1050,6 +1050,33 @@ GO
 
 
 -----------------LISTADOS ANA------------------------
+CREATE PROCEDURE HHHH.generarListado0
+
+@anio int,
+@primerMes int,
+@ultimoMes int
+AS
+	BEGIN
+		SELECT cli.Nombre, cli.Apellido, top5.Id_cuenta AS 'Cuenta_Inhabilitada' FROM
+			(SELECT TOP 5 cue.Id_cliente, cue.Id_cuenta FROM
+				(SELECT mov.Id_cuenta, COUNT (*) AS cantMov FROM HHHH.movimientos mov
+					JOIN HHHH.facturas fac
+					ON mov.Id_factura = fac.Id_factura
+					WHERE fac.Pagado = 0 AND
+					YEAR (fac.Fecha_factura) = @anio AND
+					MONTH (fac.Fecha_factura) BETWEEN @primerMes AND @ultimoMes
+					GROUP BY mov.Id_cuenta) facNoPagas
+				JOIN HHHH.cuentas cue
+				ON facNoPagas.Id_cuenta = cue.Id_cuenta
+				WHERE cue.Estado = 'I' AND
+				facNoPagas.cantMov >= 5
+				ORDER BY facNoPagas.cantMov) top5
+		JOIN HHHH.clientes cli
+		ON cli.Id_cliente = top5.Id_cliente
+	END
+GO 
+
+
 CREATE PROCEDURE HHHH.generarListado1
 @anio int,
 @primerMes int,
