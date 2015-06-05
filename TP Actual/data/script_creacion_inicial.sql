@@ -336,6 +336,8 @@ BEGIN /* *************** CREACION DE TABLAS *************** */
 		PRIMARY KEY (Id_rol, Id_funcionalidad)
 	)
 	
+
+	
 	CREATE TABLE HHHH.movimientos(
 		Id_movimiento numeric(18,0) IDENTITY(1,1) PRIMARY KEY,
 		Id_factura numeric(18,0) CONSTRAINT FK_movimientos_facturas REFERENCES HHHH.facturas(Id_factura),
@@ -1193,6 +1195,138 @@ AS
 	END
 GO
 
+
+
+-----------------LISTADOS ANA------------------------
+CREATE PROCEDURE HHHH.generarListado0
+
+@anio int,
+@primerMes int,
+@ultimoMes int
+AS
+	BEGIN
+		SELECT cli.Nombre, cli.Apellido, top5.Id_cuenta AS 'Cuenta_Inhabilitada' FROM
+			(SELECT TOP 5 cue.Id_cliente, cue.Id_cuenta FROM
+				(SELECT mov.Id_cuenta, COUNT (*) AS cantMov FROM HHHH.movimientos mov
+					JOIN HHHH.facturas fac
+					ON mov.Id_factura = fac.Id_factura
+					WHERE fac.Pagado = 0 AND
+					YEAR (fac.Fecha_factura) = @anio AND
+					MONTH (fac.Fecha_factura) BETWEEN @primerMes AND @ultimoMes
+					GROUP BY mov.Id_cuenta) facNoPagas
+				JOIN HHHH.cuentas cue
+				ON facNoPagas.Id_cuenta = cue.Id_cuenta
+				WHERE cue.Estado = 'I' AND
+				facNoPagas.cantMov >= 5
+				ORDER BY facNoPagas.cantMov) top5
+		JOIN HHHH.clientes cli
+		ON cli.Id_cliente = top5.Id_cliente
+	END
+GO 
+
+
+CREATE PROCEDURE HHHH.generarListado1
+@anio int,
+@primerMes int,
+@ultimoMes int
+AS
+
+	BEGIN 
+	select cli.Nombre,cli.Apellido,top5.TotalMovFact from(
+		select top 5 cue.Id_cliente, sum(movFact.cantMov) as TotalMovFact from
+			(select mov.Id_cuenta, COUNT (*)as 
+			cantMov from HHHH.movimientos mov
+			join HHHH.facturas fac
+			on mov.Id_factura = fac.Id_factura
+			where mov.Id_factura is not null and
+			Year(fac.Fecha_factura)=@anio and
+			Month(fac.Fecha_factura) between @primerMes and @ultimoMes
+			Group by mov.Id_cuenta) movFact
+			join HHHH.cuentas cue
+			on cue.Id_cuenta = movFact.Id_cuenta
+			group by cue.Id_cliente
+			order by TotalMovFact desc) top5
+			join HHHH.clientes cli
+			on top5.Id_cliente = cli.Id_cliente
+
+		END
+GO
+
+CREATE PROCEDURE HHHH.generarListado2
+
+@anio int,
+@primerMes int,
+@ultimoMes int
+AS
+	BEGIN
+
+	SELECT cli.Nombre, cli.Apellido, trnsxcli.cantTransac FROM
+		(SELECT TOP 5 cue.Id_cliente, COUNT(*) AS cantTransac FROM HHHH.cuentas cue
+		JOIN  HHHH.transferencias trans 
+		on trans.Cuenta_origen = cue.Id_cuenta and
+		YEAR (trans.fecha_transferencia)=@anio and
+		MONTH (trans.fecha_transferencia) BETWEEN @primerMes AND @ultimoMes
+		where trans.Cuenta_destino = cue.Id_cuenta 
+		group by cue.Id_cliente 
+		order by cantTransac desc) trnsxcli
+			JOIN HHHH.clientes cli
+		ON cli.Id_cliente = trnsxcli.Id_cliente
+
+	END
+GO
+
+CREATE PROCEDURE HHHH.generarListado3
+
+@anio int,
+@primerMes int,
+@ultimoMes int
+AS
+	BEGIN
+
+	SELECT pa.Descripcion AS 'PAIS', pa.Codigo AS 'COD_PAIS', top5.cantMov AS 'CANT MOVIMIENTOS' FROM
+		(SELECT top 5 cue.Id_pais, cue.Id_cuenta, cue.Id_cliente, movXcue.cantMov FROM
+			(SELECT  mov.Id_cuenta, COUNT (*) AS cantMov FROM HHHH.movimientos mov
+				JOIN HHHH.cuentas cue
+				ON cue.Id_cuenta = mov.Id_cuenta 
+				WHERE YEAR (mov.fecha) = @anio AND
+				MONTH (mov.fecha) BETWEEN @primerMes AND @ultimoMes
+				GROUP BY mov.Id_cuenta) movXcue
+			JOIN HHHH.cuentas cue
+			ON movXcue.Id_cuenta = cue.Id_cuenta
+			order by movXcue.cantMov desc) top5
+		JOIN HHHH.paises pa
+		ON top5.Id_pais = pa.Codigo
+		
+	END
+GO
+
+CREATE PROCEDURE HHHH.generarListado4
+
+@anio int,
+@primerMes int,
+@ultimoMes int
+AS
+	BEGIN
+
+	SELECT top 5 cueMonTot.Id_cuenta AS 'Cuenta', cueMonTot.MontoTotalxCuenta AS 'MontoTotalFacturado', 
+		tcue.Descripcion AS 'TipoCuenta' FROM 
+		(SELECT  mov.Id_cuenta, SUM (fac.Monto_total) AS MontoTotalxCuenta FROM HHHH.movimientos mov
+		JOIN HHHH.facturas fac
+		ON mov.Id_factura = fac.Id_factura
+		WHERE mov.Id_factura IS NOT NULL AND
+		YEAR (fac.Fecha_factura) = @anio AND
+		MONTH (fac.Fecha_factura) BETWEEN @primerMes AND @ultimoMes
+		GROUP BY mov.Id_cuenta) cueMonTot
+		JOIN HHHH.cuentas cue
+		ON cueMonTot.Id_cuenta = cue.Id_cuenta
+		JOIN HHHH.tipo_cuenta tcue
+		ON tcue.Id_tipo_cuenta=cue.Id_tipo_cuenta
+		ORDER BY MontoTotalxCuenta DESC 
+		
+	END
+GO
+
+----------------------------------------------------------------------------------------------
 
 update HHHH.cuentas
 set Id_tipo_cuenta =1, Estado = 'H'
