@@ -767,6 +767,18 @@ CREATE PROCEDURE HHHH.retiro
 	
 AS
 	BEGIN
+		DECLARE @Estado char
+		SELECT @Estado = cli.Estado 
+		FROM HHHH.clientes cli
+		JOIN HHHH.cuentas cue
+		ON cue.Id_cuenta = @cuenta and
+		   cue.Id_cliente = cli.Id_cliente
+		
+		IF (@Estado = 'I')
+			BEGIN
+				RAISERROR('Un cliete inhabilitado no puede realizar retiros',16,1)
+			END
+
 		INSERT INTO HHHH.cheques(Fecha_cheque, Importe, Destinatario, Id_banco)
 			VALUES(@fechaRetiro, @importe, @destinatarioApellido + ', ' + @destinatarioNombre, @banco)
 			
@@ -851,6 +863,10 @@ AS
 		IF(@tipomov = 'T')
 			BEGIN
 				RETURN 'Transferencia de saldo cod.'+convert(nvarchar(max),@idTransf)
+			END
+		IF(@tipomov = 'P')
+			BEGIN
+				RETURN 'Costos por apertura de cuenta'
 			END
 		IF(@tipomov = 'C')
 			BEGIN
