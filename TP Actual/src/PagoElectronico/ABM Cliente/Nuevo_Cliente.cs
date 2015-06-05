@@ -72,13 +72,13 @@ namespace PagoElectronico.ABM_Cliente
                 correcto = false;
             }
 
-            if (!ValidadorHelper.validarSoloNumeros(textBoxPiso.Text))
+            if (!ValidadorHelper.validarSoloNumeros(textBoxPiso.Text) /*&& textBoxPiso.Text != ""*/)
             {
                 errorProvider1.SetError(textBoxPiso, "Piso no válido");
                 correcto = false;
             }
 
-            if (!ValidadorHelper.validarSoloLetras(textBoxDepto.Text) || textBoxDepto.Text.Length > 10)
+            if ((!ValidadorHelper.validarSoloLetras(textBoxDepto.Text) || textBoxDepto.Text.Length > 10) /*&& textBoxDepto.Text != ""*/)
             {
                 errorProvider1.SetError(textBoxDepto, "Departamento no válido");
                 correcto = false;
@@ -105,9 +105,9 @@ namespace PagoElectronico.ABM_Cliente
                     correcto = false;
                 }
 
-                if (!ValidadorHelper.validarSoloLetras(textBoxPreg.Text))
+                if (comboBoxPreg.SelectedValue == null)
                 {
-                    errorProvider1.SetError(textBoxPreg, "Pregunta no válida");
+                    errorProvider1.SetError(comboBoxPreg, "Elija una pregunta");
                     correcto = false;
                 }
 
@@ -141,7 +141,7 @@ namespace PagoElectronico.ABM_Cliente
                 listaDeParametros.Add(new SqlParameter("@FechaNac", dateTimePicker1.Value));
                 listaDeParametros.Add(new SqlParameter("@Usuario", textBoxUser.Text));
                 listaDeParametros.Add(new SqlParameter("@Contrasena", Cifrador.Cifrar(textBoxPW.Text)));
-                listaDeParametros.Add(new SqlParameter("@Pregunta", textBoxPreg.Text));
+                listaDeParametros.Add(new SqlParameter("@Id_pregunta", Convert.ToDecimal(comboBoxPreg.SelectedValue)));
                 listaDeParametros.Add(new SqlParameter("@Respuesta", Cifrador.Cifrar(textBoxRes.Text)));
                 listaDeParametros.Add(new SqlParameter("@Estado", checkBoxEstado.Checked ? "H" : "I"));
 
@@ -149,6 +149,7 @@ namespace PagoElectronico.ABM_Cliente
                 {
                     ConexionDB.invocarStoreProcedure(Sesion.conexion, "nuevoCliente", listaDeParametros);
                     MessageBox.Show("El usuario "+textBoxUser.Text+" ha sido dado de alta satisfactoriamente");
+                    button4_Click(null, null);
                 }
                 catch (SqlException ex)
                 {
@@ -185,6 +186,11 @@ namespace PagoElectronico.ABM_Cliente
 
             dateTimePicker1.Value = Sesion.fecha;
             dateTimePicker1.MaxDate = Sesion.fecha;
+
+            comboBoxPreg.DataSource = ConexionDB.correrQuery(Sesion.conexion, "select * from HHHH.preguntas");
+            comboBoxPreg.DisplayMember = "Pregunta";
+            comboBoxPreg.ValueMember = "Id_pregunta";
+            comboBoxPreg.SelectedIndex = -1;
         }
 
         private void button3_Click(object sender, EventArgs e)
@@ -197,34 +203,32 @@ namespace PagoElectronico.ABM_Cliente
 
         public void recDatos(DataGridViewCellCollection cell)
         {
-            textBoxNombre.Text = cell[2].Value.ToString();
-            textBoxApellido.Text =cell[3].Value.ToString();
-            textBoxDocumento.Text = cell[4].Value.ToString();
-            comboBoxTipoDoc.SelectedValue = cell[5].Value;
-            textBoxMail.Text = cell[6].Value.ToString();
-            comboBoxPais.SelectedValue = cell[7].Value;
-            textBoxAltura.Text = cell[8].Value.ToString();
-            textBoxCalle.Text = cell[9].Value.ToString();
-            textBoxPiso.Text = cell[10].Value.ToString();
-            textBoxDepto.Text = cell[11].Value.ToString();
-            textBox9.Text = cell[12].Value.ToString();
-            comboBoxNac.SelectedValue = cell[13].Value;
-            dateTimePicker1.Value = (DateTime)cell[14].Value;
-            textBoxUser.Text = cell[17].Value.ToString();
+            textBoxNombre.Text = cell["Nombre"].Value.ToString();
+            textBoxApellido.Text =cell["Apellido"].Value.ToString();
+            textBoxDocumento.Text = cell["Documento"].Value.ToString();
+            comboBoxTipoDoc.SelectedValue = cell["Id_tipo_documento"].Value;
+            textBoxMail.Text = cell["Mail"].Value.ToString();
+            comboBoxPais.SelectedValue = cell["Id_pais"].Value;
+            textBoxAltura.Text = cell["Altura"].Value.ToString();
+            textBoxCalle.Text = cell["Calle"].Value.ToString();
+            textBoxPiso.Text = cell["Piso"].Value.ToString();
+            textBoxDepto.Text = cell["Departamento"].Value.ToString();
+            textBox9.Text = cell["Localidad"].Value.ToString();
+            comboBoxNac.SelectedValue = cell["id_nacionalidad"].Value;
+            dateTimePicker1.Value = (DateTime)cell["Fecha de nacimiento"].Value;
+            textBoxUser.Text = cell["Usuario"].Value.ToString();
             textBoxUser.Enabled = false;
             textBoxPW.Text = "******";
             textBoxPW.Enabled = false;
-            //textBoxPreg.Text = cell[16].Value.ToString();
-            textBoxPreg.Enabled = false;
+            comboBoxPreg.SelectedValue = cell["id_pregunta"].Value;
+            comboBoxPreg.Enabled = false;
             textBoxRes.Text = "******";
             textBoxRes.Enabled = false;
 
-            if (cell[15].Value.ToString() == "H")
-                checkBoxEstado.Checked = true;
-            else
-                checkBoxEstado.Checked = false;
+            checkBoxEstado.Checked = (cell["Estado usuario"].Value.ToString() == "H");
+            checkBoxCliente.Checked = (cell["Estado cliente"].Value.ToString() == "H");
 
-            idCliente = Convert.ToDecimal(cell[0].Value);
+            idCliente = Convert.ToDecimal(cell["id_cliente"].Value);
             button1.Text = "Modificar cliente";
             button1.Click -=new EventHandler(button1_Click);
             button1.Click += new EventHandler(button1_Click_Modificar);
@@ -251,12 +255,15 @@ namespace PagoElectronico.ABM_Cliente
                 listaDeParametros.Add(new SqlParameter("@Localidad", textBox9.Text));
                 listaDeParametros.Add(new SqlParameter("@Nacionalidad", Convert.ToDecimal(comboBoxNac.SelectedValue)));
                 listaDeParametros.Add(new SqlParameter("@FechaNac", dateTimePicker1.Value));
-                listaDeParametros.Add(new SqlParameter("@Estado", checkBoxEstado.Checked ? "H" : "I"));
+                listaDeParametros.Add(new SqlParameter("@EstadoUsuario", checkBoxEstado.Checked ? "H" : "I"));
+                listaDeParametros.Add(new SqlParameter("@EstadoCliente", checkBoxCliente.Checked ? "H" : "I"));
 
+                
                 try
                 {
                     ConexionDB.invocarStoreProcedure(Sesion.conexion, "modificarCliente", listaDeParametros);
                     MessageBox.Show("El usuario " + textBoxUser.Text + " ha sido modificado satisfactoriamente");
+                    button4_Click(null, null);
                 }
                 catch (SqlException ex)
                 {
@@ -274,9 +281,17 @@ namespace PagoElectronico.ABM_Cliente
         private void checkBoxEstado_CheckedChanged(object sender, EventArgs e)
         {
             if (checkBoxEstado.Checked)
-                checkBoxEstado.Text = "Habilitada";
+                checkBoxEstado.Text = "Habilitado";
             else
-                checkBoxEstado.Text = "Deshabilitada";
+                checkBoxEstado.Text = "Deshabilitado";
+        }
+
+        private void checkBoxCliente_CheckedChanged(object sender, EventArgs e)
+        {
+            if (checkBoxCliente.Checked)
+                checkBoxCliente.Text = "Habilitado";
+            else
+                checkBoxCliente.Text = "Deshabilitado";
         }
     }
 }

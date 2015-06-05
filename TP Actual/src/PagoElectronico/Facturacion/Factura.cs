@@ -24,17 +24,25 @@ namespace PagoElectronico.Facturacion
             DataTable datosFactura;
             DataTable itemFacturas;
 
-            datosFactura = ConexionDB.invocarStoreProcedure(Sesion.conexion, "Facturar", listaDeParametros);
-            label2.Text = datosFactura.Rows[0][0].ToString();
-            label4.Text = datosFactura.Rows[0][2].ToString();
-            label6.Text = datosFactura.Rows[0][1].ToString();
-            label8.Text = datosFactura.Rows[0][3].ToString();
-            label10.Text = datosFactura.Rows[0][4].ToString();
+            try
+            {
+                datosFactura = ConexionDB.invocarStoreProcedure(Sesion.conexion, "Facturar", listaDeParametros);
+                label2.Text = datosFactura.Rows[0][0].ToString();
+                label4.Text = datosFactura.Rows[0][2].ToString();
+                label6.Text = datosFactura.Rows[0][1].ToString();
+                label8.Text = datosFactura.Rows[0][3].ToString();
+                label10.Text = datosFactura.Rows[0][4].ToString();
 
-            listaDeParametros.Clear();
-            listaDeParametros.Add(new SqlParameter("@id_factura", datosFactura.Rows[0][0]));
-            itemFacturas = ConexionDB.invocarStoreProcedure(Sesion.conexion, "itemFactura", listaDeParametros);
-            dataGridView1.DataSource = itemFacturas;
+                listaDeParametros.Clear();
+                listaDeParametros.Add(new SqlParameter("@id_factura", datosFactura.Rows[0][0]));
+
+                itemFacturas = ConexionDB.invocarStoreProcedure(Sesion.conexion, "itemFactura", listaDeParametros);
+                dataGridView1.DataSource = itemFacturas;
+            }
+            catch (SqlException ex) 
+            {
+                MessageBox.Show(ex.Message);
+            }
         }
 
         private void button1_Click(object sender, EventArgs e)

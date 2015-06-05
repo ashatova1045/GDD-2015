@@ -145,14 +145,35 @@ GO
 	BEGIN 
 		RETURN substring(@mail,0,charindex('@gmail.com',@mail))
 	END
+	go
+	
+	CREATE FUNCTION HHHH.convertirmoneda(@monedaOriginal numeric(18,0),@monedaConvertida numeric(18,0),@monto numeric(18,2))
+	RETURNS numeric(18,2)
+	AS
+	BEGIN
+		declare @valorEnUSD numeric(18,2)=	(select @monto*cambio
+												from hhhh.tipo_de_cambio
+												where id_moneda=@monedaOriginal)
+		declare @valorconvertido numeric(18,2) =(select @valorEnUSD/cambio
+													from hhhh.tipo_de_cambio
+													where id_moneda = @monedaConvertida)
+		RETURN @valorconvertido
+	END
+GO
 GO
 
 BEGIN /* *************** CREACION DE TABLAS *************** */
+	CREATE TABLE HHHH.preguntas(
+		Id_pregunta numeric(18,0) IDENTITY(1,1) PRIMARY KEY,
+		Pregunta nvarchar(255) not null unique
+	)
+		
 	CREATE TABLE HHHH.usuarios(
 		Id_usuario numeric(18,0) IDENTITY(1,1) PRIMARY KEY,
 		Usuario NVARCHAR(255) UNIQUE NOT NULL,
 		Contrasena CHAR(44) NOT NULL,
 		IntentosFallidos INT DEFAULT 0,
+		Id_pregunta numeric(18,0) CONSTRAINT FK_usuarios_preguntas FOREIGN KEY REFERENCES HHHH.preguntas(id_pregunta),
 		Estado NVARCHAR CHECK (Estado IN ('H','I')) -- habilitado, inhabilitado
 	)
 	
@@ -205,6 +226,11 @@ BEGIN /* *************** CREACION DE TABLAS *************** */
 	CREATE TABLE HHHH.Monedas(
 		Id_moneda numeric(18,0) IDENTITY(1,1) PRIMARY KEY,
 		Descripcion nvarchar(30) NOT NULL
+	)
+	
+	CREATE TABLE HHHH.Tipo_de_cambio(
+		Id_moneda numeric(18,0) PRIMARY KEY references hhhh.Monedas,
+		cambio numeric(18,2) NOT NULL
 	)
 
 	CREATE TABLE HHHH.tipo_cuenta(	
@@ -331,7 +357,10 @@ GO
 BEGIN /* *************** MIGRACION *************** */
 	INSERT INTO HHHH.Monedas (Descripcion)
 		VALUES('USD');
--------------------------------------------------------------------------------------------			
+-------------------------------------------------------------------------------------------
+	INSERT INTO HHHH.tipo_de_cambio (Id_moneda,cambio)
+		VALUES(1,1);
+-------------------------------------------------------------------------------------------				
 	INSERT INTO HHHH.paises(Codigo,Descripcion)
 		SELECT DISTINCT Cli_Pais_Codigo, Cli_Pais_Desc
 			FROM gd_esquema.Maestra
@@ -484,7 +513,9 @@ BEGIN /* *************** MIGRACION *************** */
 	INSERT INTO HHHH.Rel_Rol_Funcionalidad(Id_rol, Id_funcionalidad)
 		VALUES (1,1), (1,2), (1,3), (1,4), (1,9), (1,10), (1,11),
 				(2,4), (2,5), (2,6), (2,7), (2,8), (2,9), (2,10)
-				
+-------------------------------------------------------------------------------------------	
+	INSERT INTO HHHH.preguntas(pregunta)
+		VALUES('¿Sos puto?')
 END
 GO
 
@@ -630,11 +661,24 @@ CREATE PROCEDURE HHHH.transferencia
 	@fecha datetime 
 AS
 	BEGIN
+	
+		DECLARE @Estado char
+		SELECT @Estado = cli.Estado 
+		FROM HHHH.clientes cli
+		JOIN HHHH.cuentas cue
+		ON cue.Id_cuenta = @origen and
+		   cue.Id_cliente = cli.Id_cliente
+		
+		IF (@Estado = 'I')
+			BEGIN
+				RAISERROR('Un cliete inhabilitado no puede realizar transferencias',16,1)
+			END
+	
 		INSERT INTO HHHH.transferencias(Cuenta_destino,Cuenta_origen,Fecha_transferencia,Id_moneda,Importe,Costo)
 			VALUES(@destino,@origen,@fecha,@moneda,@importe,@costo)
 		
 		INSERT INTO HHHH.movimientos(Id_cuenta,Fecha,Id_moneda,Id_transferencia,Tipo_movimiento,Costo)
-			VALUES (@origen,@fecha,@moneda,(SELECT IDENT_CURRENT('HHHH.transferencias')),'T',@costo+@importe)
+			VALUES (@origen,@fecha,@moneda,(SELECT IDENT_CURRENT('HHHH.transferencias')),'T',@costo)
 		
 		UPDATE HHHH.cuentas
 			SET Saldo -= @importe +@costo
@@ -687,6 +731,18 @@ CREATE PROCEDURE HHHH.validarDeposito
 	
 	AS
 		BEGIN
+		
+		DECLARE @Estado char
+		SELECT @Estado = cli.Estado 
+		FROM HHHH.clientes cli
+		JOIN HHHH.cuentas cue
+		ON cue.Id_cuenta = @nroCuenta and
+		   cue.Id_cliente = cli.Id_cliente
+		
+		IF (@Estado = 'I')
+			BEGIN
+				RAISERROR('Un cliete inhabilitado no puede realizar depositos',16,1)
+			END
 	
 		DECLARE @estaHabilitadaCuenta nvarchar (1)
 		SET @estaHabilitadaCuenta = (SELECT Estado FROM HHHH.cuentas WHERE Id_cuenta = @nroCuenta)
@@ -738,6 +794,18 @@ CREATE PROCEDURE HHHH.retiro
 	
 AS
 	BEGIN
+		DECLARE @Estado char
+		SELECT @Estado = cli.Estado 
+		FROM HHHH.clientes cli
+		JOIN HHHH.cuentas cue
+		ON cue.Id_cuenta = @cuenta and
+		   cue.Id_cliente = cli.Id_cliente
+		
+		IF (@Estado = 'I')
+			BEGIN
+				RAISERROR('Un cliete inhabilitado no puede realizar retiros',16,1)
+			END
+
 		INSERT INTO HHHH.cheques(Fecha_cheque, Importe, Destinatario, Id_banco)
 			VALUES(@fechaRetiro, @importe, @destinatarioApellido + ', ' + @destinatarioNombre, @banco)
 			
@@ -823,6 +891,10 @@ AS
 			BEGIN
 				RETURN 'Transferencia de saldo cod.'+convert(nvarchar(max),@idTransf)
 			END
+		IF(@tipomov = 'P')
+			BEGIN
+				RETURN 'Costos por apertura de cuenta'
+			END
 		IF(@tipomov = 'C')
 			BEGIN
 					DECLARE @Tipocuenta nvarchar(255)
@@ -875,25 +947,44 @@ AS
 		SELECT @cliente_id = Id_cliente FROM HHHH.clientes WHERE Id_usuario = @user_id
 		
 		INSERT INTO HHHH.facturas(Fecha_factura,Id_cliente)
-			SELECT @fecha, @cliente_id
-			
+		SELECT @fecha, @cliente_id
+		
+		
+		DECLARE @FacturaActual numeric(18,0)
+		SET @FacturaActual = (SELECT IDENT_CURRENT('HHHH.facturas'))
+		
+		
 		UPDATE HHHH.movimientos
-		SET Id_factura = (SELECT IDENT_CURRENT('HHHH.facturas'))
+		SET Id_factura = @FacturaActual
 		FROM HHHH.movimientos mov, HHHH.transferencias tr
-			WHERE Id_factura is null and tr.Id_transferencia = mov.Id_transferencia
-			 and HHHH.obtenerUser(mov.Id_cuenta) = @user_id
+		WHERE Id_factura is null and tr.Id_transferencia = mov.Id_transferencia
+			  and HHHH.obtenerUser(mov.Id_cuenta) = @user_id
+			  
 			 
 		UPDATE HHHH.facturas
 		SET Monto_total = (SELECT SUM(mov.Costo)
-			FROM HHHH.movimientos mov
-			WHERE mov.Id_factura = (SELECT IDENT_CURRENT('HHHH.facturas'))
-			 and HHHH.obtenerUser(mov.Id_cuenta) = @user_id)
-		WHERE Id_factura = (SELECT IDENT_CURRENT('HHHH.facturas'))
-		
+						   FROM HHHH.movimientos mov
+						   WHERE mov.Id_factura = @FacturaActual
+								 and HHHH.obtenerUser(mov.Id_cuenta) = @user_id)
+		WHERE Id_factura = @FacturaActual
+
+
+		UPDATE HHHH.Cuentas
+		SET estado = 'I' FROM 
+			(SELECT * FROM
+				(SELECT id_cuenta ,COUNT(*) AS cant FROM HHHH.movimientos
+				 WHERE Id_factura = @FacturaActual AND
+					Tipo_movimiento = 'T' 
+				 GROUP BY Id_cuenta) CantMovXCuenta
+			WHERE CantMovXCuenta.cant > 5) cue
+		WHERE HHHH.Cuentas.Id_cuenta = cue.Id_cuenta
+				
 		SELECT fac.Id_factura, cli.Nombre+' '+cli.Apellido as nombre, us.Usuario, fac.Fecha_factura, fac.Monto_total
-				FROM HHHH.facturas fac, HHHH.clientes cli, HHHH.usuarios us
-				WHERE fac.Id_factura = (SELECT IDENT_CURRENT('HHHH.facturas')) 
-					  and fac.Id_cliente = cli.Id_cliente and cli.Id_usuario = us.Id_usuario
+		FROM HHHH.facturas fac, HHHH.clientes cli, HHHH.usuarios us
+		WHERE fac.Id_factura = @FacturaActual 
+			  and fac.Id_cliente = cli.Id_cliente and cli.Id_usuario = us.Id_usuario
+					  
+
 
 	
 GO
@@ -926,7 +1017,7 @@ CREATE PROCEDURE HHHH.nuevoCliente(
 @FechaNac datetime,
 @Usuario nvarchar(255),
 @Contrasena nvarchar(255),
-@Pregunta nvarchar(255),
+@Id_Pregunta nvarchar(255),
 @Respuesta nvarchar(255),
 @Estado char)
 AS
@@ -955,8 +1046,8 @@ AS
 				RETURN
 			END
 			
-		INSERT INTO HHHH.usuarios(Usuario,Contrasena,IntentosFallidos,Estado)
-			VALUES(@Usuario,@Contrasena,0,'H')
+		INSERT INTO HHHH.usuarios(Usuario,Contrasena,IntentosFallidos,Estado,Id_pregunta)
+			VALUES(@Usuario,@Contrasena,0,'H',@Id_Pregunta)
 			
 		INSERT INTO HHHH.rel_rol_usuario(Id_rol,Id_usuario)
 			VALUES(2,IDENT_CURRENT('HHHH.usuarios'))
@@ -970,7 +1061,8 @@ AS
 			
 	END
 GO
-
+ 
+go
 CREATE PROCEDURE HHHH.buscarCliente(
 @Nombre varchar(255),
 @Apellido varchar(255),
@@ -979,14 +1071,25 @@ CREATE PROCEDURE HHHH.buscarCliente(
 @Mail varchar(255))
 AS
 	BEGIN
-		SELECT cli.*, us.* 
-			FROM HHHH.clientes cli, HHHH.usuarios us
-			WHERE Nombre like '%'+@Nombre+'%' and
-				  Apellido like '%'+@Apellido+'%' and
-				  Nro_Documento like '%'+@Documento+'%' and
-				  Id_tipo_documento like '%'+@TipoDoc+'%' and
-				  Mail like '%'+@Mail+'%'and
-				  cli.Id_usuario = us.Id_usuario
+		SELECT cli.Id_cliente,cli.Nombre, cli.Apellido, cli.Nro_Documento as 'Documento',cli.Id_tipo_documento, tDoc.Descripcion as 'Tipo documento',
+				cli.Mail, cli.Id_pais, pa.Descripcion as 'Pais', cli.Estado as 'Estado cliente',cli.Calle, cli.Altura,cli.Piso,cli.Departamento,cli.Localidad,
+				cli.Id_nacionalidad, nac.Descripcion as 'Nacionalidad', cli.Fecha_nacimiento as 'Fecha de nacimiento', us.Usuario,us.Estado as 'Estado usuario',
+				us.Id_pregunta
+			FROM HHHH.clientes cli 
+			JOIN HHHH.usuarios us
+			ON cli.Id_usuario = us.Id_usuario
+			JOIN HHHH.tipos_documentos tDoc
+			ON cli.id_tipo_documento = tDoc.Id_tipo_documento
+			JOIN HHHH.paises pa
+			ON cli.Id_pais = pa.Codigo
+			LEFT JOIN HHHH.paises nac
+			ON cli.Id_nacionalidad = nac.Codigo
+			WHERE cli.Nombre like '%'+@Nombre+'%' and
+			cli.Apellido like '%'+@Apellido+'%' and
+			cli.Nro_Documento like '%'+@Documento+'%' and
+			cli.Id_tipo_documento like '%'+@TipoDoc+'%' and
+			cli.Mail like '%'+@Mail+'%'
+			
 		RETURN
 	END
 GO
@@ -1006,7 +1109,8 @@ CREATE PROCEDURE HHHH.modificarCliente(
 @Localidad varchar(255),
 @Nacionalidad numeric(18,0),
 @FechaNac datetime,
-@Estado char)
+@EstadoUsuario char,
+@EstadoCliente char)
 AS
 	BEGIN
 	
@@ -1040,10 +1144,36 @@ AS
 			Localidad = @Localidad,
 			Id_nacionalidad = @Nacionalidad,
 			Fecha_nacimiento = @FechaNac,
-			Estado = @Estado
+			Estado = @EstadoCliente
 			FROM HHHH.clientes
 			WHERE Id_cliente = @Id_cliente
 			
+		UPDATE HHHH.usuarios
+		SET Estado = @EstadoUsuario
+		FROM HHHH.usuarios US, HHHH.clientes CLI
+		WHERE CLI.Id_cliente = @Id_cliente AND
+			  US.Id_usuario = CLI.Id_usuario
+			
+	END
+GO
+
+
+CREATE PROCEDURE HHHH.ObtenerCuentas
+@Id_usuario numeric(18,0)
+AS
+	BEGIN
+		SELECT cue.Id_cuenta as 'Cuenta', pa.Descripcion as 'Pais', cue.Id_pais, tp.Descripcion as 'Tipo cuenta', cue.Id_moneda,
+				 cue.Fecha_apertura as 'Fecha apertura', mon.Descripcion, cue.Saldo, cue.Estado
+		FROM HHHH.cuentas cue 
+		JOIN HHHH.clientes cli 
+        ON cli.Id_cliente = cue.Id_cliente and 
+	     cli.Id_usuario = @Id_usuario
+	    JOIN HHHH.paises pa
+	    ON pa.Codigo = cue.Id_pais
+	    JOIN HHHH.tipo_cuenta tp
+	    on tp.Id_tipo_cuenta = cue.Id_tipo_cuenta
+	    JOIN HHHH.Monedas mon
+	    ON mon.Id_moneda = cue.Id_moneda
 	END
 GO
 
@@ -1182,3 +1312,4 @@ GO
 
 update HHHH.cuentas
 set Id_tipo_cuenta =1, Estado = 'H'
+

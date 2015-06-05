@@ -85,10 +85,15 @@ namespace PagoElectronico.Retiros
                 listaDeParametros.Add(new SqlParameter("@banco", Banco_CB.SelectedValue));
 
                 //Llamo al procedimiento que actualiza la BD
-
-                ConexionDB.invocarStoreProcedure(Sesion.conexion, "retiro", listaDeParametros);
-                MessageBox.Show("El cheque se ha generado correctamente por la suma de" + " " +Importe_NUD.Value + " " +Moneda_CB.Text);
-
+                try
+                {
+                    ConexionDB.invocarStoreProcedure(Sesion.conexion, "retiro", listaDeParametros);
+                    MessageBox.Show("El cheque se ha generado correctamente por la suma de" + " " + Importe_NUD.Value + " " + Moneda_CB.Text);
+                }
+                catch (SqlException ex)
+                {
+                    MessageBox.Show(ex.Message);
+                }
                 //Limpio los campos para la proxima operacion
 
                 Cuenta_CB.SelectedIndex = -1;

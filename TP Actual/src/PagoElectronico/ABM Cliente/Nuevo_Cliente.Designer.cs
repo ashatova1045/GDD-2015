@@ -30,6 +30,8 @@
         {
             this.components = new System.ComponentModel.Container();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.label18 = new System.Windows.Forms.Label();
+            this.checkBoxCliente = new System.Windows.Forms.CheckBox();
             this.dateTimePicker1 = new System.Windows.Forms.DateTimePicker();
             this.comboBoxNac = new System.Windows.Forms.ComboBox();
             this.label13 = new System.Windows.Forms.Label();
@@ -60,18 +62,18 @@
             this.errorProvider1 = new System.Windows.Forms.ErrorProvider(this.components);
             this.button2 = new System.Windows.Forms.Button();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
-            this.button4 = new System.Windows.Forms.Button();
+            this.checkBoxEstado = new System.Windows.Forms.CheckBox();
+            this.labelEstado = new System.Windows.Forms.Label();
+            this.buttonLimpiar = new System.Windows.Forms.Button();
             this.button3 = new System.Windows.Forms.Button();
             this.label17 = new System.Windows.Forms.Label();
             this.textBoxRes = new System.Windows.Forms.TextBox();
-            this.textBoxPreg = new System.Windows.Forms.TextBox();
             this.label16 = new System.Windows.Forms.Label();
             this.textBoxPW = new System.Windows.Forms.TextBox();
             this.label15 = new System.Windows.Forms.Label();
             this.textBoxUser = new System.Windows.Forms.TextBox();
             this.label14 = new System.Windows.Forms.Label();
-            this.labelEstado = new System.Windows.Forms.Label();
-            this.checkBoxEstado = new System.Windows.Forms.CheckBox();
+            this.comboBoxPreg = new System.Windows.Forms.ComboBox();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).BeginInit();
             this.groupBox2.SuspendLayout();
@@ -79,6 +81,8 @@
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.label18);
+            this.groupBox1.Controls.Add(this.checkBoxCliente);
             this.groupBox1.Controls.Add(this.dateTimePicker1);
             this.groupBox1.Controls.Add(this.comboBoxNac);
             this.groupBox1.Controls.Add(this.label13);
@@ -111,6 +115,25 @@
             this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Datos del Cliente";
+            // 
+            // label18
+            // 
+            this.label18.AutoSize = true;
+            this.label18.Location = new System.Drawing.Point(325, 139);
+            this.label18.Name = "label18";
+            this.label18.Size = new System.Drawing.Size(91, 13);
+            this.label18.TabIndex = 29;
+            this.label18.Text = "Estado del cliente";
+            // 
+            // checkBoxCliente
+            // 
+            this.checkBoxCliente.AutoSize = true;
+            this.checkBoxCliente.Location = new System.Drawing.Point(433, 139);
+            this.checkBoxCliente.Name = "checkBoxCliente";
+            this.checkBoxCliente.Size = new System.Drawing.Size(15, 14);
+            this.checkBoxCliente.TabIndex = 28;
+            this.checkBoxCliente.UseVisualStyleBackColor = true;
+            this.checkBoxCliente.CheckedChanged += new System.EventHandler(this.checkBoxCliente_CheckedChanged);
             // 
             // dateTimePicker1
             // 
@@ -353,13 +376,13 @@
             // 
             // groupBox2
             // 
+            this.groupBox2.Controls.Add(this.comboBoxPreg);
             this.groupBox2.Controls.Add(this.checkBoxEstado);
             this.groupBox2.Controls.Add(this.labelEstado);
-            this.groupBox2.Controls.Add(this.button4);
+            this.groupBox2.Controls.Add(this.buttonLimpiar);
             this.groupBox2.Controls.Add(this.button3);
             this.groupBox2.Controls.Add(this.label17);
             this.groupBox2.Controls.Add(this.textBoxRes);
-            this.groupBox2.Controls.Add(this.textBoxPreg);
             this.groupBox2.Controls.Add(this.label16);
             this.groupBox2.Controls.Add(this.textBoxPW);
             this.groupBox2.Controls.Add(this.label15);
@@ -372,15 +395,34 @@
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Datos de la cuenta";
             // 
-            // button4
+            // checkBoxEstado
             // 
-            this.button4.Location = new System.Drawing.Point(338, 88);
-            this.button4.Name = "button4";
-            this.button4.Size = new System.Drawing.Size(118, 23);
-            this.button4.TabIndex = 9;
-            this.button4.Text = "Limpiar";
-            this.button4.UseVisualStyleBackColor = true;
-            this.button4.Click += new System.EventHandler(this.button4_Click);
+            this.checkBoxEstado.AutoSize = true;
+            this.checkBoxEstado.Location = new System.Drawing.Point(433, 20);
+            this.checkBoxEstado.Name = "checkBoxEstado";
+            this.checkBoxEstado.Size = new System.Drawing.Size(15, 14);
+            this.checkBoxEstado.TabIndex = 11;
+            this.checkBoxEstado.UseVisualStyleBackColor = true;
+            this.checkBoxEstado.CheckedChanged += new System.EventHandler(this.checkBoxEstado_CheckedChanged);
+            // 
+            // labelEstado
+            // 
+            this.labelEstado.AutoSize = true;
+            this.labelEstado.Location = new System.Drawing.Point(325, 20);
+            this.labelEstado.Name = "labelEstado";
+            this.labelEstado.Size = new System.Drawing.Size(96, 13);
+            this.labelEstado.TabIndex = 10;
+            this.labelEstado.Text = "Estado del Usuario";
+            // 
+            // buttonLimpiar
+            // 
+            this.buttonLimpiar.Location = new System.Drawing.Point(338, 88);
+            this.buttonLimpiar.Name = "buttonLimpiar";
+            this.buttonLimpiar.Size = new System.Drawing.Size(118, 23);
+            this.buttonLimpiar.TabIndex = 9;
+            this.buttonLimpiar.Text = "Limpiar";
+            this.buttonLimpiar.UseVisualStyleBackColor = true;
+            this.buttonLimpiar.Click += new System.EventHandler(this.button4_Click);
             // 
             // button3
             // 
@@ -405,15 +447,9 @@
             // 
             this.textBoxRes.Location = new System.Drawing.Point(68, 95);
             this.textBoxRes.Name = "textBoxRes";
+            this.textBoxRes.PasswordChar = '*';
             this.textBoxRes.Size = new System.Drawing.Size(183, 20);
             this.textBoxRes.TabIndex = 6;
-            // 
-            // textBoxPreg
-            // 
-            this.textBoxPreg.Location = new System.Drawing.Point(102, 69);
-            this.textBoxPreg.Name = "textBoxPreg";
-            this.textBoxPreg.Size = new System.Drawing.Size(149, 20);
-            this.textBoxPreg.TabIndex = 5;
             // 
             // label16
             // 
@@ -428,6 +464,7 @@
             // 
             this.textBoxPW.Location = new System.Drawing.Point(68, 43);
             this.textBoxPW.Name = "textBoxPW";
+            this.textBoxPW.PasswordChar = '*';
             this.textBoxPW.Size = new System.Drawing.Size(183, 20);
             this.textBoxPW.TabIndex = 3;
             // 
@@ -456,24 +493,13 @@
             this.label14.TabIndex = 0;
             this.label14.Text = "Username";
             // 
-            // labelEstado
+            // comboBoxPreg
             // 
-            this.labelEstado.AutoSize = true;
-            this.labelEstado.Location = new System.Drawing.Point(292, 20);
-            this.labelEstado.Name = "labelEstado";
-            this.labelEstado.Size = new System.Drawing.Size(102, 13);
-            this.labelEstado.TabIndex = 10;
-            this.labelEstado.Text = "Estado de la cuenta";
-            // 
-            // checkBoxEstado
-            // 
-            this.checkBoxEstado.AutoSize = true;
-            this.checkBoxEstado.Location = new System.Drawing.Point(401, 20);
-            this.checkBoxEstado.Name = "checkBoxEstado";
-            this.checkBoxEstado.Size = new System.Drawing.Size(15, 14);
-            this.checkBoxEstado.TabIndex = 11;
-            this.checkBoxEstado.UseVisualStyleBackColor = true;
-            this.checkBoxEstado.CheckedChanged += new System.EventHandler(this.checkBoxEstado_CheckedChanged);
+            this.comboBoxPreg.FormattingEnabled = true;
+            this.comboBoxPreg.Location = new System.Drawing.Point(103, 68);
+            this.comboBoxPreg.Name = "comboBoxPreg";
+            this.comboBoxPreg.Size = new System.Drawing.Size(148, 21);
+            this.comboBoxPreg.TabIndex = 12;
             // 
             // Nuevo_Cliente
             // 
@@ -534,12 +560,14 @@
         private System.Windows.Forms.Label label15;
         private System.Windows.Forms.TextBox textBoxPW;
         private System.Windows.Forms.Label label16;
-        private System.Windows.Forms.TextBox textBoxPreg;
         private System.Windows.Forms.Label label17;
         private System.Windows.Forms.TextBox textBoxRes;
-        private System.Windows.Forms.Button button4;
+        private System.Windows.Forms.Button buttonLimpiar;
         private System.Windows.Forms.Button button3;
         private System.Windows.Forms.CheckBox checkBoxEstado;
         private System.Windows.Forms.Label labelEstado;
+        private System.Windows.Forms.Label label18;
+        private System.Windows.Forms.CheckBox checkBoxCliente;
+        private System.Windows.Forms.ComboBox comboBoxPreg;
     }
 }

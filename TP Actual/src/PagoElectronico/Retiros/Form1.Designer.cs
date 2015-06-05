@@ -28,17 +28,6 @@
         /// </summary>
         private void InitializeComponent()
         {
-		
-            this.SuspendLayout();
-            // 
-            // Form1
-            // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(679, 302);
-            this.Name = "Form1";
-            this.Text = "Form1";
-            this.ResumeLayout(false);
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(RetiroEfectivo_FRM));
             this.Cuenta_CB = new System.Windows.Forms.ComboBox();
@@ -64,6 +53,7 @@
             // 
             this.Cuenta_CB.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
             this.Cuenta_CB.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
+            this.Cuenta_CB.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.Cuenta_CB.FormattingEnabled = true;
             this.Cuenta_CB.Location = new System.Drawing.Point(143, 23);
             this.Cuenta_CB.Name = "Cuenta_CB";

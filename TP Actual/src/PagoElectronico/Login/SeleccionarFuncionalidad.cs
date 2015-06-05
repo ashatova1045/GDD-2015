@@ -20,24 +20,38 @@ namespace PagoElectronico.Login
             string queryFuncionalidad = "SELECT r.Id_funcionalidad,f.Descripcion FROM HHHH.rel_rol_funcionalidad r,HHHH.funcionalidades f WHERE r.Id_funcionalidad=f.Id_funcionalidad AND r.Id_rol = " + Sesion.rol_id;
             DataTable funcionalidadDeRol = ConexionDB.correrQuery(Sesion.conexion, queryFuncionalidad);
 
-            cbFuncionalidad.DisplayMember = "Descripcion";
-            cbFuncionalidad.ValueMember = "Id_funcionalidad";
-            cbFuncionalidad.DataSource = funcionalidadDeRol;
-            cbFuncionalidad.Update();
+            dataGridView1.DataSource = funcionalidadDeRol;
+            dataGridView1.Columns[0].Visible = false;
+
+            int tam = (funcionalidadDeRol.Rows.Count * 30) + 3;
+
+            if (tam > 393)
+            {
+                dataGridView1.Height = 393;
+                this.Height = 393 + 150;
+                btVolver.Top = 393 + 80;
+            }
+            else
+            {
+                dataGridView1.Height = tam;
+                this.Height = tam + 150;
+                btVolver.Top = 80 + tam;
+            }
         }
 
         private void btVolver_Click(object sender, EventArgs e)
         {
-            ((DataTable)(cbFuncionalidad.DataSource)).Dispose();
+            ((DataTable)(dataGridView1.DataSource)).Dispose();
 
             Owner.Show();
             this.Close();
         }
 
-        private void btSeleccionar_Click(object sender, EventArgs e)
+        private void dataGridView1_Click(object sender, EventArgs e)
         {
             Form nuevoForm = null;
-            switch (cbFuncionalidad.Text)
+           
+            switch (dataGridView1.SelectedRows[0].Cells[1].Value.ToString())
             {
                 case "ABM Rol":
                     nuevoForm = new ABM_Rol.AdministrarRoles();
@@ -76,11 +90,6 @@ namespace PagoElectronico.Login
 
             nuevoForm.Show(this);
             this.Hide();
-
-        }
-
-        private void cbFuncionalidad_SelectedIndexChanged(object sender, EventArgs e)
-        {
 
         }
     }

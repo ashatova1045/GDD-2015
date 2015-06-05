@@ -92,10 +92,18 @@ namespace PagoElectronico.Transferencias
             listaDeParametros.Add(new SqlParameter("@importe", nImporte.Value));
             listaDeParametros.Add(new SqlParameter("@fecha", Sesion.fecha));
             listaDeParametros.Add(new SqlParameter("@costo", Convert.ToDecimal(txtCosto.Text)));
-            ConexionDB.invocarStoreProcedure(Sesion.conexion,"transferencia",listaDeParametros);
-            MessageBox.Show("Se han descontado de su cuenta " + nImporte.Value + " " + cbImporteMoneda.Text + " y " + cuentaSeleccionada["costo_transf"] + " " + cbImporteMoneda.Text + " de comision.");
-            actualizarCuentas();
-            actualizarCuentaSeleccionada();
+
+            try
+            {
+                ConexionDB.invocarStoreProcedure(Sesion.conexion, "transferencia", listaDeParametros);
+                MessageBox.Show("Se han descontado de su cuenta " + nImporte.Value + " " + cbImporteMoneda.Text + " y " + cuentaSeleccionada["costo_transf"] + " " + cbImporteMoneda.Text + " de comision.");
+                actualizarCuentas();
+                actualizarCuentaSeleccionada();
+            }
+            catch(SqlException ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
         }
 
         private void cbDestino_SelectedIndexChanged(object sender, EventArgs e)
