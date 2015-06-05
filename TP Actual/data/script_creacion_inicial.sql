@@ -917,7 +917,6 @@ AS
 								 and HHHH.obtenerUser(mov.Id_cuenta) = @user_id)
 		WHERE Id_factura = @FacturaActual
 
---No me rompas las pelotas git hub
 
 		UPDATE HHHH.Cuentas
 		SET estado = 'I' FROM 
@@ -1023,7 +1022,7 @@ AS
 	BEGIN
 		SELECT cli.Id_cliente,cli.Nombre, cli.Apellido, cli.Nro_Documento as 'Documento',cli.Id_tipo_documento, tDoc.Descripcion as 'Tipo documento',
 				cli.Mail, cli.Id_pais, pa.Descripcion as 'Pais', cli.Estado as 'Estado cliente',cli.Calle, cli.Altura,cli.Piso,cli.Departamento,cli.Localidad,
-				cli.Id_nacionalidad, nac.Descripcion as 'Nacionalidad', cli.Fecha_nacimiento as 'Fecha de nacimiento', us.Usuario,us.Estado as 'Estado cuenta'
+				cli.Id_nacionalidad, nac.Descripcion as 'Nacionalidad', cli.Fecha_nacimiento as 'Fecha de nacimiento', us.Usuario,us.Estado as 'Estado usuario'
 			FROM HHHH.clientes cli 
 			JOIN HHHH.usuarios us
 			ON cli.Id_usuario = us.Id_usuario
@@ -1099,9 +1098,8 @@ AS
 	END
 GO
 
--- Aca me dejas esto la puta que te pario
 
-REATE PROCEDURE HHHH.ObtenerCuentas
+CREATE PROCEDURE HHHH.ObtenerCuentas
 @Id_usuario numeric(18,0)
 AS
 	BEGIN
