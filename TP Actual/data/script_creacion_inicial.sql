@@ -1099,6 +1099,7 @@ AS
 GO
 
 
+
 REATE PROCEDURE HHHH.ObtenerCuentas
 @Id_usuario numeric(18,0)
 AS
@@ -1120,6 +1121,7 @@ GO
 
 update HHHH.cuentas
 set Id_tipo_cuenta =1, Estado = 'H'
+
 
 
 
