@@ -659,6 +659,19 @@ CREATE PROCEDURE HHHH.transferencia
 	@fecha datetime 
 AS
 	BEGIN
+	
+		DECLARE @Estado char
+		SELECT @Estado = cli.Estado 
+		FROM HHHH.clientes cli
+		JOIN HHHH.cuentas cue
+		ON cue.Id_cuenta = @origen and
+		   cue.Id_cliente = cli.Id_cliente
+		
+		IF (@Estado = 'I')
+			BEGIN
+				RAISERROR('Un cliete inhabilitado no puede realizar transferencias',16,1)
+			END
+	
 		INSERT INTO HHHH.transferencias(Cuenta_destino,Cuenta_origen,Fecha_transferencia,Id_moneda,Importe,Costo)
 			VALUES(@destino,@origen,@fecha,@moneda,@importe,@costo)
 		
@@ -716,6 +729,18 @@ CREATE PROCEDURE HHHH.validarDeposito
 	
 	AS
 		BEGIN
+		
+		DECLARE @Estado char
+		SELECT @Estado = cli.Estado 
+		FROM HHHH.clientes cli
+		JOIN HHHH.cuentas cue
+		ON cue.Id_cuenta = @nroCuenta and
+		   cue.Id_cliente = cli.Id_cliente
+		
+		IF (@Estado = 'I')
+			BEGIN
+				RAISERROR('Un cliete inhabilitado no puede realizar depositos',16,1)
+			END
 	
 		DECLARE @estaHabilitadaCuenta nvarchar (1)
 		SET @estaHabilitadaCuenta = (SELECT Estado FROM HHHH.cuentas WHERE Id_cuenta = @nroCuenta)
