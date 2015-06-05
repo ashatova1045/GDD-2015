@@ -149,6 +149,7 @@ namespace PagoElectronico.ABM_Cliente
                 {
                     ConexionDB.invocarStoreProcedure(Sesion.conexion, "nuevoCliente", listaDeParametros);
                     MessageBox.Show("El usuario "+textBoxUser.Text+" ha sido dado de alta satisfactoriamente");
+                    button4_Click(null, null);
                 }
                 catch (SqlException ex)
                 {
@@ -256,6 +257,7 @@ namespace PagoElectronico.ABM_Cliente
                 {
                     ConexionDB.invocarStoreProcedure(Sesion.conexion, "modificarCliente", listaDeParametros);
                     MessageBox.Show("El usuario " + textBoxUser.Text + " ha sido modificado satisfactoriamente");
+                    button4_Click(null, null);
                 }
                 catch (SqlException ex)
                 {

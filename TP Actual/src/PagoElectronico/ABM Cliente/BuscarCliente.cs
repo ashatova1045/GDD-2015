@@ -60,21 +60,29 @@ namespace PagoElectronico.ABM_Cliente
 
         private void textBoxDoc_TextChanged(object sender, EventArgs e)
         {
-            if (ValidadorHelper.validarSoloNumeros(textBoxDoc.Text))
-            {
+            if (ValidarDatos())
                 ActulizarResultados();
-                errorProvider1.Clear();
-            }
             else
-            {
                 dataGridView1.DataSource = null;
-                errorProvider1.SetError(textBoxDoc, "El Documento solo puede contener numeros");
-            }
         }
 
         private void comboBoxTipoDoc_SelectionChangeCommitted(object sender, EventArgs e)
         {
             ActulizarResultados();
+        }
+
+        private bool ValidarDatos()
+        {
+            errorProvider1.Clear();
+            bool resultado = true;
+
+            if ((!ValidadorHelper.validarSoloNumeros(textBoxDoc.Text)) && textBoxDoc.Text != "")
+            {
+                errorProvider1.SetError(textBoxDoc, "El Documento solo puede contener numeros");
+                resultado = false;
+            }
+
+            return resultado;
         }
 
         private void BuscarCliente_Load(object sender, EventArgs e)
