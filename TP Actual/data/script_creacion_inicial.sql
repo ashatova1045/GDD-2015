@@ -1125,6 +1125,32 @@ AS
 	END
 GO
 
+CREATE PROCEDURE HHHH.generarListado4
+
+@anio int,
+@primerMes int,
+@ultimoMes int
+AS
+	BEGIN
+
+	SELECT top 5 cueMonTot.Id_cuenta AS 'Cuenta', cueMonTot.MontoTotalxCuenta AS 'MontoTotalFacturado', 
+		tcue.Descripcion AS 'TipoCuenta' FROM 
+		(SELECT  mov.Id_cuenta, SUM (fac.Monto_total) AS MontoTotalxCuenta FROM HHHH.movimientos mov
+		JOIN HHHH.facturas fac
+		ON mov.Id_factura = fac.Id_factura
+		WHERE mov.Id_factura IS NOT NULL AND
+		YEAR (fac.Fecha_factura) = @anio AND
+		MONTH (fac.Fecha_factura) BETWEEN @primerMes AND @ultimoMes
+		GROUP BY mov.Id_cuenta) cueMonTot
+		JOIN HHHH.cuentas cue
+		ON cueMonTot.Id_cuenta = cue.Id_cuenta
+		JOIN HHHH.tipo_cuenta tcue
+		ON tcue.Id_tipo_cuenta=cue.Id_tipo_cuenta
+		ORDER BY MontoTotalxCuenta DESC 
+		
+	END
+GO
+
 ----------------------------------------------------------------------------------------------
 
 update HHHH.cuentas
