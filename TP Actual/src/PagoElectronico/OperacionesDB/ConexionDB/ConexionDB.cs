@@ -5,6 +5,7 @@ using System.Data.Common;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Windows.Forms;
 
 namespace PagoElectronico.OperacionesDB.ConexionDB
 {
@@ -44,6 +45,43 @@ namespace PagoElectronico.OperacionesDB.ConexionDB
 
             return llenarDataTable(comandoSQL);
         }
+
+        public static bool Procedure(string nombreProcedure, List<SqlParameter> parametros, out DataTable tabla)
+        {
+            return Procedure(nombreProcedure, parametros, out tabla, true);
+        }
+
+        public static bool Procedure(string nombreProcedure, List<SqlParameter> parametros, out DataTable tabla, bool mensajes)
+        {
+            try
+            {
+                SqlCommand comandoSQL = new SqlCommand("HHHH." + nombreProcedure, Sesion.conexion);
+                comandoSQL.CommandType = CommandType.StoredProcedure;
+
+                if (parametros != null && parametros.Exists(x => x != null))
+                {
+                    foreach (SqlParameter parametro in parametros)
+                    {
+                        comandoSQL.Parameters.Add(parametro);
+                    }
+                }
+
+                tabla = llenarDataTable(comandoSQL);
+
+                return true;
+            }
+            catch (SqlException ex)
+            {
+                if (mensajes)
+                {
+                    MessageBox.Show(ex.Message);
+                }
+
+                tabla = new DataTable();
+                return false;
+            }
+        }
+
 
         //correrQuery
         public static DataTable correrQuery(SqlConnection conexionDB, string query)
