@@ -383,16 +383,7 @@ BEGIN /* *************** MIGRACION *************** */
 			FROM gd_esquema.Maestra M
 			WHERE M.Cheque_Numero IS NOT NULL
 	SET IDENTITY_INSERT HHHH.cheques OFF
--------------------------------------------------------------------------------------------	
-	INSERT INTO HHHH.tipos_documentos(Descripcion)
-		VALUES('Documento Nacional Identidad')
-	INSERT INTO HHHH.tipos_documentos(Descripcion)
-		VALUES('Cedula Identidad')
-	INSERT INTO HHHH.tipos_documentos(Descripcion)
-		VALUES('Libreta Civica')
-	INSERT INTO HHHH.tipos_documentos(Descripcion)
-		VALUES('Libreta de Enrolamiento')
-		
+-------------------------------------------------------------------------------------------		
 	SET IDENTITY_INSERT HHHH.tipos_documentos ON
 	INSERT INTO HHHH.tipos_documentos(Id_tipo_documento, Descripcion)
 		SELECT DISTINCT Cli_Tipo_Doc_Cod, Cli_Tipo_Doc_Desc
@@ -689,16 +680,12 @@ AS
 		INSERT INTO HHHH.movimientos(Id_cuenta,Fecha,Id_moneda,Id_transferencia,Tipo_movimiento,Costo)
 			VALUES (@origen,@fecha,@moneda,(SELECT IDENT_CURRENT('HHHH.transferencias')),'T',@costo)
 		
-		declare @monedaorigen numeric(18,0) = (select Id_moneda from HHHH.cuentas where Id_cuenta=@origen)
-		declare @monedadestino numeric(18,0) = (select Id_moneda from HHHH.cuentas where Id_cuenta=@destino)
-	
-		
 		UPDATE HHHH.cuentas
-			SET Saldo -= hhhh.convertirmoneda(@moneda,@monedaorigen ,@importe+@costo)
+			SET Saldo -= @importe +@costo
 			WHERE Id_cuenta = @origen
 		
 		UPDATE HHHH.cuentas
-			SET Saldo += hhhh.convertirmoneda(@moneda,@monedadestino ,@importe)
+			SET Saldo += @importe
 			WHERE Id_cuenta = @destino
     END				
 		
@@ -1368,4 +1355,60 @@ GO
 
 update HHHH.cuentas
 set Id_tipo_cuenta =1, Estado = 'H'
+GO
 
+
+
+
+
+
+
+--////////////////////////////////////////
+
+
+CREATE PROCEDURE HHHH.ObtenerFuncionalidades
+@id_rol numeric(18,0)
+AS
+	BEGIN
+		SELECT r.Id_funcionalidad,f.Descripcion 
+		FROM HHHH.rel_rol_funcionalidad r,HHHH.funcionalidades f 
+		WHERE r.Id_funcionalidad=f.Id_funcionalidad AND 
+			  r.Id_rol = @id_rol
+	END
+GO
+
+CREATE PROCEDURE HHHH.ObtenerRoles
+@Id_usuario numeric(18,0)
+AS
+	BEGIN
+		SELECT r.Id_rol,Nombre_rol 
+		FROM HHHH.rel_rol_usuario r,HHHH.roles ro 
+		WHERE r.Id_rol=ro.Id_rol AND 
+			  ro.Estado = 'A' AND 
+			  r.Id_usuario = @Id_usuario
+	END
+GO
+
+CREATE PROCEDURE HHHH.ObtenerTipoDoc
+AS
+	BEGIN
+		SELECT * 
+		FROM HHHH.tipos_documentos
+	END
+GO
+
+CREATE PROCEDURE HHHH.ObtenerPaises
+AS
+	BEGIN
+		SELECT * 
+		FROM HHHH.paises
+	END
+GO
+
+CREATE PROCEDURE HHHH.ObtenerPreguntas
+AS
+	BEGIN
+		SELECT * 
+		FROM HHHH.preguntas
+	END
+GO

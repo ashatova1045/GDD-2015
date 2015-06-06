@@ -20,19 +20,26 @@ namespace PagoElectronico.ABM_Cuenta
 
         private void comboBox1_SelectionChangeCommitted(object sender, EventArgs e)
         {
-            List<SqlParameter> listaDeParametros = new List<SqlParameter>();
-            listaDeParametros.Add(new SqlParameter("@Id_usuario", Convert.ToDecimal(comboBox1.SelectedValue)));
+            SQLParametros parametros = new SQLParametros();
+            parametros.add("@Id_usuario", Convert.ToDecimal(comboBox1.SelectedValue));
 
-            dataGridView1.DataSource = ConexionDB.invocarStoreProcedure(Sesion.conexion, "ObtenerCuentas", listaDeParametros);
+            DataTable cuentas;
 
-            string[] ColOcultas = { "Id_pais", "Id_moneda", "Id_moneda" };
-
-            foreach (string i in ColOcultas)
+            if(ConexionDB.Procedure("ObtenerCuentas", parametros.get(), out cuentas))
             {
-                dataGridView1.Columns[i].Visible = false;
+                dataGridView1.DataSource = cuentas;
+
+                string[] ColOcultas = { "Id_pais", "Id_moneda", "Id_moneda" };
+
+                foreach (string i in ColOcultas)
+                {
+                    dataGridView1.Columns[i].Visible = false;
+                }
+
+                button1.Enabled = true;
             }
 
-            button1.Enabled = true;
+            
         }
 
         private void AdministrarCuentas_Load(object sender, EventArgs e)
@@ -43,11 +50,16 @@ namespace PagoElectronico.ABM_Cuenta
 
             if (Sesion.rol_id == 1)
             {
-                comboBox1.DataSource = ConexionDB.correrQuery(Sesion.conexion, "select * from HHHH.usuarios where Id_usuario <> 1");
-                comboBox1.DisplayMember = "Usuario";
-                comboBox1.ValueMember = "Id_usuario";
-                comboBox1.SelectedIndex = -1;
-                comboBox1.Text = "Elija un usuario";
+                DataTable Usuarios;
+
+                if (ConexionDB.Procedure("ObtenerUsuariosClientes", null, out Usuarios))
+                {
+                    comboBox1.DataSource = Usuarios;
+                    comboBox1.DisplayMember = "Usuario";
+                    comboBox1.ValueMember = "Id_usuario";
+                    comboBox1.SelectedIndex = -1;
+                    comboBox1.Text = "Elija un usuario";
+                }
             }
             else 
             {
