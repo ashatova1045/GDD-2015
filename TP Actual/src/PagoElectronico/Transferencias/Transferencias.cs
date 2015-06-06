@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
-using System.Drawing;
-using System.Text;
 using System.Windows.Forms;
 using PagoElectronico.OperacionesDB.ConexionDB;
 using System.Data.SqlClient;
@@ -12,10 +9,9 @@ namespace PagoElectronico.Transferencias
 {
     public partial class Transferencias : Form
     {
-        private DataTable cuentasActivas;
+        private DataTable cuentas;
         private DataRow cuentaSeleccionada;
         readonly DataTable monedas = ConexionDB.correrQuery(Sesion.conexion, "SELECT DISTINCT id_moneda,descripcion FROM HHHH.monedas"); //traigo todas las monedas, no solo las que tiene seteada alguna cuenta
-
 
         public Transferencias()
         {
@@ -25,17 +21,16 @@ namespace PagoElectronico.Transferencias
 
         private void actualizarCuentas()
         {
-            string queryCuentasActivas = "SELECT DISTINCT cu.Id_cuenta,cu.Saldo,cu.Id_moneda,u.id_usuario,cu.estado,tc.costo_transf,tc.id_moneda_transf FROM HHHH.Cuentas cu, HHHH.clientes cl,HHHH.usuarios u ,HHHH.tipo_cuenta tc WHERE tc.id_tipo_cuenta = cu.id_tipo_cuenta and cu.Id_cliente = cl.Id_cliente AND u.Id_usuario = cl.Id_usuario"; //traigo todos los datos de todas las cuentas
-            cuentasActivas = ConexionDB.correrQuery(Sesion.conexion, queryCuentasActivas);
+            cuentas = ConexionDB.correrQuery(Sesion.conexion, "SELECT DISTINCT c.Id_cuenta,c.Saldo,c.Id_moneda,c.Id_cliente,c.estado,t.Costo_transf,t.Id_moneda_transf FROM HHHH.Cuentas c,hhhh.tipo_cuenta t where c.Id_tipo_cuenta = t.Id_tipo_cuenta and c.estado = 'H' or c.estado = 'I'");//traigo todos los datos de todas las cuentas habilitadas o inhabilitadas
 
             cbOrigen.DisplayMember = "Id_cuenta";
             cbOrigen.ValueMember = "Id_cuenta";
-            cbOrigen.DataSource = cuentasActivas.Select("estado = 'H' and id_usuario = " + Sesion.user_id).CopyToDataTable();
+            cbOrigen.DataSource = cuentas.Select("estado = 'H' and Id_cliente = " + Sesion.cliente_id).CopyToDataTable();
             cbOrigen.Update();
 
             cbDestino.DisplayMember = "Id_cuenta";
             cbDestino.ValueMember = "Id_cuenta";
-            cbDestino.DataSource = cuentasActivas;
+            cbDestino.DataSource = cuentas;
             cbDestino.Update();
 
             cbImporteMoneda.DisplayMember = "descripcion";
@@ -60,26 +55,29 @@ namespace PagoElectronico.Transferencias
 
         private void actualizarCuentaSeleccionada()
         {
-            cuentaSeleccionada = cuentasActivas.Select("[id_cuenta] = " + cbOrigen.Text)[0];
+            cuentaSeleccionada = cuentas.Select("[id_cuenta] = " + cbOrigen.Text)[0];
+            var cuentaDestino = cuentas.Select("[id_cuenta] = " + cbDestino.Text)[0];
             txtSaldo.Text = Convert.ToString(cuentaSeleccionada["saldo"]);
             txtMoneda.Text = Convert.ToString(monedas.Select("id_moneda = " + cuentaSeleccionada["id_moneda"])[0]["descripcion"]);
-            var a =cuentasActivas.Select("[id_cuenta] = " + cbOrigen.Text)[0]["id_usuario"];
-            var b = cuentasActivas.Select("[id_cuenta] = " + cbDestino.Text)[0]["id_usuario"];
-            if (Convert.ToString(cuentasActivas.Select("[id_cuenta] = "+ cbOrigen.Text)[0]["id_usuario"]).Equals(Convert.ToString(cuentasActivas.Select("[id_cuenta] = "+ cbDestino.Text)[0]["id_usuario"])))
+            if (Convert.ToString(cuentaSeleccionada["id_cliente"]).Equals(Convert.ToString(cuentaDestino["id_cliente"])))
             {
                 txtCosto.Text = "0"; //si son del mismo usuario no les cobro
             }
             else
             {
-                txtCosto.Text = Convert.ToString(cuentaSeleccionada["costo_transf"]);
+                //lo que cuesta transferir expresado en la moneda de la cuenta
+                txtCosto.Text = Convert.ToString(ConexionDB.correrQuery(Sesion.conexion, "select hhhh.convertirmoneda (" + cuentaSeleccionada["Id_moneda_transf"] + "," + cuentaSeleccionada["Id_moneda"] + "," + cuentaSeleccionada["Costo_transf"].ToString().Replace(',', '.') + ")").Rows[0][0]);
             }
-            txtMoneda2.Text = Convert.ToString(monedas.Select("id_moneda = " + cuentaSeleccionada["id_moneda_transf"])[0]["descripcion"]);
+            
+            txtMoneda2.Text = txtMoneda.Text;
+            txtMonedaATransferir.Text = txtMoneda.Text;
 
         }
 
         private void btTransferir_Click(object sender, EventArgs e)
         {
-            if (nImporte.Value + Convert.ToDecimal(txtCosto.Text) > Convert.ToDecimal(cuentaSeleccionada["saldo"]))
+            actualizarImporteATransferir();
+            if (Convert.ToDecimal(txtCosto.Text) + Convert.ToDecimal(txtImporteConvertido.Text) > Convert.ToDecimal(cuentaSeleccionada["saldo"]))
             {
                 MessageBox.Show("La suma entre importe a transferir y costo no puede superar a su saldo actual");
                 return;
@@ -92,23 +90,26 @@ namespace PagoElectronico.Transferencias
             listaDeParametros.Add(new SqlParameter("@importe", nImporte.Value));
             listaDeParametros.Add(new SqlParameter("@fecha", Sesion.fecha));
             listaDeParametros.Add(new SqlParameter("@costo", Convert.ToDecimal(txtCosto.Text)));
-
-            try
-            {
-                ConexionDB.invocarStoreProcedure(Sesion.conexion, "transferencia", listaDeParametros);
-                MessageBox.Show("Se han descontado de su cuenta " + nImporte.Value + " " + cbImporteMoneda.Text + " y " + cuentaSeleccionada["costo_transf"] + " " + cbImporteMoneda.Text + " de comision.");
-                actualizarCuentas();
-                actualizarCuentaSeleccionada();
-            }
-            catch(SqlException ex)
-            {
-                MessageBox.Show(ex.Message);
-            }
+            ConexionDB.invocarStoreProcedure(Sesion.conexion,"transferencia",listaDeParametros);
+            MessageBox.Show("Se han descontado de su cuenta " + nImporte.Value + " " + txtMonedaATransferir.Text + " y " + cuentaSeleccionada["costo_transf"] + " " + txtMoneda2.Text + " de comision.");
+            actualizarCuentas();
+            actualizarCuentaSeleccionada();
         }
 
         private void cbDestino_SelectedIndexChanged(object sender, EventArgs e)
         {
             actualizarCuentaSeleccionada();
+        }
+
+        private void actualizarImporteATransferir()
+        {
+            var valorImporte = ConexionDB.correrQuery(Sesion.conexion, "SELECT HHHH.convertirmoneda(" + cbImporteMoneda.SelectedValue + "," + cuentaSeleccionada["id_moneda"] + "," + nImporte.Text.Replace(',', '.') + ")").Rows[0][0];
+            txtImporteConvertido.Text = Convert.ToString(valorImporte);
+        }
+
+        private void btnCalc_Click(object sender, EventArgs e)
+        {
+            actualizarImporteATransferir();
         }
 
     }

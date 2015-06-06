@@ -689,12 +689,16 @@ AS
 		INSERT INTO HHHH.movimientos(Id_cuenta,Fecha,Id_moneda,Id_transferencia,Tipo_movimiento,Costo)
 			VALUES (@origen,@fecha,@moneda,(SELECT IDENT_CURRENT('HHHH.transferencias')),'T',@costo)
 		
+		declare @monedaorigen numeric(18,0) = (select Id_moneda from HHHH.cuentas where Id_cuenta=@origen)
+		declare @monedadestino numeric(18,0) = (select Id_moneda from HHHH.cuentas where Id_cuenta=@destino)
+	
+		
 		UPDATE HHHH.cuentas
-			SET Saldo -= @importe +@costo
+			SET Saldo -= hhhh.convertirmoneda(@moneda,@monedaorigen ,@importe+@costo)
 			WHERE Id_cuenta = @origen
 		
 		UPDATE HHHH.cuentas
-			SET Saldo += @importe
+			SET Saldo += hhhh.convertirmoneda(@moneda,@monedadestino ,@importe)
 			WHERE Id_cuenta = @destino
     END				
 		
