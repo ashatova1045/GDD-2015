@@ -383,7 +383,16 @@ BEGIN /* *************** MIGRACION *************** */
 			FROM gd_esquema.Maestra M
 			WHERE M.Cheque_Numero IS NOT NULL
 	SET IDENTITY_INSERT HHHH.cheques OFF
--------------------------------------------------------------------------------------------		
+-------------------------------------------------------------------------------------------	
+	INSERT INTO HHHH.tipos_documentos(Descripcion)
+		VALUES('Documento Nacional Identidad')
+	INSERT INTO HHHH.tipos_documentos(Descripcion)
+		VALUES('Cedula Identidad')
+	INSERT INTO HHHH.tipos_documentos(Descripcion)
+		VALUES('Libreta Civica')
+	INSERT INTO HHHH.tipos_documentos(Descripcion)
+		VALUES('Libreta de Enrolamiento')
+		
 	SET IDENTITY_INSERT HHHH.tipos_documentos ON
 	INSERT INTO HHHH.tipos_documentos(Id_tipo_documento, Descripcion)
 		SELECT DISTINCT Cli_Tipo_Doc_Cod, Cli_Tipo_Doc_Desc

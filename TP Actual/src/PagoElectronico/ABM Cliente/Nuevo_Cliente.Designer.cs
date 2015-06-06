@@ -425,7 +425,7 @@
             // 
             // buttonLimpiar
             // 
-            this.buttonLimpiar.Location = new System.Drawing.Point(331, 79);
+            this.buttonLimpiar.Location = new System.Drawing.Point(331, 78);
             this.buttonLimpiar.Name = "buttonLimpiar";
             this.buttonLimpiar.Size = new System.Drawing.Size(118, 23);
             this.buttonLimpiar.TabIndex = 21;
@@ -435,7 +435,7 @@
             // 
             // button3
             // 
-            this.button3.Location = new System.Drawing.Point(331, 50);
+            this.button3.Location = new System.Drawing.Point(331, 49);
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(118, 23);
             this.button3.TabIndex = 20;
