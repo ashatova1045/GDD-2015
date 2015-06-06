@@ -64,5 +64,10 @@ namespace PagoElectronico.ABM_Tarjeta
             new AsociarTarjeta(0).ShowDialog(this);
             actualizar();
         }
+
+        private void mtar_Load(object sender, EventArgs e)
+        {
+
+        }
     }
 }

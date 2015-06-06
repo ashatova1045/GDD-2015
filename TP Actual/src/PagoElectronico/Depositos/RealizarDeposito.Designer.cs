@@ -93,7 +93,7 @@
             this.seleccionTarjeta.FormattingEnabled = true;
             this.seleccionTarjeta.Location = new System.Drawing.Point(98, 160);
             this.seleccionTarjeta.Name = "seleccionTarjeta";
-            this.seleccionTarjeta.Size = new System.Drawing.Size(245, 21);
+            this.seleccionTarjeta.Size = new System.Drawing.Size(249, 21);
             this.seleccionTarjeta.TabIndex = 3;
             // 
             // label1
@@ -176,6 +176,7 @@
             this.Controls.Add(this.seleccionCuenta);
             this.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.5F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Underline))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Name = "RealizarDeposito";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "RealizarDeposito";
             this.Load += new System.EventHandler(this.RealizarDeposito_Load);
             ((System.ComponentModel.ISupportInitialize)(this.seleccionImporte)).EndInit();

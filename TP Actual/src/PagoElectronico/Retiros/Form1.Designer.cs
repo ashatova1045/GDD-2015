@@ -215,7 +215,9 @@
             this.Controls.Add(this.Cuenta_LB);
             this.Controls.Add(this.Cuenta_CB);
             this.Name = "RetiroEfectivo_FRM";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Retiro de Efectivo";
+            this.Load += new System.EventHandler(this.RetiroEfectivo_FRM_Load);
             ((System.ComponentModel.ISupportInitialize)(this.Importe_NUD)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).EndInit();

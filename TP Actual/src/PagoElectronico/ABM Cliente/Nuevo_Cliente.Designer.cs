@@ -137,6 +137,7 @@
             // 
             // dateTimePicker1
             // 
+            this.dateTimePicker1.Format = System.Windows.Forms.DateTimePickerFormat.Short;
             this.dateTimePicker1.Location = new System.Drawing.Point(68, 133);
             this.dateTimePicker1.Name = "dateTimePicker1";
             this.dateTimePicker1.Size = new System.Drawing.Size(150, 20);
@@ -399,9 +400,9 @@
             // comboBoxPreg
             // 
             this.comboBoxPreg.FormattingEnabled = true;
-            this.comboBoxPreg.Location = new System.Drawing.Point(70, 69);
+            this.comboBoxPreg.Location = new System.Drawing.Point(68, 69);
             this.comboBoxPreg.Name = "comboBoxPreg";
-            this.comboBoxPreg.Size = new System.Drawing.Size(181, 21);
+            this.comboBoxPreg.Size = new System.Drawing.Size(183, 21);
             this.comboBoxPreg.TabIndex = 17;
             // 
             // checkBoxEstado
@@ -429,7 +430,7 @@
             this.buttonLimpiar.Name = "buttonLimpiar";
             this.buttonLimpiar.Size = new System.Drawing.Size(118, 23);
             this.buttonLimpiar.TabIndex = 21;
-            this.buttonLimpiar.Text = "Limpiar";
+            this.buttonLimpiar.Text = "Limpiar Campos";
             this.buttonLimpiar.UseVisualStyleBackColor = true;
             this.buttonLimpiar.Click += new System.EventHandler(this.button4_Click);
             // 
@@ -512,6 +513,7 @@
             this.Controls.Add(this.button1);
             this.Controls.Add(this.groupBox1);
             this.Name = "Nuevo_Cliente";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Nuevo_Cliente";
             this.Load += new System.EventHandler(this.Nuevo_Cliente_Load);
             this.groupBox1.ResumeLayout(false);
