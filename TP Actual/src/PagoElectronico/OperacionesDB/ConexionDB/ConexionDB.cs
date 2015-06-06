@@ -82,6 +82,34 @@ namespace PagoElectronico.OperacionesDB.ConexionDB
             }
         }
 
+        public static bool Procedure(string nombreProcedure, List<SqlParameter> parametros)
+        {
+            try
+            {
+                SqlCommand comandoSQL = new SqlCommand("HHHH." + nombreProcedure, Sesion.conexion);
+                comandoSQL.CommandType = CommandType.StoredProcedure;
+
+                if (parametros != null && parametros.Exists(x => x != null))
+                {
+                    foreach (SqlParameter parametro in parametros)
+                    {
+                        comandoSQL.Parameters.Add(parametro);
+                    }
+                }
+
+                SqlDataReader dr = comandoSQL.ExecuteReader();
+                dr.Close();
+
+                return true;
+            }
+            catch (SqlException ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+                return false;
+        }   
+        
+        
 
         //correrQuery
         public static DataTable correrQuery(SqlConnection conexionDB, string query)
@@ -98,6 +126,25 @@ namespace PagoElectronico.OperacionesDB.ConexionDB
             dr.Close();
             return dt;
         }
-
    }
+
+    public class SQLParametros
+        {
+            List<SqlParameter> listaDeParametros;
+
+            public SQLParametros()
+            {
+            listaDeParametros = new List<SqlParameter>();
+            }
+            
+            public void add(string nombreParametro, object valor)
+            {
+            listaDeParametros.Add(new SqlParameter(nombreParametro,valor));
+            }
+
+            public List<SqlParameter> get()
+            {
+                return listaDeParametros;
+            }
+        }
 }

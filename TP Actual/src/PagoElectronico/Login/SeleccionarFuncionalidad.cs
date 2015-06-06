@@ -17,11 +17,15 @@ namespace PagoElectronico.Login
         {
             InitializeComponent();
 
-            string queryFuncionalidad = "SELECT r.Id_funcionalidad,f.Descripcion FROM HHHH.rel_rol_funcionalidad r,HHHH.funcionalidades f WHERE r.Id_funcionalidad=f.Id_funcionalidad AND r.Id_rol = " + Sesion.rol_id;
-            DataTable funcionalidadDeRol = ConexionDB.correrQuery(Sesion.conexion, queryFuncionalidad);
+            SQLParametros parametros = new SQLParametros();
+            parametros.add("@id_rol", Sesion.rol_id);
+            DataTable funcionalidadDeRol;
 
-            dataGridView1.DataSource = funcionalidadDeRol;
-            dataGridView1.Columns[0].Visible = false;
+            if(ConexionDB.Procedure("ObtenerFuncionalidades",parametros.get(), out funcionalidadDeRol))
+            {
+                dataGridView1.DataSource = funcionalidadDeRol;
+                dataGridView1.Columns[0].Visible = false;
+            }
 
             int tam = (funcionalidadDeRol.Rows.Count * 30) + 3;
 

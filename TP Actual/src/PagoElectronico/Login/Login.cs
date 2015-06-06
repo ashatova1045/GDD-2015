@@ -21,13 +21,13 @@ namespace PagoElectronico.Login
 
         private void btnIngresar_Click(object sender, EventArgs e)
         {
-            List<SqlParameter> listaDeParametros = new List<SqlParameter>();
-            listaDeParametros.Add(new SqlParameter("@usu",txtUsuario.Text));
-            listaDeParametros.Add(new SqlParameter("@contra",Cifrador.Cifrar(txtContrasena.Text))); //enctrìpto la contrasena para pasarsela a la db
-            
+            SQLParametros parametros = new SQLParametros();
+            parametros.add("@usu", txtUsuario.Text);
+            parametros.add("@contra",Cifrador.Cifrar(txtContrasena.Text)); //enctrìpto la contrasena para pasarsela a la db
+
             DataTable DTUsuario;
             
-            if(ConexionDB.Procedure("loginProc", listaDeParametros, out DTUsuario))
+            if(ConexionDB.Procedure("loginProc", parametros.get(), out DTUsuario))
             {
                 Sesion.user_id = Convert.ToDecimal(DTUsuario.Rows[0][0]);
                 Sesion.cliente_id = Convert.ToDecimal(DTUsuario.Rows[0][1]); 
@@ -36,16 +36,6 @@ namespace PagoElectronico.Login
                 new SeleccionarRol().Show(this);
                 this.Hide();
             }
-            
-
-
-
-            
          }
-
-        private void Login_Load(object sender, EventArgs e)
-        {
-
-        }
      }
 }

@@ -17,15 +17,20 @@ namespace PagoElectronico.Login
         {
             InitializeComponent();
 
-            string queryRoles = "SELECT r.Id_rol,Nombre_rol FROM HHHH.rel_rol_usuario r,HHHH.roles ro WHERE r.Id_rol=ro.Id_rol AND ro.Estado = 'A' AND r.Id_usuario = " + Sesion.user_id;
-            DataTable rolesDeUsuario = ConexionDB.correrQuery(Sesion.conexion, queryRoles);
+            SQLParametros parametros = new SQLParametros();
+            parametros.add("@Id_usuario",Sesion.user_id);
 
-            cbRoles.DisplayMember = "Nombre_rol";
-            cbRoles.ValueMember = "Id_rol";
-            cbRoles.DataSource = rolesDeUsuario;
-            cbRoles.Update();
+            DataTable rolesDeUsuario;
 
-            Shown += SeleccionarRol_Shown;
+            if (ConexionDB.Procedure("ObtenerRoles", parametros.get(), out rolesDeUsuario))
+            {
+                cbRoles.DisplayMember = "Nombre_rol";
+                cbRoles.ValueMember = "Id_rol";
+                cbRoles.DataSource = rolesDeUsuario;
+                cbRoles.Update();
+
+                Shown += SeleccionarRol_Shown;
+            }
         }
 
         private void SeleccionarRol_Shown(Object sender, EventArgs e)
