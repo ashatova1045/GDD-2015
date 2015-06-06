@@ -22,7 +22,7 @@ namespace PagoElectronico.Login
 
             DataTable rolesDeUsuario;
 
-            if (ConexionDB.Procedure("ObtenerRoles", parametros.get(), out rolesDeUsuario))
+            if (ConexionDB.Procedure("ObtenerRolesDeUsuario", parametros.get(), out rolesDeUsuario))
             {
                 cbRoles.DisplayMember = "Nombre_rol";
                 cbRoles.ValueMember = "Id_rol";

@@ -21,7 +21,7 @@ namespace PagoElectronico.Login
             parametros.add("@id_rol", Sesion.rol_id);
             DataTable funcionalidadDeRol;
 
-            if(ConexionDB.Procedure("ObtenerFuncionalidades",parametros.get(), out funcionalidadDeRol))
+            if (ConexionDB.Procedure("ObtenerFuncionalidadesDeRol", parametros.get(), out funcionalidadDeRol))
             {
                 dataGridView1.DataSource = funcionalidadDeRol;
                 dataGridView1.Columns[0].Visible = false;

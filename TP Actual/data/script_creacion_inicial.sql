@@ -588,8 +588,7 @@ AS
 	GO
 	
 CREATE PROCEDURE HHHH.agregarNuevoRol
-	@nombre nvarchar(255),
-	@estado nvarchar
+	@nombre nvarchar(255)
 AS
 BEGIN
 	DECLARE @existeRol nvarchar(255)
@@ -600,7 +599,7 @@ BEGIN
 			RETURN
 		END
 	INSERT INTO HHHH.roles(Nombre_rol, Estado)
-		VALUES	(@nombre, @estado)
+		VALUES	(@nombre, 'N')
 END		
 GO
 
@@ -1366,7 +1365,7 @@ GO
 --////////////////////////////////////////
 
 
-CREATE PROCEDURE HHHH.ObtenerFuncionalidades
+CREATE PROCEDURE HHHH.ObtenerFuncionalidadesDeRol
 @id_rol numeric(18,0)
 AS
 	BEGIN
@@ -1377,7 +1376,15 @@ AS
 	END
 GO
 
-CREATE PROCEDURE HHHH.ObtenerRoles
+CREATE PROCEDURE HHHH.ObtenerFuncionalidades
+AS
+	BEGIN
+		SELECT *
+		FROM HHHH.funcionalidades
+	END
+GO
+
+CREATE PROCEDURE HHHH.ObtenerRolesDeUsuario
 @Id_usuario numeric(18,0)
 AS
 	BEGIN
@@ -1389,11 +1396,20 @@ AS
 	END
 GO
 
+CREATE PROCEDURE HHHH.ObtenerRoles
+AS
+	BEGIN
+		SELECT *
+		FROM HHHH.roles
+	END
+GO
+
 CREATE PROCEDURE HHHH.ObtenerTipoDoc
 AS
 	BEGIN
 		SELECT * 
 		FROM HHHH.tipos_documentos
+		ORDER BY Descripcion
 	END
 GO
 
@@ -1402,6 +1418,7 @@ AS
 	BEGIN
 		SELECT * 
 		FROM HHHH.paises
+		ORDER BY Descripcion
 	END
 GO
 
@@ -1410,5 +1427,33 @@ AS
 	BEGIN
 		SELECT * 
 		FROM HHHH.preguntas
+	END
+GO
+
+CREATE PROCEDURE HHHH.ObtenerUsuariosClientes
+AS
+	BEGIN
+		SELECT us.* 
+		FROM HHHH.usuarios us
+		JOIN HHHH.clientes cli
+		ON cli.Id_usuario = us.Id_usuario
+		ORDER BY us.Usuario
+	END
+GO
+
+CREATE PROCEDURE HHHH.ObtenerMonedas
+AS
+	BEGIN
+		SELECT * 
+		FROM HHHH.Monedas
+	END
+GO
+
+
+CREATE PROCEDURE HHHH.ObtenerTipoCuentas
+AS
+	BEGIN
+		SELECT * 
+		FROM HHHH.tipo_cuenta
 	END
 GO

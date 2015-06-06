@@ -20,18 +20,13 @@ namespace PagoElectronico.ABM_Rol
 
         private void button1_Click(object sender, EventArgs e)
         {
-            List<SqlParameter> listaDeParametros = new List<SqlParameter>();
-            listaDeParametros.Add(new SqlParameter("@nombre", textBox1.Text));
-            listaDeParametros.Add(new SqlParameter("@estado", "N"));
-            try
+            SQLParametros parametros = new SQLParametros();
+            parametros.add("@nombre", textBox1.Text);
+
+            if (ConexionDB.Procedure("agregarNuevoRol", parametros.get()))
             {
-                ConexionDB.invocarStoreProcedure(Sesion.conexion, "agregarNuevoRol", listaDeParametros);
                 Owner.Show();
                 this.Close();
-            }
-            catch (SqlException ex)
-            {
-                MessageBox.Show(ex.Message);
             }
         }
 
