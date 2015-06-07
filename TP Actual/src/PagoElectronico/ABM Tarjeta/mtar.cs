@@ -21,21 +21,28 @@ namespace PagoElectronico.ABM_Tarjeta
 
         public void actualizar()
         {
-            DataTable tarjetas = ConexionDB.correrQuery(Sesion.conexion, "select Id_tarjeta,finalnumero from HHHH.tarjetas t where t.estado = 1 and t.Id_cliente=" + Sesion.cliente_id);
-            cbTarjeta.DisplayMember = "finalnumero";
-            cbTarjeta.ValueMember = "Id_tarjeta";
-            cbTarjeta.DataSource = tarjetas;
-            cbTarjeta.Update();
-            
-            if (tarjetas.Rows.Count >= 1)
+            SQLParametros parametros = new SQLParametros();
+            parametros.add("Id_cliente", Sesion.cliente_id);
+
+            DataTable tarjetas;
+
+            if (ConexionDB.Procedure("ObtenerTarjetasDeCliente", parametros.get(), out tarjetas))
             {
-                btModificar.Enabled = true;
-                btDesasociar.Enabled = true;
-            }
-            else
-            {
-                btModificar.Enabled = false;
-                btDesasociar.Enabled = false;
+                cbTarjeta.DisplayMember = "finalnumero";
+                cbTarjeta.ValueMember = "Id_tarjeta";
+                cbTarjeta.DataSource = tarjetas;
+                cbTarjeta.Update();
+
+                if (tarjetas.Rows.Count >= 1)
+                {
+                    btModificar.Enabled = true;
+                    btDesasociar.Enabled = true;
+                }
+                else
+                {
+                    btModificar.Enabled = false;
+                    btDesasociar.Enabled = false;
+                }
             }
 
         }
@@ -53,10 +60,15 @@ namespace PagoElectronico.ABM_Tarjeta
         }
 
         private void btDesasociar_Click(object sender, EventArgs e)
-        {
-            ConexionDB.correrQuery(Sesion.conexion, "update HHHH.tarjetas set estado=0 where id_tarjeta = " + Convert.ToDecimal(cbTarjeta.SelectedValue));
-            MessageBox.Show("Tarjeta desasociada");
-            actualizar();
+        {   
+            SQLParametros parametros = new SQLParametros();
+            parametros.add("@Id_tarjeta",Convert.ToDecimal(cbTarjeta.SelectedValue));
+
+            if (ConexionDB.Procedure("AlterarEstadoTarjeta", parametros.get()))
+            {
+                MessageBox.Show("Tarjeta desasociada");
+                actualizar();
+            }
         }
 
         protected void btAsociar_Click(object sender, EventArgs e)

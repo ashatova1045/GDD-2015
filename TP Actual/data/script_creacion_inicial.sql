@@ -1457,3 +1457,91 @@ AS
 		FROM HHHH.tipo_cuenta
 	END
 GO
+
+CREATE PROCEDURE HHHH.ObtenerBancos
+AS
+	BEGIN
+		SELECT DISTINCT Id_banco,b.Descripcion ,b.Calle,b.altura,
+						 b.localidad, p.Descripcion DES 
+		FROM HHHH.bancos b 
+		LEFT JOIN HHHH.paises p 
+		ON p.Codigo=Id_pais
+	END
+GO
+
+CREATE PROCEDURE HHHH.ObtenerTarjeta
+@Id_tarjeta numeric(18,0)
+AS
+	BEGIN
+		SELECT Id_banco,Fecha_emision,Fecha_vencimiento 
+		FROM hhhh.tarjetas 
+		WHERE id_tarjeta = @Id_tarjeta
+	END
+GO
+
+CREATE PROCEDURE HHHH.ObtenerTarjetasDeCliente
+@Id_cliente numeric(18,0)
+AS
+	BEGIN
+		SELECT Id_tarjeta,finalnumero 
+		FROM HHHH.tarjetas t 
+		WHERE t.estado = 1 and t.Id_cliente= @Id_cliente
+	END
+GO
+
+CREATE PROCEDURE HHHH.AlterarEstadoTarjeta
+@Id_tarjeta numeric(18,0)
+AS
+	BEGIN
+		UPDATE HHHH.tarjetas 
+		SET estado = 0 
+		WHERE id_tarjeta = @Id_tarjeta
+	END
+GO
+
+CREATE PROCEDURE HHHH.ObtenerCuentasDeCliente
+@Id_cliente numeric(18,0)
+AS
+	BEGIN
+
+		SELECT cue.* 
+		FROM HHHH.cuentas cue, HHHH.clientes cli 
+		WHERE cli.Id_cliente = cue.Id_cliente and 
+			  cli.Id_usuario = @Id_cliente
+	END
+GO
+
+CREATE PROCEDURE HHHH.Ultimos5Depositos
+@Id_cuenta numeric(18,0)
+AS
+	BEGIN
+		SELECT TOP 5 Fecha_deposito, HHHH.impconmoneda(Importe,Id_tipo_moneda) AS Importe,
+					 'XXXX-XXXX-XXXX-'+tar.finalnumero AS Tarjeta 
+		FROM HHHH.depositos dep, HHHH.tarjetas tar 
+		WHERE Id_cuenta = @Id_cuenta and 
+				dep.Id_tarjeta = tar.Id_tarjeta
+		ORDER BY Fecha_deposito DESC
+	END
+GO
+
+CREATE PROCEDURE HHHH.Ultimos5Retiros
+@Id_cuenta numeric(18,0)
+AS
+	BEGIN
+		SELECT TOP 5 Fecha_retiro, HHHH.impconmoneda(Importe,Id_moneda) AS Importe, ban.Descripcion 
+		FROM HHHH.retiros, HHHH.bancos ban WHERE Id_cuenta = @Id_cuenta and Id_banco = ban.Id_banco
+		ORDER BY Fecha_retiro DESC
+	END
+GO
+
+
+CREATE PROCEDURE HHHH.Ultimas5Transferencias
+@Id_cuenta numeric(18,0)
+AS
+	BEGIN
+		SELECT TOP 10 Fecha_transferencia, HHHH.impconmoneda(Importe,Id_moneda) AS Importe, Cuenta_destino
+		FROM HHHH.transferencias 
+		WHERE Cuenta_origen = @Id_cuenta
+        ORDER BY Fecha_transferencia DESC
+    END
+GO

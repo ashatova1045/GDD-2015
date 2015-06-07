@@ -25,13 +25,16 @@ namespace PagoElectronico.Consulta_Saldos
                 label6.Visible = false;
                 comboBox1.Visible = true;
                 DataTable usuarios;
-                usuarios = ConexionDB.correrQuery(Sesion.conexion, "select Id_usuario,Usuario from HHHH.usuarios where Id_usuario <> 1");
-                comboBox1.DataSource = usuarios;
-                comboBox1.ValueMember = "Id_usuario";
-                comboBox1.DisplayMember = "Usuario";
-                comboBox1.Text = "Elija un usuario";
-                comboBox1.SelectedIndex = -1;
-                comboBox2.Enabled = false;
+
+                if(ConexionDB.Procedure("ObtenerUsuariosClientes",null, out usuarios))
+                {
+                    comboBox1.DataSource = usuarios;
+                    comboBox1.ValueMember = "Id_usuario";
+                    comboBox1.DisplayMember = "Usuario";
+                    comboBox1.Text = "Elija un usuario";
+                    comboBox1.SelectedIndex = -1;
+                    comboBox2.Enabled = false;
+                }
             }
             else
             {
@@ -60,53 +63,56 @@ namespace PagoElectronico.Consulta_Saldos
             }
             else{ user = Sesion.user_id; }
             {
-
-                cuentas = ConexionDB.correrQuery(Sesion.conexion, "select cue.* from HHHH.cuentas cue, HHHH.clientes cli where cli.Id_cliente = cue.Id_cliente and cli.Id_usuario = " + user);
-                comboBox2.DataSource = cuentas;
-                comboBox2.ValueMember = "Id_cuenta";
-                comboBox2.DisplayMember = "Id_cuenta";
-                label8.Text = "";
+                SQLParametros parametros = new SQLParametros();
+                parametros.add("@Id_cliente",user);
+                if(ConexionDB.Procedure("ObtenerCuentasDeCliente",parametros.get(), out cuentas))
+                {
+                    comboBox2.DataSource = cuentas;
+                    comboBox2.ValueMember = "Id_cuenta";
+                    comboBox2.DisplayMember = "Id_cuenta";
+                    label8.Text = "";
+                }
             }
 
         }
 
         private void actualizarDepositos()
         {
-            try
-            {
-                DataTable depositos;
-                depositos = ConexionDB.correrQuery(Sesion.conexion, "select TOP 5 Fecha_deposito, HHHH.impconmoneda(Importe,Id_tipo_moneda) AS Importe, 'XXXX-XXXX-XXXX-'+tar.finalnumero as Tarjeta " +
-                                                                    "from HHHH.depositos dep, HHHH.tarjetas tar where Id_cuenta = " + comboBox2.SelectedValue + " and dep.Id_tarjeta = tar.Id_tarjeta"+
-                                                                    " order by Fecha_deposito DESC");
+            SQLParametros parametros = new SQLParametros();
+            parametros.add("@Id_cuenta", comboBox2.SelectedValue);
+
+            DataTable depositos;
+
+            if(ConexionDB.Procedure("Ultimos5Depositos",parametros.get(), out depositos))
                 dataGridView1.DataSource = depositos;
-            }
-            catch (SqlException) { dataGridView1.DataSource = null; }
+            else 
+                dataGridView1.DataSource = null; 
         }
 
         private void actualizarRetiros()
         {
-            try
-            {
-                DataTable retiros;
-                retiros = ConexionDB.correrQuery(Sesion.conexion, "select TOP 5 Fecha_retiro, HHHH.impconmoneda(Importe,Id_moneda) AS Importe, ban.Descripcion " +
-                                                                     "from HHHH.retiros, HHHH.bancos ban where Id_cuenta = " + comboBox2.SelectedValue + " and Id_banco = ban.Id_banco" +
-                                                                     " order by Fecha_retiro DESC");
+            SQLParametros parametros = new SQLParametros();
+            parametros.add("@Id_cuenta", comboBox2.SelectedValue);
+
+            DataTable retiros;
+
+            if (ConexionDB.Procedure("Ultimos5Retiros", parametros.get(), out retiros))
                 dataGridView2.DataSource = retiros;
-            }
-            catch (SqlException) { dataGridView2.DataSource = null; }
+            else
+                dataGridView2.DataSource = null;
         }
 
         private void actualizarTransferencias()
         {
-            try
-            {
-                DataTable transferencias;
-                transferencias = ConexionDB.correrQuery(Sesion.conexion, "select TOP 10 Fecha_transferencia, HHHH.impconmoneda(Importe,Id_moneda) AS Importe, Cuenta_destino "+
-                                                                            "from HHHH.transferencias where Cuenta_origen = " + comboBox2.SelectedValue +
-                                                                            " order by Fecha_transferencia DESC");
+            SQLParametros parametros = new SQLParametros();
+            parametros.add("@Id_cuenta", comboBox2.SelectedValue);
+
+            DataTable transferencias;
+
+            if (ConexionDB.Procedure("Ultimas5Transferencias", parametros.get(), out transferencias))
                 dataGridView3.DataSource = transferencias;
-            }
-            catch (SqlException) { dataGridView3.DataSource = null; }
+            else
+                dataGridView3.DataSource = null;
         }
 
         private void comboBox2_SelectionChangeCommitted(object sender, EventArgs e)
