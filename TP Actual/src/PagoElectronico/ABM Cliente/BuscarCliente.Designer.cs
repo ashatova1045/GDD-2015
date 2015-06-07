@@ -137,9 +137,9 @@
             // 
             // textBoxDoc
             // 
-            this.textBoxDoc.Location = new System.Drawing.Point(74, 59);
+            this.textBoxDoc.Location = new System.Drawing.Point(56, 59);
             this.textBoxDoc.Name = "textBoxDoc";
-            this.textBoxDoc.Size = new System.Drawing.Size(118, 20);
+            this.textBoxDoc.Size = new System.Drawing.Size(136, 20);
             this.textBoxDoc.TabIndex = 5;
             this.textBoxDoc.TextChanged += new System.EventHandler(this.textBoxDoc_TextChanged);
             // 
@@ -148,9 +148,9 @@
             this.label3.AutoSize = true;
             this.label3.Location = new System.Drawing.Point(6, 62);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(62, 13);
+            this.label3.Size = new System.Drawing.Size(42, 13);
             this.label3.TabIndex = 4;
-            this.label3.Text = "Documento";
+            this.label3.Text = "Nº Doc";
             // 
             // textBoxApellido
             // 
@@ -224,6 +224,7 @@
             this.Controls.Add(this.dataGridView1);
             this.Controls.Add(this.groupBox1);
             this.Name = "BuscarCliente";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "BuscarCliente";
             this.Load += new System.EventHandler(this.BuscarCliente_Load);
             this.groupBox1.ResumeLayout(false);

@@ -264,6 +264,7 @@
             this.Controls.Add(this.label1);
             this.Controls.Add(this.cbOrigen);
             this.Name = "Transferencias";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Transferencias";
             ((System.ComponentModel.ISupportInitialize)(this.nImporte)).EndInit();
             this.ResumeLayout(false);

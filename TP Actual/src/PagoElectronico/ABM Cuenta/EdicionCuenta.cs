@@ -145,6 +145,11 @@ namespace PagoElectronico.ABM_Cuenta
                 button2_Click(null, null);
             }
         }
+
+        private void label2_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }
 

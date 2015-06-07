@@ -216,5 +216,10 @@ namespace PagoElectronico.Retiros
 
             return correcto;
         }
+
+        private void RetiroEfectivo_FRM_Load(object sender, EventArgs e)
+        {
+
+        }
     }
 }

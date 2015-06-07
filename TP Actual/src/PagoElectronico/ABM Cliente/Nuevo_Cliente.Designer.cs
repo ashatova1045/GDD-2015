@@ -74,6 +74,9 @@
             this.label15 = new System.Windows.Forms.Label();
             this.textBoxUser = new System.Windows.Forms.TextBox();
             this.label14 = new System.Windows.Forms.Label();
+            this.LB_RepetirPassword = new System.Windows.Forms.Label();
+            this.TXT_RepetirPassword = new System.Windows.Forms.TextBox();
+            this.LB_MensajeError = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).BeginInit();
             this.groupBox2.SuspendLayout();
@@ -137,6 +140,7 @@
             // 
             // dateTimePicker1
             // 
+            this.dateTimePicker1.Format = System.Windows.Forms.DateTimePickerFormat.Short;
             this.dateTimePicker1.Location = new System.Drawing.Point(68, 133);
             this.dateTimePicker1.Name = "dateTimePicker1";
             this.dateTimePicker1.Size = new System.Drawing.Size(150, 20);
@@ -352,10 +356,10 @@
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(22, 322);
+            this.button1.Location = new System.Drawing.Point(22, 360);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(75, 23);
-            this.button1.TabIndex = 22;
+            this.button1.TabIndex = 23;
             this.button1.Text = "Dar de alta";
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
@@ -367,16 +371,19 @@
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(460, 322);
+            this.button2.Location = new System.Drawing.Point(460, 360);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(75, 23);
-            this.button2.TabIndex = 23;
+            this.button2.TabIndex = 24;
             this.button2.Text = "Volver";
             this.button2.UseVisualStyleBackColor = true;
             this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
             // groupBox2
             // 
+            this.groupBox2.Controls.Add(this.LB_MensajeError);
+            this.groupBox2.Controls.Add(this.TXT_RepetirPassword);
+            this.groupBox2.Controls.Add(this.LB_RepetirPassword);
             this.groupBox2.Controls.Add(this.comboBoxPreg);
             this.groupBox2.Controls.Add(this.checkBoxEstado);
             this.groupBox2.Controls.Add(this.labelEstado);
@@ -391,7 +398,7 @@
             this.groupBox2.Controls.Add(this.label14);
             this.groupBox2.Location = new System.Drawing.Point(13, 189);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(531, 125);
+            this.groupBox2.Size = new System.Drawing.Size(531, 165);
             this.groupBox2.TabIndex = 3;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Datos de la cuenta";
@@ -399,25 +406,25 @@
             // comboBoxPreg
             // 
             this.comboBoxPreg.FormattingEnabled = true;
-            this.comboBoxPreg.Location = new System.Drawing.Point(70, 69);
+            this.comboBoxPreg.Location = new System.Drawing.Point(68, 109);
             this.comboBoxPreg.Name = "comboBoxPreg";
-            this.comboBoxPreg.Size = new System.Drawing.Size(181, 21);
-            this.comboBoxPreg.TabIndex = 17;
+            this.comboBoxPreg.Size = new System.Drawing.Size(183, 21);
+            this.comboBoxPreg.TabIndex = 18;
             // 
             // checkBoxEstado
             // 
             this.checkBoxEstado.AutoSize = true;
-            this.checkBoxEstado.Location = new System.Drawing.Point(433, 20);
+            this.checkBoxEstado.Location = new System.Drawing.Point(435, 33);
             this.checkBoxEstado.Name = "checkBoxEstado";
             this.checkBoxEstado.Size = new System.Drawing.Size(15, 14);
-            this.checkBoxEstado.TabIndex = 19;
+            this.checkBoxEstado.TabIndex = 20;
             this.checkBoxEstado.UseVisualStyleBackColor = true;
             this.checkBoxEstado.CheckedChanged += new System.EventHandler(this.checkBoxEstado_CheckedChanged);
             // 
             // labelEstado
             // 
             this.labelEstado.AutoSize = true;
-            this.labelEstado.Location = new System.Drawing.Point(325, 20);
+            this.labelEstado.Location = new System.Drawing.Point(327, 33);
             this.labelEstado.Name = "labelEstado";
             this.labelEstado.Size = new System.Drawing.Size(96, 13);
             this.labelEstado.TabIndex = 10;
@@ -425,20 +432,20 @@
             // 
             // buttonLimpiar
             // 
-            this.buttonLimpiar.Location = new System.Drawing.Point(331, 78);
+            this.buttonLimpiar.Location = new System.Drawing.Point(330, 108);
             this.buttonLimpiar.Name = "buttonLimpiar";
             this.buttonLimpiar.Size = new System.Drawing.Size(118, 23);
-            this.buttonLimpiar.TabIndex = 21;
-            this.buttonLimpiar.Text = "Limpiar";
+            this.buttonLimpiar.TabIndex = 22;
+            this.buttonLimpiar.Text = "Limpiar Campos";
             this.buttonLimpiar.UseVisualStyleBackColor = true;
             this.buttonLimpiar.Click += new System.EventHandler(this.button4_Click);
             // 
             // button3
             // 
-            this.button3.Location = new System.Drawing.Point(331, 49);
+            this.button3.Location = new System.Drawing.Point(330, 72);
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(118, 23);
-            this.button3.TabIndex = 20;
+            this.button3.TabIndex = 21;
             this.button3.Text = "Buscar Cliente";
             this.button3.UseVisualStyleBackColor = true;
             this.button3.Click += new System.EventHandler(this.button3_Click);
@@ -446,7 +453,7 @@
             // label17
             // 
             this.label17.AutoSize = true;
-            this.label17.Location = new System.Drawing.Point(7, 98);
+            this.label17.Location = new System.Drawing.Point(7, 136);
             this.label17.Name = "label17";
             this.label17.Size = new System.Drawing.Size(58, 13);
             this.label17.TabIndex = 7;
@@ -454,16 +461,16 @@
             // 
             // textBoxRes
             // 
-            this.textBoxRes.Location = new System.Drawing.Point(68, 95);
+            this.textBoxRes.Location = new System.Drawing.Point(68, 136);
             this.textBoxRes.Name = "textBoxRes";
             this.textBoxRes.PasswordChar = '*';
             this.textBoxRes.Size = new System.Drawing.Size(183, 20);
-            this.textBoxRes.TabIndex = 18;
+            this.textBoxRes.TabIndex = 19;
             // 
             // label16
             // 
             this.label16.AutoSize = true;
-            this.label16.Location = new System.Drawing.Point(6, 64);
+            this.label16.Location = new System.Drawing.Point(7, 104);
             this.label16.Name = "label16";
             this.label16.Size = new System.Drawing.Size(53, 26);
             this.label16.TabIndex = 4;
@@ -502,16 +509,49 @@
             this.label14.TabIndex = 0;
             this.label14.Text = "Username";
             // 
+            // LB_RepetirPassword
+            // 
+            this.LB_RepetirPassword.AutoSize = true;
+            this.LB_RepetirPassword.Location = new System.Drawing.Point(7, 63);
+            this.LB_RepetirPassword.Name = "LB_RepetirPassword";
+            this.LB_RepetirPassword.Size = new System.Drawing.Size(52, 26);
+            this.LB_RepetirPassword.TabIndex = 22;
+            this.LB_RepetirPassword.Text = "Repetir \r\npassword";
+            // 
+            // TXT_RepetirPassword
+            // 
+            this.TXT_RepetirPassword.Location = new System.Drawing.Point(68, 69);
+            this.TXT_RepetirPassword.Name = "TXT_RepetirPassword";
+            this.TXT_RepetirPassword.PasswordChar = '*';
+            this.TXT_RepetirPassword.Size = new System.Drawing.Size(183, 20);
+            this.TXT_RepetirPassword.TabIndex = 17;
+            this.TXT_RepetirPassword.TextChanged += new System.EventHandler(this.TXT_RepetirPassword_TextChanged);
+            this.TXT_RepetirPassword.KeyUp += new System.Windows.Forms.KeyEventHandler(this.TXT_RepetirPassword_KeyUp);
+            this.TXT_RepetirPassword.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.TXT_RepetirPassword_KeyPress);
+            // 
+            // LB_MensajeError
+            // 
+            this.LB_MensajeError.AutoSize = true;
+            this.LB_MensajeError.ForeColor = System.Drawing.Color.Red;
+            this.LB_MensajeError.Location = new System.Drawing.Point(66, 92);
+            this.LB_MensajeError.Name = "LB_MensajeError";
+            this.LB_MensajeError.Size = new System.Drawing.Size(136, 13);
+            this.LB_MensajeError.TabIndex = 24;
+            this.LB_MensajeError.Text = "Las password no coinciden";
+            this.LB_MensajeError.Visible = false;
+            this.LB_MensajeError.Click += new System.EventHandler(this.label19_Click);
+            // 
             // Nuevo_Cliente
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(556, 357);
+            this.ClientSize = new System.Drawing.Size(556, 391);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.button2);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.groupBox1);
             this.Name = "Nuevo_Cliente";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Nuevo_Cliente";
             this.Load += new System.EventHandler(this.Nuevo_Cliente_Load);
             this.groupBox1.ResumeLayout(false);
@@ -570,5 +610,8 @@
         private System.Windows.Forms.Label label18;
         private System.Windows.Forms.CheckBox checkBoxCliente;
         private System.Windows.Forms.ComboBox comboBoxPreg;
+        private System.Windows.Forms.TextBox TXT_RepetirPassword;
+        private System.Windows.Forms.Label LB_RepetirPassword;
+        private System.Windows.Forms.Label LB_MensajeError;
     }
 }

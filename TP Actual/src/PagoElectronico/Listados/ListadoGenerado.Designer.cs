@@ -61,6 +61,7 @@
             this.Controls.Add(this.volver);
             this.Controls.Add(this.dataGridView1);
             this.Name = "ListadoGenerado";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Listado0";
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.ResumeLayout(false);

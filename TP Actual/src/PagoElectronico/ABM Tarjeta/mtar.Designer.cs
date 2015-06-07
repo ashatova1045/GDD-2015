@@ -100,7 +100,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(513, 63);
+            this.ClientSize = new System.Drawing.Size(513, 71);
             this.Controls.Add(this.btAsociar);
             this.Controls.Add(this.btVolver);
             this.Controls.Add(this.btDesasociar);
@@ -108,7 +108,9 @@
             this.Controls.Add(this.label1);
             this.Controls.Add(this.cbTarjeta);
             this.Name = "mtar";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Tarjetas";
+            this.Load += new System.EventHandler(this.mtar_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 
