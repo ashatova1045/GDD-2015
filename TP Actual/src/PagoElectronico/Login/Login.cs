@@ -21,32 +21,21 @@ namespace PagoElectronico.Login
 
         private void btnIngresar_Click(object sender, EventArgs e)
         {
-            List<SqlParameter> listaDeParametros = new List<SqlParameter>();
-            listaDeParametros.Add(new SqlParameter("@usu",txtUsuario.Text));
-            listaDeParametros.Add(new SqlParameter("@contra",Cifrador.Cifrar(txtContrasena.Text))); //enctrìpto la contrasena para pasarsela a la db
+            SQLParametros parametros = new SQLParametros();
+            parametros.add("@usu", txtUsuario.Text);
+            parametros.add("@contra",Cifrador.Cifrar(txtContrasena.Text)); //enctrìpto la contrasena para pasarsela a la db
+
             DataTable DTUsuario;
-
-            try
+            
+            if(ConexionDB.Procedure("loginProc", parametros.get(), out DTUsuario))
             {
-                DTUsuario = ConexionDB.invocarStoreProcedure(Sesion.conexion, "loginProc", listaDeParametros);
-            }
-            catch(SqlException ex)
-            {
-                MessageBox.Show(ex.Message);
-                return;
-            }
+                Sesion.user_id = Convert.ToDecimal(DTUsuario.Rows[0][0]);
+                Sesion.cliente_id = Convert.ToDecimal(DTUsuario.Rows[0][1]); 
+                Sesion.usuario = txtUsuario.Text;
 
-            Sesion.user_id = Convert.ToDecimal(DTUsuario.Rows[0][0]);
-            Sesion.cliente_id = Convert.ToDecimal(DTUsuario.Rows[0][1]); 
-            Sesion.usuario = txtUsuario.Text;
-
-            new SeleccionarRol().Show(this);
-            this.Hide();
+                new SeleccionarRol().Show(this);
+                this.Hide();
+            }
          }
-
-        private void Login_Load(object sender, EventArgs e)
-        {
-
-        }
      }
 }

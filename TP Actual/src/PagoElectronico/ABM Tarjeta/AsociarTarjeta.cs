@@ -15,24 +15,37 @@ namespace PagoElectronico.ABM_Tarjeta
         {
             InitializeComponent();
 
-            DataTable banco = ConexionDB.correrQuery(Sesion.conexion, "select distinct Id_banco,b.Descripcion ,b.Calle,b.altura,b.localidad, p.Descripcion des from HHHH.bancos b left join HHHH.paises p on p.Codigo=Id_pais");
-            dgBanco.DataSource = banco;
-            dgBanco.Update();
-
-            if (idtarjeta != 0)
+            DataTable banco;
+            if (ConexionDB.Procedure("ObtenerBancos", null, out banco))
             {
-                modificacion = true;
-                idt = idtarjeta;
-                DataRow tarjeta = ConexionDB.correrQuery(Sesion.conexion, "select Id_banco,Fecha_emision,Fecha_vencimiento from hhhh.tarjetas where id_tarjeta =" + idtarjeta).Rows[0];
-                foreach (DataGridViewRow r in dgBanco.Rows)
+
+                dgBanco.DataSource = banco;
+                dgBanco.Update();
+
+                if (idtarjeta != 0)
                 {
-                    if (Convert.ToDecimal(r.Cells["id"].Value)==Convert.ToDecimal(tarjeta["Id_banco"]))
+                    modificacion = true;
+                    idt = idtarjeta;
+
+                    SQLParametros parametros = new SQLParametros();
+                    parametros.add("Id_tarjeta", idtarjeta);
+
+                    DataTable tarjetaTabla;
+
+                    if (ConexionDB.Procedure("ObtenerTarjeta", parametros.get(), out tarjetaTabla))
                     {
-                        dgBanco.CurrentCell = dgBanco.Rows[r.Index].Cells[0];
+                        DataRow tarjeta =  tarjetaTabla.Rows[0];
+                        foreach (DataGridViewRow r in dgBanco.Rows)
+                        {
+                            if (Convert.ToDecimal(r.Cells["id"].Value) == Convert.ToDecimal(tarjeta["Id_banco"]))
+                            {
+                                dgBanco.CurrentCell = dgBanco.Rows[r.Index].Cells[0];
+                            }
+                        }
+                        dtEmision.Value = Convert.ToDateTime(tarjeta["Fecha_emision"]);
+                        dtVencimiento.Value = Convert.ToDateTime(tarjeta["Fecha_vencimiento"]);
                     }
                 }
-                dtEmision.Value=Convert.ToDateTime(tarjeta["Fecha_emision"]);
-                dtVencimiento.Value = Convert.ToDateTime(tarjeta["Fecha_vencimiento"]);
             }
         }
 
@@ -58,26 +71,23 @@ namespace PagoElectronico.ABM_Tarjeta
                 MessageBox.Show("El codigo debe contener 3 numeros");
                 return;
             }
-            List<SqlParameter> listaP = new List<SqlParameter>();
-            listaP.Add(new SqlParameter("@idcliente",Sesion.cliente_id));
-            listaP.Add(new SqlParameter("@idtarjeta", idt));
-            listaP.Add(new SqlParameter("@tarjeta", txttarjeta.Text));
-            listaP.Add(new SqlParameter("@emision", dtEmision.Value));
-            listaP.Add(new SqlParameter("@vencimiento", dtVencimiento.Value));
-            listaP.Add(new SqlParameter("@codigo", txtCodigo.Text));
-            listaP.Add(new SqlParameter("@modificacion", (modificacion?1:0)));
-            listaP.Add(new SqlParameter("@banco",Convert.ToDecimal(dgBanco.SelectedRows[0].Cells["id"].Value)));
-            try
+            SQLParametros parametros = new SQLParametros();
+
+            parametros.add("@idcliente",Sesion.cliente_id);
+            parametros.add("@idtarjeta", idt);
+            parametros.add("@tarjeta", txttarjeta.Text);
+            parametros.add("@emision", dtEmision.Value);
+            parametros.add("@vencimiento", dtVencimiento.Value);
+            parametros.add("@codigo", txtCodigo.Text);
+            parametros.add("@modificacion", (modificacion?1:0));
+            parametros.add("@banco",Convert.ToDecimal(dgBanco.SelectedRows[0].Cells["id"].Value));
+
+            if(ConexionDB.Procedure("asociarTarjeta", parametros.get()))
             {
-                ConexionDB.invocarStoreProcedure(Sesion.conexion, "asociarTarjeta", listaP);
+                MessageBox.Show("Tarjeta "+ (modificacion?"modificada":"agregada") +" correctamente");
+                btVolver.PerformClick();
             }
-            catch (SqlException ex)
-            {
-                MessageBox.Show(ex.Message);
-                return;
-            }
-            MessageBox.Show("Tarjeta "+ (modificacion?"modificada":"agregada") +" correctamente");
-            btVolver.PerformClick();
+            
         }
 
         private void btVolver_Click(object sender, EventArgs e)

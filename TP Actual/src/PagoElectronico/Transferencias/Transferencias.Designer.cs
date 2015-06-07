@@ -43,6 +43,10 @@
             this.label5 = new System.Windows.Forms.Label();
             this.txtMoneda2 = new System.Windows.Forms.TextBox();
             this.cbDestino = new System.Windows.Forms.ComboBox();
+            this.txtImporteConvertido = new System.Windows.Forms.TextBox();
+            this.label6 = new System.Windows.Forms.Label();
+            this.btnCalc = new System.Windows.Forms.Button();
+            this.txtMonedaATransferir = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.nImporte)).BeginInit();
             this.SuspendLayout();
             // 
@@ -127,9 +131,9 @@
             // 
             // btTransferir
             // 
-            this.btTransferir.Location = new System.Drawing.Point(90, 121);
+            this.btTransferir.Location = new System.Drawing.Point(107, 141);
             this.btTransferir.Name = "btTransferir";
-            this.btTransferir.Size = new System.Drawing.Size(103, 26);
+            this.btTransferir.Size = new System.Drawing.Size(103, 28);
             this.btTransferir.TabIndex = 9;
             this.btTransferir.Text = "Transferir";
             this.btTransferir.UseVisualStyleBackColor = true;
@@ -137,9 +141,9 @@
             // 
             // btVolver
             // 
-            this.btVolver.Location = new System.Drawing.Point(210, 120);
+            this.btVolver.Location = new System.Drawing.Point(227, 140);
             this.btVolver.Name = "btVolver";
-            this.btVolver.Size = new System.Drawing.Size(90, 26);
+            this.btVolver.Size = new System.Drawing.Size(90, 28);
             this.btVolver.TabIndex = 10;
             this.btVolver.Text = "Volver";
             this.btVolver.UseVisualStyleBackColor = true;
@@ -174,7 +178,7 @@
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(263, 43);
+            this.label5.Location = new System.Drawing.Point(265, 43);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(37, 13);
             this.label5.TabIndex = 13;
@@ -183,7 +187,7 @@
             // txtMoneda2
             // 
             this.txtMoneda2.Enabled = false;
-            this.txtMoneda2.Location = new System.Drawing.Point(429, 41);
+            this.txtMoneda2.Location = new System.Drawing.Point(429, 40);
             this.txtMoneda2.Name = "txtMoneda2";
             this.txtMoneda2.Size = new System.Drawing.Size(76, 20);
             this.txtMoneda2.TabIndex = 15;
@@ -199,11 +203,51 @@
             this.cbDestino.TabIndex = 16;
             this.cbDestino.SelectedIndexChanged += new System.EventHandler(this.cbDestino_SelectedIndexChanged);
             // 
+            // txtImporteConvertido
+            // 
+            this.txtImporteConvertido.Enabled = false;
+            this.txtImporteConvertido.Location = new System.Drawing.Point(378, 84);
+            this.txtImporteConvertido.Name = "txtImporteConvertido";
+            this.txtImporteConvertido.Size = new System.Drawing.Size(63, 20);
+            this.txtImporteConvertido.TabIndex = 17;
+            this.txtImporteConvertido.Text = "0";
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(359, 87);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(13, 13);
+            this.label6.TabIndex = 18;
+            this.label6.Text = "=";
+            // 
+            // btnCalc
+            // 
+            this.btnCalc.Location = new System.Drawing.Point(378, 110);
+            this.btnCalc.Name = "btnCalc";
+            this.btnCalc.Size = new System.Drawing.Size(106, 21);
+            this.btnCalc.TabIndex = 19;
+            this.btnCalc.Text = "Calcular cambio";
+            this.btnCalc.UseVisualStyleBackColor = true;
+            this.btnCalc.Click += new System.EventHandler(this.btnCalc_Click);
+            // 
+            // txtMonedaATransferir
+            // 
+            this.txtMonedaATransferir.Enabled = false;
+            this.txtMonedaATransferir.Location = new System.Drawing.Point(447, 84);
+            this.txtMonedaATransferir.Name = "txtMonedaATransferir";
+            this.txtMonedaATransferir.Size = new System.Drawing.Size(49, 20);
+            this.txtMonedaATransferir.TabIndex = 20;
+            // 
             // Transferencias
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(509, 158);
+            this.ClientSize = new System.Drawing.Size(509, 178);
+            this.Controls.Add(this.txtMonedaATransferir);
+            this.Controls.Add(this.btnCalc);
+            this.Controls.Add(this.label6);
+            this.Controls.Add(this.txtImporteConvertido);
             this.Controls.Add(this.cbDestino);
             this.Controls.Add(this.txtMoneda2);
             this.Controls.Add(this.txtCosto);
@@ -245,5 +289,9 @@
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.TextBox txtMoneda2;
         private System.Windows.Forms.ComboBox cbDestino;
+        private System.Windows.Forms.TextBox txtImporteConvertido;
+        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.Button btnCalc;
+        private System.Windows.Forms.TextBox txtMonedaATransferir;
     }
 }

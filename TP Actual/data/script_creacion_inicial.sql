@@ -383,16 +383,7 @@ BEGIN /* *************** MIGRACION *************** */
 			FROM gd_esquema.Maestra M
 			WHERE M.Cheque_Numero IS NOT NULL
 	SET IDENTITY_INSERT HHHH.cheques OFF
--------------------------------------------------------------------------------------------	
-	INSERT INTO HHHH.tipos_documentos(Descripcion)
-		VALUES('Documento Nacional Identidad')
-	INSERT INTO HHHH.tipos_documentos(Descripcion)
-		VALUES('Cedula Identidad')
-	INSERT INTO HHHH.tipos_documentos(Descripcion)
-		VALUES('Libreta Civica')
-	INSERT INTO HHHH.tipos_documentos(Descripcion)
-		VALUES('Libreta de Enrolamiento')
-		
+-------------------------------------------------------------------------------------------		
 	SET IDENTITY_INSERT HHHH.tipos_documentos ON
 	INSERT INTO HHHH.tipos_documentos(Id_tipo_documento, Descripcion)
 		SELECT DISTINCT Cli_Tipo_Doc_Cod, Cli_Tipo_Doc_Desc
@@ -609,8 +600,7 @@ AS
 	GO
 	
 CREATE PROCEDURE HHHH.agregarNuevoRol
-	@nombre nvarchar(255),
-	@estado nvarchar
+	@nombre nvarchar(255)
 AS
 BEGIN
 	DECLARE @existeRol nvarchar(255)
@@ -621,7 +611,7 @@ BEGIN
 			RETURN
 		END
 	INSERT INTO HHHH.roles(Nombre_rol, Estado)
-		VALUES	(@nombre, @estado)
+		VALUES	(@nombre, 'N')
 END		
 GO
 
@@ -1376,4 +1366,194 @@ GO
 
 update HHHH.cuentas
 set Id_tipo_cuenta =1, Estado = 'H'
+GO
 
+
+
+
+
+
+
+--////////////////////////////////////////
+
+
+CREATE PROCEDURE HHHH.ObtenerFuncionalidadesDeRol
+@id_rol numeric(18,0)
+AS
+	BEGIN
+		SELECT r.Id_funcionalidad,f.Descripcion 
+		FROM HHHH.rel_rol_funcionalidad r,HHHH.funcionalidades f 
+		WHERE r.Id_funcionalidad=f.Id_funcionalidad AND 
+			  r.Id_rol = @id_rol
+	END
+GO
+
+CREATE PROCEDURE HHHH.ObtenerFuncionalidades
+AS
+	BEGIN
+		SELECT *
+		FROM HHHH.funcionalidades
+	END
+GO
+
+CREATE PROCEDURE HHHH.ObtenerRolesDeUsuario
+@Id_usuario numeric(18,0)
+AS
+	BEGIN
+		SELECT r.Id_rol,Nombre_rol 
+		FROM HHHH.rel_rol_usuario r,HHHH.roles ro 
+		WHERE r.Id_rol=ro.Id_rol AND 
+			  ro.Estado = 'A' AND 
+			  r.Id_usuario = @Id_usuario
+	END
+GO
+
+CREATE PROCEDURE HHHH.ObtenerRoles
+AS
+	BEGIN
+		SELECT *
+		FROM HHHH.roles
+	END
+GO
+
+CREATE PROCEDURE HHHH.ObtenerTipoDoc
+AS
+	BEGIN
+		SELECT * 
+		FROM HHHH.tipos_documentos
+		ORDER BY Descripcion
+	END
+GO
+
+CREATE PROCEDURE HHHH.ObtenerPaises
+AS
+	BEGIN
+		SELECT * 
+		FROM HHHH.paises
+		ORDER BY Descripcion
+	END
+GO
+
+CREATE PROCEDURE HHHH.ObtenerPreguntas
+AS
+	BEGIN
+		SELECT * 
+		FROM HHHH.preguntas
+	END
+GO
+
+CREATE PROCEDURE HHHH.ObtenerUsuariosClientes
+AS
+	BEGIN
+		SELECT us.* 
+		FROM HHHH.usuarios us
+		JOIN HHHH.clientes cli
+		ON cli.Id_usuario = us.Id_usuario
+		ORDER BY us.Usuario
+	END
+GO
+
+CREATE PROCEDURE HHHH.ObtenerMonedas
+AS
+	BEGIN
+		SELECT * 
+		FROM HHHH.Monedas
+	END
+GO
+
+
+CREATE PROCEDURE HHHH.ObtenerTipoCuentas
+AS
+	BEGIN
+		SELECT * 
+		FROM HHHH.tipo_cuenta
+	END
+GO
+
+CREATE PROCEDURE HHHH.ObtenerBancos
+AS
+	BEGIN
+		SELECT DISTINCT Id_banco,b.Descripcion ,b.Calle,b.altura,
+						 b.localidad, p.Descripcion DES 
+		FROM HHHH.bancos b 
+		LEFT JOIN HHHH.paises p 
+		ON p.Codigo=Id_pais
+	END
+GO
+
+CREATE PROCEDURE HHHH.ObtenerTarjeta
+@Id_tarjeta numeric(18,0)
+AS
+	BEGIN
+		SELECT Id_banco,Fecha_emision,Fecha_vencimiento 
+		FROM hhhh.tarjetas 
+		WHERE id_tarjeta = @Id_tarjeta
+	END
+GO
+
+CREATE PROCEDURE HHHH.ObtenerTarjetasDeCliente
+@Id_cliente numeric(18,0)
+AS
+	BEGIN
+		SELECT Id_tarjeta,finalnumero 
+		FROM HHHH.tarjetas t 
+		WHERE t.estado = 1 and t.Id_cliente= @Id_cliente
+	END
+GO
+
+CREATE PROCEDURE HHHH.AlterarEstadoTarjeta
+@Id_tarjeta numeric(18,0)
+AS
+	BEGIN
+		UPDATE HHHH.tarjetas 
+		SET estado = 0 
+		WHERE id_tarjeta = @Id_tarjeta
+	END
+GO
+
+CREATE PROCEDURE HHHH.ObtenerCuentasDeCliente
+@Id_cliente numeric(18,0)
+AS
+	BEGIN
+
+		SELECT cue.* 
+		FROM HHHH.cuentas cue, HHHH.clientes cli 
+		WHERE cli.Id_cliente = cue.Id_cliente and 
+			  cli.Id_usuario = @Id_cliente
+	END
+GO
+
+CREATE PROCEDURE HHHH.Ultimos5Depositos
+@Id_cuenta numeric(18,0)
+AS
+	BEGIN
+		SELECT TOP 5 Fecha_deposito, HHHH.impconmoneda(Importe,Id_tipo_moneda) AS Importe,
+					 'XXXX-XXXX-XXXX-'+tar.finalnumero AS Tarjeta 
+		FROM HHHH.depositos dep, HHHH.tarjetas tar 
+		WHERE Id_cuenta = @Id_cuenta and 
+				dep.Id_tarjeta = tar.Id_tarjeta
+		ORDER BY Fecha_deposito DESC
+	END
+GO
+
+CREATE PROCEDURE HHHH.Ultimos5Retiros
+@Id_cuenta numeric(18,0)
+AS
+	BEGIN
+		SELECT TOP 5 Fecha_retiro, HHHH.impconmoneda(Importe,Id_moneda) AS Importe, ban.Descripcion 
+		FROM HHHH.retiros, HHHH.bancos ban WHERE Id_cuenta = @Id_cuenta and Id_banco = ban.Id_banco
+		ORDER BY Fecha_retiro DESC
+	END
+GO
+
+
+CREATE PROCEDURE HHHH.Ultimas5Transferencias
+@Id_cuenta numeric(18,0)
+AS
+	BEGIN
+		SELECT TOP 10 Fecha_transferencia, HHHH.impconmoneda(Importe,Id_moneda) AS Importe, Cuenta_destino
+		FROM HHHH.transferencias 
+		WHERE Cuenta_origen = @Id_cuenta
+        ORDER BY Fecha_transferencia DESC
+    END
+GO

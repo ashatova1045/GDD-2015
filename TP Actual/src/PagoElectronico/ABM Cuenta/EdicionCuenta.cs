@@ -40,20 +40,36 @@ namespace PagoElectronico.ABM_Cuenta
 
         private void Inicio()
         {
-            comboBoxPais.DataSource = ConexionDB.correrQuery(Sesion.conexion, "select * from HHHH.paises");
-            comboBoxPais.DisplayMember = "Descripcion";
-            comboBoxPais.ValueMember = "Codigo";
-            comboBoxPais.SelectedIndex = -1;
+            DataTable paises;
 
-            comboBoxMoneda.DataSource = ConexionDB.correrQuery(Sesion.conexion, "select * from HHHH.monedas");
-            comboBoxMoneda.DisplayMember = "Descripcion";
-            comboBoxMoneda.ValueMember = "Id_moneda";
-            comboBoxMoneda.SelectedIndex = -1;
+            if (ConexionDB.Procedure("ObtenerPaises", null, out paises))
+            {
+                comboBoxPais.DataSource = paises;
+                comboBoxPais.DisplayMember = "Descripcion";
+                comboBoxPais.ValueMember = "Codigo";
+                comboBoxPais.SelectedIndex = -1;
+            }
+            
+             DataTable monedas;
 
-            comboBoxTipoCuenta.DataSource = ConexionDB.correrQuery(Sesion.conexion, "select * from HHHH.tipo_cuenta");
-            comboBoxTipoCuenta.DisplayMember = "Descripcion";
-            comboBoxTipoCuenta.ValueMember = "Id_tipo_cuenta";
-            comboBoxTipoCuenta.SelectedIndex = -1;
+             if (ConexionDB.Procedure("ObtenerMonedas", null, out monedas))
+             {
+
+                 comboBoxMoneda.DataSource = monedas;
+                 comboBoxMoneda.DisplayMember = "Descripcion";
+                 comboBoxMoneda.ValueMember = "Id_moneda";
+                 comboBoxMoneda.SelectedIndex = -1;
+             }
+
+             DataTable tipoCuentas;
+
+             if (ConexionDB.Procedure("ObtenerTipoCuentas", null, out tipoCuentas))
+             {
+                 comboBoxTipoCuenta.DataSource = tipoCuentas;
+                 comboBoxTipoCuenta.DisplayMember = "Descripcion";
+                 comboBoxTipoCuenta.ValueMember = "Id_tipo_cuenta";
+                 comboBoxTipoCuenta.SelectedIndex = -1;
+             }
         }
 
         private void button2_Click(object sender, EventArgs e)
@@ -97,50 +113,36 @@ namespace PagoElectronico.ABM_Cuenta
 
         private List<SqlParameter> cargarLista()
         {
-            List<SqlParameter> listaDeParametros = new List<SqlParameter>();
-            listaDeParametros.Add(new SqlParameter("@Id_usuario", user));
-            listaDeParametros.Add(new SqlParameter("@Id_cuenta", Convert.ToDecimal(textBoxNumero.Text)));
-            listaDeParametros.Add(new SqlParameter("@Id_pais", comboBoxPais.SelectedValue));
-            listaDeParametros.Add(new SqlParameter("@Id_moneda", comboBoxMoneda.SelectedValue));
-            listaDeParametros.Add(new SqlParameter("@FechaApert", dateTimePicker1.Value));
-            listaDeParametros.Add(new SqlParameter("@id_tipoCta", comboBoxTipoCuenta.SelectedValue));
-            return listaDeParametros;
+            SQLParametros parametros = new SQLParametros();
+
+            parametros.add("@Id_usuario", user);
+            parametros.add("@Id_cuenta", Convert.ToDecimal(textBoxNumero.Text));
+            parametros.add("@Id_pais", comboBoxPais.SelectedValue);
+            parametros.add("@Id_moneda", comboBoxMoneda.SelectedValue);
+            parametros.add("@FechaApert", dateTimePicker1.Value);
+            parametros.add("@id_tipoCta", comboBoxTipoCuenta.SelectedValue);
+
+            return parametros.get();
 
         }
 
         private void modCuenta(object sender, EventArgs e)
         {
-            if (validarDatos())
-            {
-                try
-                {
-                    ConexionDB.invocarStoreProcedure(Sesion.conexion, "ModCuenta", cargarLista());
-                    MessageBox.Show("Cuenta modificada exitosamente");
-                    button2_Click(null, null);
 
-                }
-                catch (SqlException ex)
-                {
-                    MessageBox.Show(ex.Message);
-                }
+            if(validarDatos() && ConexionDB.Procedure("ModCuenta", cargarLista()))
+            {
+                MessageBox.Show("Cuenta modificada exitosamente");
+                button2_Click(null, null);
 
             }
         }
 
         private void nuevaCuenta(object sender, EventArgs e)
         {
-            if (validarDatos())
+            if (validarDatos() && ConexionDB.Procedure("nvaCuenta", cargarLista()))
             {
-                try
-                {
-                    ConexionDB.invocarStoreProcedure(Sesion.conexion, "nvaCuenta", cargarLista());
-                    MessageBox.Show("Cuenta creada exitosamente");
-                    button2_Click(null, null);
-                }
-                catch (SqlException ex)
-                {
-                    MessageBox.Show(ex.Message);
-                }
+                MessageBox.Show("Cuenta creada exitosamente");
+                button2_Click(null, null);
             }
         }
 

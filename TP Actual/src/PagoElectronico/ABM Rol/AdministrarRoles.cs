@@ -16,12 +16,14 @@ namespace PagoElectronico.ABM_Rol
         DataTable rolesActuales;
         private void ActualizarRoles()
         {
-            rolesActuales = ConexionDB.correrQuery(Sesion.conexion, "select * from HHHH.roles");
-            comboBox1.DataSource = rolesActuales;
-            comboBox1.DisplayMember = "Nombre_rol";
-            comboBox1.ValueMember = "Id_rol";
-            comboBox1.Text = "Elija un Rol";
-            comboBox1.Update();
+            if (ConexionDB.Procedure("ObtenerRoles", null, out rolesActuales))
+            {
+                comboBox1.DataSource = rolesActuales;
+                comboBox1.DisplayMember = "Nombre_rol";
+                comboBox1.ValueMember = "Id_rol";
+                comboBox1.Text = "Elija un Rol";
+                comboBox1.Update();
+            }
 
         }
 
@@ -32,17 +34,22 @@ namespace PagoElectronico.ABM_Rol
 
         private void AdministrarRoles_Load(object sender, EventArgs e)
         {
-            this.ActualizarRoles();
-            DataTable funcionalidades = ConexionDB.correrQuery(Sesion.conexion, "select * from HHHH.funcionalidades");
-            foreach (DataRow row in funcionalidades.Rows)
+            ActualizarRoles();
+
+            DataTable funcionalidades;
+
+            if (ConexionDB.Procedure("ObtenerFuncionalidades", null, out funcionalidades))
             {
-                // foreach (DataColumn item in funcionalidades.Columns)
-                //{
-                //   if (item.ToString() == "Descripcion")
-                checkedListBox1.Items.Add(row["Descripcion"].ToString());
-                //  }
+                foreach (DataRow row in funcionalidades.Rows)
+                {
+                    // foreach (DataColumn item in funcionalidades.Columns)
+                    //{
+                    //   if (item.ToString() == "Descripcion")
+                    checkedListBox1.Items.Add(row["Descripcion"].ToString());
+                    //  }
+                }
+                comboBox1.SelectedIndex = -1;
             }
-            comboBox1.SelectedIndex = -1;
         }
 
         private void comboBox1_SelectionChangeCommitted(object sender, EventArgs e)
@@ -59,18 +66,23 @@ namespace PagoElectronico.ABM_Rol
      
             button1.Enabled = false;
 
-            List<SqlParameter> listaDeParametros = new List<SqlParameter>();
-            listaDeParametros.Add(new SqlParameter("@nombre", comboBox1.SelectedValue));
-            DataTable funcsActivas = ConexionDB.invocarStoreProcedure(Sesion.conexion, "funcionesdelrol", listaDeParametros);
+            SQLParametros parametros = new SQLParametros();
+            parametros.add("@nombre", comboBox1.SelectedValue);
 
-            for (int i = 0; i < checkedListBox1.Items.Count; i++)
-            {
-                checkedListBox1.SetItemChecked(i, false);
-            }
+            DataTable funcsActivas;
 
-            foreach (DataRow funcAct in funcsActivas.Rows)
+            if (ConexionDB.Procedure("funcionesdelrol", parametros.get(), out funcsActivas))
             {
-                checkedListBox1.SetItemChecked(checkedListBox1.Items.IndexOf(funcAct["Descripcion"].ToString()), true);
+
+                for (int i = 0; i < checkedListBox1.Items.Count; i++)
+                {
+                    checkedListBox1.SetItemChecked(i, false);
+                }
+
+                foreach (DataRow funcAct in funcsActivas.Rows)
+                {
+                    checkedListBox1.SetItemChecked(checkedListBox1.Items.IndexOf(funcAct["Descripcion"].ToString()), true);
+                }
             }
 
         }
@@ -116,11 +128,13 @@ namespace PagoElectronico.ABM_Rol
                 funciones = funciones + "," + itemChecked.ToString();
             }
 
-            List<SqlParameter> listaDeParametros = new List<SqlParameter>();
-            listaDeParametros.Add(new SqlParameter("@Rol", comboBox1.Text));
-            listaDeParametros.Add(new SqlParameter("@ListaFuc", funciones));
-            listaDeParametros.Add(new SqlParameter("@estado", estado));
-            ConexionDB.invocarStoreProcedure(Sesion.conexion, "asignarNuevasFuncRol", listaDeParametros);
+            SQLParametros parametros = new SQLParametros();
+
+            parametros.add("@Rol", comboBox1.Text);
+            parametros.add("@ListaFuc", funciones);
+            parametros.add("@estado", estado);
+
+            ConexionDB.Procedure("asignarNuevasFuncRol", parametros.get());
 
             this.ActualizarRoles();
         }

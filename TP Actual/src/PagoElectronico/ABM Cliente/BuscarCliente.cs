@@ -26,21 +26,27 @@ namespace PagoElectronico.ABM_Cliente
             else
                 tipoDoc = comboBoxTipoDoc.SelectedValue.ToString();
 
+            SQLParametros parametros = new SQLParametros();
 
-            List<SqlParameter> listaDeParametros = new List<SqlParameter>();
-            listaDeParametros.Add(new SqlParameter("@Nombre", textBoxNombre.Text));
-            listaDeParametros.Add(new SqlParameter("@Apellido", textBoxApellido.Text));
-            listaDeParametros.Add(new SqlParameter("@Documento", textBoxDoc.Text));
-            listaDeParametros.Add(new SqlParameter("@TipoDoc", tipoDoc));
-            listaDeParametros.Add(new SqlParameter("@Mail", textBoxMail.Text));
-            dataGridView1.DataSource = ConexionDB.invocarStoreProcedure(Sesion.conexion, "buscarCliente",listaDeParametros);
-            labelCantRes.Text = ((DataTable)dataGridView1.DataSource).Rows.Count.ToString();
+            parametros.add("@Nombre", textBoxNombre.Text);
+            parametros.add("@Apellido", textBoxApellido.Text);
+            parametros.add("@Documento", textBoxDoc.Text);
+            parametros.add("@TipoDoc", tipoDoc);
+            parametros.add("@Mail", textBoxMail.Text);
 
-            int[] columnasOcultas = { 0, 4, 7, 10, 11, 12, 13, 14, 15, 20 };
-                foreach(int i in columnasOcultas)
-                {
-                    dataGridView1.Columns[i].Visible = false;
-                }
+            DataTable clientesEncontrados;
+
+            if(ConexionDB.Procedure("buscarCliente" ,parametros.get() ,out clientesEncontrados))
+            {
+                dataGridView1.DataSource = clientesEncontrados;
+                labelCantRes.Text = clientesEncontrados.Rows.Count.ToString();
+
+                int[] columnasOcultas = { 0, 4, 7, 10, 11, 12, 13, 14, 15, 20 };
+                    foreach(int i in columnasOcultas)
+                    {
+                        dataGridView1.Columns[i].Visible = false;
+                    }
+            }
         }
 
         private void textBoxNombre_TextChanged(object sender, EventArgs e)
@@ -87,10 +93,15 @@ namespace PagoElectronico.ABM_Cliente
 
         private void BuscarCliente_Load(object sender, EventArgs e)
         {
-            comboBoxTipoDoc.DataSource = ConexionDB.correrQuery(Sesion.conexion, "select * from HHHH.tipos_documentos");
-            comboBoxTipoDoc.DisplayMember = "Descripcion";
-            comboBoxTipoDoc.ValueMember = "Id_tipo_documento";
-            comboBoxTipoDoc.SelectedIndex = -1;
+            DataTable tipoDoc;
+
+            if(ConexionDB.Procedure("ObtenerTipoDoc",null,out tipoDoc))
+            {
+                comboBoxTipoDoc.DataSource = tipoDoc;
+                comboBoxTipoDoc.DisplayMember = "Descripcion";
+                comboBoxTipoDoc.ValueMember = "Id_tipo_documento";
+                comboBoxTipoDoc.SelectedIndex = -1;
+            }
         }
 
         private void button2_Click(object sender, EventArgs e)

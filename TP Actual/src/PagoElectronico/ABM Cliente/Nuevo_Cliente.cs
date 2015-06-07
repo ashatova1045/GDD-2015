@@ -131,37 +131,32 @@ namespace PagoElectronico.ABM_Cliente
         {
             if (validacion())
             {
-                List<SqlParameter> listaDeParametros = new List<SqlParameter>();
-                listaDeParametros.Add(new SqlParameter("@Nombre", textBoxNombre.Text));
-                listaDeParametros.Add(new SqlParameter("@Apellido", textBoxApellido.Text));
-                listaDeParametros.Add(new SqlParameter("@Documento", Convert.ToDecimal(textBoxDocumento.Text)));
-                listaDeParametros.Add(new SqlParameter("@tipoDoc", Convert.ToInt32(comboBoxTipoDoc.SelectedValue)));
-                listaDeParametros.Add(new SqlParameter("@Mail", textBoxMail.Text));
-                listaDeParametros.Add(new SqlParameter("@Id_pais", Convert.ToDecimal(comboBoxPais.SelectedValue)));
-                listaDeParametros.Add(new SqlParameter("@Calle", textBoxCalle.Text));
-                listaDeParametros.Add(new SqlParameter("@Altura", Convert.ToInt32(textBoxAltura.Text)));
-                listaDeParametros.Add(new SqlParameter("@Piso", Convert.ToInt32(textBoxPiso.Text)));
-                listaDeParametros.Add(new SqlParameter("@Departamento", textBoxDepto.Text));
-                listaDeParametros.Add(new SqlParameter("@Localidad", textBox9.Text));
-                listaDeParametros.Add(new SqlParameter("@Nacionalidad", Convert.ToDecimal(comboBoxNac.SelectedValue)));
-                listaDeParametros.Add(new SqlParameter("@FechaNac", dateTimePicker1.Value));
-                listaDeParametros.Add(new SqlParameter("@Usuario", textBoxUser.Text));
-                listaDeParametros.Add(new SqlParameter("@Contrasena", Cifrador.Cifrar(textBoxPW.Text)));
-                listaDeParametros.Add(new SqlParameter("@Id_pregunta", Convert.ToDecimal(comboBoxPreg.SelectedValue)));
-                listaDeParametros.Add(new SqlParameter("@Respuesta", Cifrador.Cifrar(textBoxRes.Text)));
-                listaDeParametros.Add(new SqlParameter("@Estado", checkBoxEstado.Checked ? "H" : "I"));
+                SQLParametros parametros = new SQLParametros();
 
-                try
+                parametros.add("@Nombre", textBoxNombre.Text);
+                parametros.add("@Apellido", textBoxApellido.Text);
+                parametros.add("@Documento", Convert.ToDecimal(textBoxDocumento.Text));
+                parametros.add("@tipoDoc", Convert.ToInt32(comboBoxTipoDoc.SelectedValue));
+                parametros.add("@Mail", textBoxMail.Text);
+                parametros.add("@Id_pais", Convert.ToDecimal(comboBoxPais.SelectedValue));
+                parametros.add("@Calle", textBoxCalle.Text);
+                parametros.add("@Altura", Convert.ToInt32(textBoxAltura.Text));
+                parametros.add("@Piso", Convert.ToInt32(textBoxPiso.Text));
+                parametros.add("@Departamento", textBoxDepto.Text);
+                parametros.add("@Localidad", textBox9.Text);
+                parametros.add("@Nacionalidad", Convert.ToDecimal(comboBoxNac.SelectedValue));
+                parametros.add("@FechaNac", dateTimePicker1.Value);
+                parametros.add("@Usuario", textBoxUser.Text);
+                parametros.add("@Contrasena", Cifrador.Cifrar(textBoxPW.Text));
+                parametros.add("@Id_pregunta", Convert.ToDecimal(comboBoxPreg.SelectedValue));
+                parametros.add("@Respuesta", Cifrador.Cifrar(textBoxRes.Text));
+                parametros.add("@Estado", checkBoxEstado.Checked ? "H" : "I");
+
+                if (ConexionDB.Procedure("nuevoCliente", parametros.get()))
                 {
-                    ConexionDB.invocarStoreProcedure(Sesion.conexion, "nuevoCliente", listaDeParametros);
-                    MessageBox.Show("El usuario "+textBoxUser.Text+" ha sido dado de alta satisfactoriamente");
+                    MessageBox.Show("El usuario " + textBoxUser.Text + " ha sido dado de alta satisfactoriamente");
                     button4_Click(null, null);
                 }
-                catch (SqlException ex)
-                {
-                    MessageBox.Show(ex.Message);
-                }
-
             }
         }
 
@@ -173,30 +168,48 @@ namespace PagoElectronico.ABM_Cliente
 
         private void Nuevo_Cliente_Load(object sender, EventArgs e)
         {
-            comboBoxTipoDoc.DataSource = ConexionDB.correrQuery(Sesion.conexion, "select * from HHHH.tipos_documentos");
-            comboBoxTipoDoc.DisplayMember = "Descripcion";
-            comboBoxTipoDoc.ValueMember = "Id_tipo_documento";
-            comboBoxTipoDoc.SelectedIndex = -1;
+            DataTable tiposDoc;
 
-            DataTable paises = ConexionDB.correrQuery(Sesion.conexion, "select * from HHHH.paises");
-            
-            comboBoxPais.DataSource = paises;
-            comboBoxPais.DisplayMember = "Descripcion";
-            comboBoxPais.ValueMember = "Codigo";
-            comboBoxPais.SelectedIndex = -1;
+            if (ConexionDB.Procedure("ObtenerTipoDoc", null, out tiposDoc))
+            {
+                comboBoxTipoDoc.DataSource = tiposDoc;
+                comboBoxTipoDoc.DisplayMember = "Descripcion";
+                comboBoxTipoDoc.ValueMember = "Id_tipo_documento";
+                comboBoxTipoDoc.SelectedIndex = -1;
+            }
 
-            comboBoxNac.DataSource = ConexionDB.correrQuery(Sesion.conexion, "select * from HHHH.paises");
-            comboBoxNac.DisplayMember = "Descripcion";
-            comboBoxNac.ValueMember = "Codigo";
-            comboBoxNac.SelectedIndex = -1;
+            DataTable paises;
+
+            if (ConexionDB.Procedure("ObtenerPaises", null, out paises))
+            {
+                comboBoxPais.DataSource = paises;
+                comboBoxPais.DisplayMember = "Descripcion";
+                comboBoxPais.ValueMember = "Codigo";
+                comboBoxPais.SelectedIndex = -1;
+            }
+
+            DataTable nacionalidades;
+
+            if (ConexionDB.Procedure("ObtenerPaises", null, out nacionalidades))
+            {
+                comboBoxNac.DataSource = nacionalidades;
+                comboBoxNac.DisplayMember = "Descripcion";
+                comboBoxNac.ValueMember = "Codigo";
+                comboBoxNac.SelectedIndex = -1;
+            }
 
             dateTimePicker1.Value = Sesion.fecha;
             dateTimePicker1.MaxDate = Sesion.fecha;
 
-            comboBoxPreg.DataSource = ConexionDB.correrQuery(Sesion.conexion, "select * from HHHH.preguntas");
-            comboBoxPreg.DisplayMember = "Pregunta";
-            comboBoxPreg.ValueMember = "Id_pregunta";
-            comboBoxPreg.SelectedIndex = -1;
+            DataTable preguntas;
+
+            if (ConexionDB.Procedure("ObtenerPreguntas", null, out preguntas))
+            {
+                comboBoxPreg.DataSource = preguntas;
+                comboBoxPreg.DisplayMember = "Pregunta";
+                comboBoxPreg.ValueMember = "Id_pregunta";
+                comboBoxPreg.SelectedIndex = -1;
+            }
         }
 
         private void button3_Click(object sender, EventArgs e)
@@ -246,34 +259,29 @@ namespace PagoElectronico.ABM_Cliente
         {
             if (validacion())
             {
-                List<SqlParameter> listaDeParametros = new List<SqlParameter>();
-                listaDeParametros.Add(new SqlParameter("@Id_cliente", idCliente));
-                listaDeParametros.Add(new SqlParameter("@Nombre", textBoxNombre.Text));
-                listaDeParametros.Add(new SqlParameter("@Apellido", textBoxApellido.Text));
-                listaDeParametros.Add(new SqlParameter("@Documento", Convert.ToDecimal(textBoxDocumento.Text)));
-                listaDeParametros.Add(new SqlParameter("@tipoDoc", Convert.ToInt32(comboBoxTipoDoc.SelectedValue)));
-                listaDeParametros.Add(new SqlParameter("@Mail", textBoxMail.Text));
-                listaDeParametros.Add(new SqlParameter("@Id_pais", Convert.ToDecimal(comboBoxPais.SelectedValue)));
-                listaDeParametros.Add(new SqlParameter("@Calle", textBoxCalle.Text));
-                listaDeParametros.Add(new SqlParameter("@Altura", Convert.ToInt32(textBoxAltura.Text)));
-                listaDeParametros.Add(new SqlParameter("@Piso", Convert.ToInt32(textBoxPiso.Text)));
-                listaDeParametros.Add(new SqlParameter("@Departamento", textBoxDepto.Text));
-                listaDeParametros.Add(new SqlParameter("@Localidad", textBox9.Text));
-                listaDeParametros.Add(new SqlParameter("@Nacionalidad", Convert.ToDecimal(comboBoxNac.SelectedValue)));
-                listaDeParametros.Add(new SqlParameter("@FechaNac", dateTimePicker1.Value));
-                listaDeParametros.Add(new SqlParameter("@EstadoUsuario", checkBoxEstado.Checked ? "H" : "I"));
-                listaDeParametros.Add(new SqlParameter("@EstadoCliente", checkBoxCliente.Checked ? "H" : "I"));
-
+                SQLParametros parametros = new SQLParametros();
                 
-                try
+                parametros.add("@Id_cliente", idCliente);
+                parametros.add("@Nombre", textBoxNombre.Text);
+                parametros.add("@Apellido", textBoxApellido.Text);
+                parametros.add("@Documento", Convert.ToDecimal(textBoxDocumento.Text));
+                parametros.add("@tipoDoc", Convert.ToInt32(comboBoxTipoDoc.SelectedValue));
+                parametros.add("@Mail", textBoxMail.Text);
+                parametros.add("@Id_pais", Convert.ToDecimal(comboBoxPais.SelectedValue));
+                parametros.add("@Calle", textBoxCalle.Text);
+                parametros.add("@Altura", Convert.ToInt32(textBoxAltura.Text));
+                parametros.add("@Piso", Convert.ToInt32(textBoxPiso.Text));
+                parametros.add("@Departamento", textBoxDepto.Text);
+                parametros.add("@Localidad", textBox9.Text);
+                parametros.add("@Nacionalidad", Convert.ToDecimal(comboBoxNac.SelectedValue));
+                parametros.add("@FechaNac", dateTimePicker1.Value);
+                parametros.add("@EstadoUsuario", checkBoxEstado.Checked ? "H" : "I");
+                parametros.add("@EstadoCliente", checkBoxCliente.Checked ? "H" : "I");
+
+                if(ConexionDB.Procedure("modificarCliente", parametros.get()))
                 {
-                    ConexionDB.invocarStoreProcedure(Sesion.conexion, "modificarCliente", listaDeParametros);
                     MessageBox.Show("El usuario " + textBoxUser.Text + " ha sido modificado satisfactoriamente");
                     button4_Click(null, null);
-                }
-                catch (SqlException ex)
-                {
-                    MessageBox.Show(ex.Message);
                 }
             }
         }
