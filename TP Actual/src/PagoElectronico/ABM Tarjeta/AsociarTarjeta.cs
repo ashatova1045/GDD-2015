@@ -16,7 +16,10 @@ namespace PagoElectronico.ABM_Tarjeta
             InitializeComponent();
 
             DataTable banco;
-            if (ConexionDB.Procedure("ObtenerBancos", null, out banco))
+            SQLParametros parametros = new SQLParametros();
+            parametros.add("@FiltMigracion",0);
+
+            if (ConexionDB.Procedure("ObtenerBancos", parametros.get(), out banco))
             {
 
                 dgBanco.DataSource = banco;
@@ -27,7 +30,7 @@ namespace PagoElectronico.ABM_Tarjeta
                     modificacion = true;
                     idt = idtarjeta;
 
-                    SQLParametros parametros = new SQLParametros();
+                    parametros.Clear();
                     parametros.add("Id_tarjeta", idtarjeta);
 
                     DataTable tarjetaTabla;

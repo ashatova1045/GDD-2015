@@ -13,31 +13,52 @@ namespace PagoElectronico.Retiros
 {
     public partial class RetiroEfectivo_FRM : Form
     {
-        readonly DataTable monedas = ConexionDB.correrQuery(Sesion.conexion, "SELECT DISTINCT id_moneda,descripcion FROM HHHH.monedas"); //Traigo todas las monedas
-        readonly DataTable cuentas = ConexionDB.correrQuery(Sesion.conexion, "SELECT DISTINCT id_cuenta,estado,saldo FROM HHHH.cuentas WHERE Id_cliente =" + Sesion.cliente_id);
-        readonly DataTable bancos = ConexionDB.correrQuery(Sesion.conexion, "SELECT DISTINCT id_banco,descripcion FROM HHHH.bancos where descripcion <> 'Banco migracion'"); //Traigo todos los bancos
-        DataTable cliente = ConexionDB.correrQuery(Sesion.conexion, "SELECT DISTINCT Nombre, Apellido, Nro_Documento FROM HHHH.clientes WHERE Id_cliente =" + Sesion.cliente_id);
+        
+        readonly DataTable monedas;
+        readonly DataTable cuentas;
+        readonly DataTable bancos;// descripcion <> 'Banco migracion'"); //Traigo todos los bancos
+        DataTable cliente; 
+            //ConexionDB.correrQuery(Sesion.conexion, "SELECT DISTINCT Nombre, Apellido, Nro_Documento 
+            //FROM HHHH.clientes WHERE Id_cliente =" + Sesion.cliente_id);
 
 
         public RetiroEfectivo_FRM()
         {
             InitializeComponent();
-
+            
             //Se carga el CB "Monedas"
-
-            Moneda_CB.DisplayMember = "descripcion";
-            Moneda_CB.ValueMember = "id_moneda";
+            
+            if (ConexionDB.Procedure("ObtenerMonedas", null, out monedas))
+            {
+                Moneda_CB.DisplayMember = "descripcion";
+                Moneda_CB.ValueMember = "id_moneda";
+            }
 
 
             //Se carga el CB "Cuentas"
-
-            Cuenta_CB.DisplayMember = "Id_cuenta";
-            Cuenta_CB.ValueMember = "id_cuenta";
+   
+            SQLParametros parametros = new SQLParametros();
+            parametros.add("@Id_cliente",Sesion.cliente_id);
+            if (ConexionDB.Procedure("ObtenerCuentasDeCliente", parametros.get(), out cuentas))
+            {
+                Cuenta_CB.DisplayMember = "Id_cuenta";
+                Cuenta_CB.ValueMember = "id_cuenta";
+            }
 
             //Se carga el CB "Bancos"
+            parametros.Clear();
+            parametros.add("@FiltMigracion", 1);
+            if (ConexionDB.Procedure("ObtenerBancos", parametros.get(), out bancos))
+            {
+                Banco_CB.DisplayMember = "Descripcion";
+                Banco_CB.ValueMember = "Id_banco";
+            }
 
-            Banco_CB.DisplayMember = "Descripcion";
-            Banco_CB.ValueMember = "Id_banco";
+            // Carga tabla cliente
+
+            parametros.Clear();
+            parametros.add("@Id_cliente", Sesion.cliente_id);
+            ConexionDB.Procedure("ObtenerCliente", parametros.get(), out cliente);
         }
 
         private void label1_Click(object sender, EventArgs e)
@@ -74,26 +95,22 @@ namespace PagoElectronico.Retiros
 
                 //Guardar el contenido de los combo box en variables
 
-                List<SqlParameter> listaDeParametros = new List<SqlParameter>();
-                listaDeParametros.Add(new SqlParameter("@cuenta", Cuenta_CB.SelectedValue));
-                listaDeParametros.Add(new SqlParameter("@doc", NoDoc_TXT.Text));
-                listaDeParametros.Add(new SqlParameter("@importe", Importe_NUD.Value));
-                listaDeParametros.Add(new SqlParameter("@moneda", Moneda_CB.SelectedValue));
-                listaDeParametros.Add(new SqlParameter("@fechaRetiro", Sesion.fecha));
-                listaDeParametros.Add(new SqlParameter("@destinatarioNombre", cliente.Rows[0]["Nombre"].ToString()));
-                listaDeParametros.Add(new SqlParameter("@destinatarioApellido", cliente.Rows[0]["Apellido"].ToString()));
-                listaDeParametros.Add(new SqlParameter("@banco", Banco_CB.SelectedValue));
+                SQLParametros parametros = new SQLParametros();
+                parametros.add("@cuenta", Cuenta_CB.SelectedValue);
+                parametros.add("@doc", NoDoc_TXT.Text);
+                parametros.add("@importe", Importe_NUD.Value);
+                parametros.add("@moneda", Moneda_CB.SelectedValue);
+                parametros.add("@fechaRetiro", Sesion.fecha);
+                parametros.add("@destinatarioNombre", cliente.Rows[0]["Nombre"].ToString());
+                parametros.add("@destinatarioApellido", cliente.Rows[0]["Apellido"].ToString());
+                parametros.add("@banco", Banco_CB.SelectedValue);
 
                 //Llamo al procedimiento que actualiza la BD
-                try
+                if(ConexionDB.Procedure("retiro",parametros.get()))
                 {
-                    ConexionDB.invocarStoreProcedure(Sesion.conexion, "retiro", listaDeParametros);
                     MessageBox.Show("El cheque se ha generado correctamente por la suma de" + " " + Importe_NUD.Value + " " + Moneda_CB.Text);
                 }
-                catch (SqlException ex)
-                {
-                    MessageBox.Show(ex.Message);
-                }
+
                 //Limpio los campos para la proxima operacion
 
                 Cuenta_CB.SelectedIndex = -1;

@@ -29,7 +29,7 @@ namespace PagoElectronico.Consulta_Saldos
                 if(ConexionDB.Procedure("ObtenerUsuariosClientes",null, out usuarios))
                 {
                     comboBox1.DataSource = usuarios;
-                    comboBox1.ValueMember = "Id_usuario";
+                    comboBox1.ValueMember = "Id_cliente";
                     comboBox1.DisplayMember = "Usuario";
                     comboBox1.Text = "Elija un usuario";
                     comboBox1.SelectedIndex = -1;
@@ -50,21 +50,22 @@ namespace PagoElectronico.Consulta_Saldos
         private void actualizarCuentas()
         {
             DataTable cuentas;
-            decimal user;
+            decimal cliente;
             
             
             if (Sesion.rol_id == 1)
             {
                 try
                 {
-                   user = Convert.ToInt32(comboBox1.SelectedValue);
+                   cliente = Convert.ToInt32(comboBox1.SelectedValue);
                 }
-                catch (InvalidCastException) { user = -1; }
+                catch (InvalidCastException) { cliente = -1; }
             }
-            else{ user = Sesion.user_id; }
+            else{ cliente = Sesion.cliente_id; }
             {
                 SQLParametros parametros = new SQLParametros();
-                parametros.add("@Id_cliente",user);
+                parametros.add("@Id_cliente",cliente);
+
                 if(ConexionDB.Procedure("ObtenerCuentasDeCliente",parametros.get(), out cuentas))
                 {
                     comboBox2.DataSource = cuentas;

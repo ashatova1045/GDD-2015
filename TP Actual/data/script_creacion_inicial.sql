@@ -1434,6 +1434,16 @@ AS
 	END
 GO
 
+CREATE PROCEDURE HHHH.ObtenerCliente
+@Id_cliente numeric(18,0)
+AS
+	BEGIN
+		SELECT * 
+		FROM HHHH.clientes
+		WHERE Id_cliente = @Id_cliente
+	END
+GO
+
 CREATE PROCEDURE HHHH.ObtenerClientes
 AS
 	BEGIN
@@ -1479,13 +1489,26 @@ AS
 GO
 
 CREATE PROCEDURE HHHH.ObtenerBancos
+@FiltMigracion bit 
 AS
 	BEGIN
-		SELECT DISTINCT Id_banco,b.Descripcion ,b.Calle,b.altura,
-						 b.localidad, p.Descripcion DES 
-		FROM HHHH.bancos b 
-		LEFT JOIN HHHH.paises p 
-		ON p.Codigo=Id_pais
+		IF (@FiltMigracion = 1)
+			BEGIN
+			SELECT DISTINCT Id_banco,b.Descripcion ,b.Calle,b.altura,
+								 b.localidad, p.Descripcion DES 
+				FROM HHHH.bancos b 
+				LEFT JOIN HHHH.paises p 
+				ON p.Codigo=Id_pais
+				WHERE b.Descripcion <> 'Banco Migracion'
+			END
+		ELSE
+			BEGIN
+				SELECT DISTINCT Id_banco,b.Descripcion ,b.Calle,b.altura,
+								 b.localidad, p.Descripcion DES 
+				FROM HHHH.bancos b 
+				LEFT JOIN HHHH.paises p 
+				ON p.Codigo=Id_pais
+			END
 	END
 GO
 
@@ -1527,9 +1550,21 @@ AS
 		SELECT cue.* 
 		FROM HHHH.cuentas cue, HHHH.clientes cli 
 		WHERE cli.Id_cliente = cue.Id_cliente and 
-			  cli.Id_usuario = @Id_cliente
+			  cli.Id_cliente = @Id_cliente
 	END
 GO
+
+CREATE PROCEDURE HHHH.ObtenerTodasCuentas_HoI
+AS
+	BEGIN
+
+		SELECT DISTINCT c.Id_cuenta,c.Saldo,c.Id_moneda,c.Id_cliente,c.estado,t.Costo_transf,
+				t.Id_moneda_transf 
+		FROM HHHH.Cuentas c,hhhh.tipo_cuenta t 
+		WHERE c.Id_tipo_cuenta = t.Id_tipo_cuenta and c.estado = 'H' or c.estado = 'I'
+	END
+GO
+
 
 CREATE PROCEDURE HHHH.Ultimos5Depositos
 @Id_cuenta numeric(18,0)
