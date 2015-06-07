@@ -17,31 +17,29 @@ namespace PagoElectronico.Facturacion
         public Factura(decimal user)
         {
             InitializeComponent();
-            List<SqlParameter> listaDeParametros = new List<SqlParameter>();
-            listaDeParametros.Add(new SqlParameter("@user_id", user));
-            listaDeParametros.Add(new SqlParameter("@fecha", Sesion.fecha));
+
+            SQLParametros parametros = new SQLParametros();
+            parametros.add("@user_id", user);
+            parametros.add("@fecha", Sesion.fecha);
 
             DataTable datosFactura;
             DataTable itemFacturas;
 
-            try
+            if(ConexionDB.Procedure("Facturar", parametros.get(), out datosFactura))
             {
-                datosFactura = ConexionDB.invocarStoreProcedure(Sesion.conexion, "Facturar", listaDeParametros);
                 label2.Text = datosFactura.Rows[0][0].ToString();
                 label4.Text = datosFactura.Rows[0][2].ToString();
                 label6.Text = datosFactura.Rows[0][1].ToString();
                 label8.Text = datosFactura.Rows[0][3].ToString();
                 label10.Text = datosFactura.Rows[0][4].ToString();
 
-                listaDeParametros.Clear();
-                listaDeParametros.Add(new SqlParameter("@id_factura", datosFactura.Rows[0][0]));
+                parametros.Clear();
+                parametros.add("@id_factura", datosFactura.Rows[0][0]);
 
-                itemFacturas = ConexionDB.invocarStoreProcedure(Sesion.conexion, "itemFactura", listaDeParametros);
-                dataGridView1.DataSource = itemFacturas;
-            }
-            catch (SqlException ex) 
-            {
-                MessageBox.Show(ex.Message);
+                if (ConexionDB.Procedure("itemFactura", parametros.get(), out itemFacturas))
+                {
+                    dataGridView1.DataSource = itemFacturas;
+                }
             }
         }
 

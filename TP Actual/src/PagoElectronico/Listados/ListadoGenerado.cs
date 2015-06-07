@@ -17,14 +17,19 @@ namespace PagoElectronico.Listados
         {
             InitializeComponent();
 
-            List<SqlParameter> listaParaListados = new List<SqlParameter>();
-            listaParaListados.Add(new SqlParameter("@anio", anioIngresado));
-            listaParaListados.Add(new SqlParameter("@primerMes", 1 + (trimestre*3)));
-            listaParaListados.Add(new SqlParameter("@ultimoMes", 3 + (trimestre * 3)));
+            SQLParametros parametros = new SQLParametros();
+
+            parametros.add("@anio", anioIngresado);
+            parametros.add("@primerMes", 1 + (trimestre * 3));
+            parametros.add("@ultimoMes", 3 + (trimestre * 3));
 
             string procToCall = "generarListado" + tListado.ToString();
+            DataTable listado;
 
-            dataGridView1.DataSource = ConexionDB.invocarStoreProcedure(Sesion.conexion, procToCall, listaParaListados);
+            if (ConexionDB.Procedure(procToCall, parametros.get(), out listado))
+            {
+                dataGridView1.DataSource = listado;
+            }
         }
 
         

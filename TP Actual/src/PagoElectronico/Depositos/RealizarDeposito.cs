@@ -27,42 +27,51 @@ namespace PagoElectronico.Depositos
         public RealizarDeposito()
         {
             InitializeComponent();
-            List<SqlParameter> listaParaCuentas = new List<SqlParameter>();
-            listaParaCuentas.Add(new SqlParameter("@idUsuarioLogeado", Sesion.user_id));
+            SQLParametros parametrosCuentas = new SQLParametros();
+            parametrosCuentas.add("@idUsuarioLogeado", Sesion.user_id);
 
-            List<SqlParameter> listaParaTarjetas = new List<SqlParameter>();
-            listaParaTarjetas.Add(new SqlParameter("@idUsuarioLogeado", Sesion.user_id));
+            SQLParametros parametrosTarjetas = new SQLParametros();
+            parametrosTarjetas.add("@idUsuarioLogeado", Sesion.user_id);
 
-            tablaCuentas = ConexionDB.invocarStoreProcedure(Sesion.conexion, "seleccionarCuentas", listaParaCuentas);
-            if (tablaCuentas.Rows.Count == 0)
+
+
+
+            if (ConexionDB.Procedure("seleccionarCuentas", parametrosCuentas.get(), out tablaCuentas))
             {
-                MessageBox.Show("No tiene cuentas");
-                botonConfirmar.Enabled = false;
+                if (tablaCuentas.Rows.Count == 0)
+                {
+                    MessageBox.Show("No tiene cuentas");
+                    botonConfirmar.Enabled = false;
+                }
+                seleccionCuenta.DataSource = tablaCuentas;
+                seleccionCuenta.DisplayMember = "Id_cuenta";
+                seleccionCuenta.ValueMember = "Id_cuenta";
+
+                if (ConexionDB.Procedure("seleccionarTarjetas", parametrosTarjetas.get(), out tablaTarjetas))
+                {
+                    if (tablaTarjetas.Rows.Count == 0)
+                    {
+                        MessageBox.Show("No tiene tarjetas");
+                        botonConfirmar.Enabled = false;
+                    }
+
+                    seleccionTarjeta.DataSource = tablaTarjetas;
+                    seleccionTarjeta.DisplayMember = "finalnumero";
+                    seleccionTarjeta.ValueMember = "Id_tarjeta";
+
+                    if (ConexionDB.Procedure("ObtenerMonedas", null, out tablaMonedas))
+                    {
+                        seleccionMoneda.DataSource = tablaMonedas;
+                        seleccionMoneda.DisplayMember = "Descripcion";
+                        seleccionMoneda.ValueMember = "Id_moneda";
+                    }
+                }
             }
-            seleccionCuenta.DataSource = tablaCuentas;
-            seleccionCuenta.DisplayMember = "Id_cuenta";
-            seleccionCuenta.ValueMember = "Id_cuenta";
-
-            tablaTarjetas = ConexionDB.invocarStoreProcedure(Sesion.conexion, "seleccionarTarjetas", listaParaTarjetas);
-            if (tablaTarjetas.Rows.Count == 0)
-            {
-                MessageBox.Show("No tiene tarjetas");
-                botonConfirmar.Enabled = false;
-            }
-
-            seleccionTarjeta.DataSource = tablaTarjetas;
-            seleccionTarjeta.DisplayMember = "finalnumero";
-            seleccionTarjeta.ValueMember = "Id_tarjeta";
-
-            tablaMonedas = ConexionDB.correrQuery(Sesion.conexion, "select * from HHHH.monedas");
-            seleccionMoneda.DataSource = tablaMonedas;
-            seleccionMoneda.DisplayMember = "Descripcion";
-            seleccionMoneda.ValueMember = "Id_moneda";
         }
            
         private void RealizarDeposito_Load(object sender, EventArgs e)
         {
-            tablaClientes = ConexionDB.correrQuery(Sesion.conexion, "select * from HHHH.clientes");
+            ConexionDB.Procedure("ObtenerClientes", null, out tablaClientes);
         }
 
         private void botonConfirmar_Click_1(object sender, EventArgs e)
@@ -73,27 +82,21 @@ namespace PagoElectronico.Depositos
             tipoMoneda =  (decimal)seleccionMoneda.SelectedValue;
             idTarjeta = (decimal)seleccionTarjeta.SelectedValue;
 
-            List<SqlParameter> listaParaValidar = new List<SqlParameter>();
-            listaParaValidar.Add(new SqlParameter("@idUsuarioLogeado", Sesion.user_id));
-            listaParaValidar.Add(new SqlParameter("@nroCuenta", nroCuenta));
-            listaParaValidar.Add(new SqlParameter("@idTarjeta", idTarjeta));
-            listaParaValidar.Add(new SqlParameter("@importeIngresado", importeIngresado));
-            listaParaValidar.Add(new SqlParameter("@tipoMoneda", tipoMoneda));
-            listaParaValidar.Add(new SqlParameter("@fechaAhora", Sesion.fecha));
+            SQLParametros parametrosParaValidar = new SQLParametros();
 
-            try
+            parametrosParaValidar.add("@idUsuarioLogeado", Sesion.user_id);
+            parametrosParaValidar.add("@nroCuenta", nroCuenta);
+            parametrosParaValidar.add("@idTarjeta", idTarjeta);
+            parametrosParaValidar.add("@importeIngresado", importeIngresado);
+            parametrosParaValidar.add("@tipoMoneda", tipoMoneda);
+            parametrosParaValidar.add("@fechaAhora", Sesion.fecha);
+
+            DataTable tablaValidacionResultado;
+
+            if (ConexionDB.Procedure("validarDeposito", parametrosParaValidar.get(), out tablaValidacionResultado))
             {
-                DataTable tablaValidacionResultado = ConexionDB.invocarStoreProcedure(Sesion.conexion, "validarDeposito", listaParaValidar);
+                MessageBox.Show("Se ha realizado el deposito correctamente");
             }
-
-            catch (Exception errorDeposito)
-            {
-                MessageBox.Show (errorDeposito.Message);
-                return;
-            }
-
-
-        MessageBox.Show("Se ha realizado el deposito correctamente");
 
         }
 

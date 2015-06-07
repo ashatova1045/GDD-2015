@@ -35,20 +35,27 @@ namespace PagoElectronico.Listados
 
             TListadoCBox.SelectedIndex = 0;
             TrimestreCBox.SelectedIndex = 0;
+
+            generarB.Enabled = false;
          
         }
 
         
         private void AnioTextBox_TextChanged(object sender, EventArgs e)
         {
-            if (System.Text.RegularExpressions.Regex.IsMatch(AnioTextBox.Text, "[^0-9]"))
+            if (ValidadorHelper.validarSoloNumeros(AnioTextBox.Text) && AnioTextBox.Text.Length > 3)
             {
-                MessageBox.Show("Solamente numeros!!!");
-                AnioTextBox.Text.Remove(AnioTextBox.Text.Length - 1);
+                errorProvider1.Clear();
+                anioIngresado = Convert.ToInt32(AnioTextBox.Text);
+                generarB.Enabled = true;
+            }
+            else
+            {  
+                errorProvider1.SetError(AnioTextBox, "El año ingresado no es correcto");
+                generarB.Enabled = false;
             }
 
-            AnioTextBox.MaxLength = 4;
-            anioIngresado = Convert.ToInt32( AnioTextBox.Text);
+            
         }
 
 

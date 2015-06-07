@@ -16,23 +16,25 @@ namespace PagoElectronico.Facturacion
         private void actualizarMov(string usuario, decimal userID)
         {
             label3.Text = usuario;
+
             DataTable movSinFacturar;
-            List<SqlParameter> listaDeParametros = new List<SqlParameter>();
-            listaDeParametros.Add(new SqlParameter("@user_id", userID));
+            SQLParametros parametros = new SQLParametros();
+            parametros.add("@user_id", userID);
+
             dataGridView1.DataSource = null;
             dataGridView1.Rows.Clear();
-            try 
+
+            if (ConexionDB.Procedure("movSinFacturar", parametros.get(), out movSinFacturar) && movSinFacturar.Rows.Count > 0)
             {
-            movSinFacturar = ConexionDB.invocarStoreProcedure(Sesion.conexion, "movSinFacturar",listaDeParametros);
-            dataGridView1.DataSource = movSinFacturar;
-            dataGridView1.Visible = true;
-            label4.Visible = false;
-            button2.Enabled = true;
+                dataGridView1.DataSource = movSinFacturar;
+                dataGridView1.Visible = true;
+                label4.Visible = false;
+                button2.Enabled = true;
             }
-            catch(SqlException ex)
+            else
             {
                 dataGridView1.Visible = false;
-                label4.Text = ex.Message;
+                label4.Text = "No hay item para mostrar";
                 label4.Visible = true;
                 button2.Enabled = false;
                 return;
@@ -46,12 +48,15 @@ namespace PagoElectronico.Facturacion
                 label3.Visible = false;
                 comboBox1.Visible = true;
                 DataTable usuarios;
-                usuarios = ConexionDB.correrQuery(Sesion.conexion, "select Id_usuario,Usuario from HHHH.usuarios where Id_usuario <> 1");
-                comboBox1.DataSource = usuarios;
-                comboBox1.ValueMember = "Id_usuario";
-                comboBox1.DisplayMember = "Usuario";
-                comboBox1.Text = "Elija un usuario";
-                comboBox1.SelectedIndex = -1;
+
+                if (ConexionDB.Procedure("ObtenerUsuariosClientes", null, out usuarios))
+                {
+                    comboBox1.DataSource = usuarios;
+                    comboBox1.ValueMember = "Id_usuario";
+                    comboBox1.DisplayMember = "Usuario";
+                    comboBox1.Text = "Elija un usuario";
+                    comboBox1.SelectedIndex = -1;
+                }
             }
             else
             {

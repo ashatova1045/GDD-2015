@@ -923,12 +923,12 @@ GO
 CREATE PROCEDURE HHHH.movSinFacturar
 @user_id numeric(18,0)
 AS
-	IF  ((select COUNT(*) from HHHH.movimientos
+	/*IF  ((select COUNT(*) from HHHH.movimientos
 					where Id_factura is null and HHHH.obtenerUser(Id_cuenta) = @user_id) = 0)
 		BEGIN
 			RAISERROR ('No hay movimientos sin facturar',16,1)
 			RETURN
-		END
+		END*/
 	BEGIN
 		select convert(date,Fecha) AS Fecha, HHHH.GenerarDescripcion (mov.Tipo_movimiento,mov.Id_transferencia,mov.Dias_comprados,mov.Cambio_tipo_cuenta) AS Descripcion,
 				HHHH.impconmoneda(tr.Importe,mov.Id_moneda) AS Importe,HHHH.impconmoneda(mov.Costo,mov.Id_moneda) AS Costo_Final
@@ -1419,6 +1419,14 @@ AS
 		SELECT * 
 		FROM HHHH.paises
 		ORDER BY Descripcion
+	END
+GO
+
+CREATE PROCEDURE HHHH.ObtenerClientes
+AS
+	BEGIN
+		SELECT * 
+		FROM HHHH.clientes
 	END
 GO
 

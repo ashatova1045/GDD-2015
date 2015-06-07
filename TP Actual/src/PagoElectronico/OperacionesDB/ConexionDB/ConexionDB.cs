@@ -134,17 +134,21 @@ namespace PagoElectronico.OperacionesDB.ConexionDB
 
             public SQLParametros()
             {
-            listaDeParametros = new List<SqlParameter>();
+                listaDeParametros = new List<SqlParameter>();
             }
             
             public void add(string nombreParametro, object valor)
             {
-            listaDeParametros.Add(new SqlParameter(nombreParametro,valor));
+                listaDeParametros.Add(new SqlParameter(nombreParametro,valor));
             }
 
             public List<SqlParameter> get()
             {
                 return listaDeParametros;
+            }
+            public void Clear()
+            {
+                listaDeParametros.Clear();
             }
         }
 }
