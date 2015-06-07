@@ -188,6 +188,7 @@
             this.Controls.Add(this.dataGridView1);
             this.Controls.Add(this.groupBox1);
             this.Name = "Factura";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Factura";
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();

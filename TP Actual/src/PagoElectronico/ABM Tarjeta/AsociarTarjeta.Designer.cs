@@ -77,17 +77,19 @@
             // 
             // dtEmision
             // 
+            this.dtEmision.Format = System.Windows.Forms.DateTimePickerFormat.Short;
             this.dtEmision.Location = new System.Drawing.Point(126, 178);
             this.dtEmision.Name = "dtEmision";
-            this.dtEmision.Size = new System.Drawing.Size(479, 20);
+            this.dtEmision.Size = new System.Drawing.Size(99, 20);
             this.dtEmision.TabIndex = 4;
             this.dtEmision.ValueChanged += new System.EventHandler(this.dtEmision_ValueChanged);
             // 
             // dtVencimiento
             // 
+            this.dtVencimiento.Format = System.Windows.Forms.DateTimePickerFormat.Short;
             this.dtVencimiento.Location = new System.Drawing.Point(126, 205);
             this.dtVencimiento.Name = "dtVencimiento";
-            this.dtVencimiento.Size = new System.Drawing.Size(479, 20);
+            this.dtVencimiento.Size = new System.Drawing.Size(99, 20);
             this.dtVencimiento.TabIndex = 5;
             this.dtVencimiento.ValueChanged += new System.EventHandler(this.dtVencimiento_ValueChanged);
             // 
@@ -96,7 +98,7 @@
             this.txtCodigo.Location = new System.Drawing.Point(126, 234);
             this.txtCodigo.MaxLength = 3;
             this.txtCodigo.Name = "txtCodigo";
-            this.txtCodigo.Size = new System.Drawing.Size(80, 20);
+            this.txtCodigo.Size = new System.Drawing.Size(99, 20);
             this.txtCodigo.TabIndex = 6;
             // 
             // label3
@@ -128,7 +130,7 @@
             // 
             // btAsociar
             // 
-            this.btAsociar.Location = new System.Drawing.Point(205, 255);
+            this.btAsociar.Location = new System.Drawing.Point(204, 265);
             this.btAsociar.Name = "btAsociar";
             this.btAsociar.Size = new System.Drawing.Size(97, 30);
             this.btAsociar.TabIndex = 13;
@@ -138,7 +140,7 @@
             // 
             // btVolver
             // 
-            this.btVolver.Location = new System.Drawing.Point(345, 255);
+            this.btVolver.Location = new System.Drawing.Point(345, 265);
             this.btVolver.Name = "btVolver";
             this.btVolver.Size = new System.Drawing.Size(97, 30);
             this.btVolver.TabIndex = 14;
@@ -166,7 +168,6 @@
             this.dgBanco.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dgBanco.Size = new System.Drawing.Size(479, 139);
             this.dgBanco.TabIndex = 15;
-            
             // 
             // Nombre
             // 
@@ -227,7 +228,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(617, 297);
+            this.ClientSize = new System.Drawing.Size(617, 307);
             this.Controls.Add(this.dgBanco);
             this.Controls.Add(this.btVolver);
             this.Controls.Add(this.btAsociar);
@@ -241,6 +242,7 @@
             this.Controls.Add(this.label1);
             this.Controls.Add(this.txttarjeta);
             this.Name = "AsociarTarjeta";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Tarjeta";
             ((System.ComponentModel.ISupportInitialize)(this.dgBanco)).EndInit();
             this.ResumeLayout(false);

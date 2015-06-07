@@ -116,6 +116,12 @@ namespace PagoElectronico.ABM_Cliente
                     errorProvider1.SetError(textBoxRes, "Respuesta no válida");
                     correcto = false;
                 }
+
+                if (TXT_RepetirPassword.Text!=textBoxPW.Text){
+
+                    errorProvider1.SetError(TXT_RepetirPassword, "Las password no coinciden");
+                    correcto = false;
+                }
             }
 
             return correcto;
@@ -305,6 +311,40 @@ namespace PagoElectronico.ABM_Cliente
         private void label13_Click(object sender, EventArgs e)
         {
 
+        }
+
+        private void TXT_RepetirPassword_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (textBoxPW.Text == TXT_RepetirPassword.Text)
+            {
+                LB_MensajeError.Visible = false;
+            }
+            else 
+            {
+                LB_MensajeError.Visible = true;
+            }
+        }
+
+        private void label19_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void TXT_RepetirPassword_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void TXT_RepetirPassword_KeyUp(object sender, KeyEventArgs e)
+        {
+            if (textBoxPW.Text == TXT_RepetirPassword.Text)
+            {
+                LB_MensajeError.Visible = false;
+            }
+            else
+            {
+                LB_MensajeError.Visible = true;
+            }
         }
     }
 }

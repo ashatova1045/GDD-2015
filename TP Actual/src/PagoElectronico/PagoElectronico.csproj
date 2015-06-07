@@ -203,6 +203,9 @@
     <EmbeddedResource Include="ABM Tarjeta\mtar.resx">
       <DependentUpon>mtar.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Facturacion\Factura.resx">
+      <DependentUpon>Factura.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Facturacion\Facturacion.resx">
       <DependentUpon>Facturacion.cs</DependentUpon>
     </EmbeddedResource>

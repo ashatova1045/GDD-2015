@@ -63,14 +63,14 @@
             this.groupBox1.Controls.Add(this.label1);
             this.groupBox1.Location = new System.Drawing.Point(13, 4);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(358, 170);
+            this.groupBox1.Size = new System.Drawing.Size(384, 192);
             this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Datos Cuenta";
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(258, 141);
+            this.button2.Location = new System.Drawing.Point(247, 163);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(75, 23);
             this.button2.TabIndex = 11;
@@ -80,7 +80,7 @@
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(6, 141);
+            this.button1.Location = new System.Drawing.Point(69, 163);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(75, 23);
             this.button1.TabIndex = 10;
@@ -91,23 +91,24 @@
             // 
             this.comboBoxTipoCuenta.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxTipoCuenta.FormattingEnabled = true;
-            this.comboBoxTipoCuenta.Location = new System.Drawing.Point(43, 111);
+            this.comboBoxTipoCuenta.Location = new System.Drawing.Point(59, 123);
             this.comboBoxTipoCuenta.Name = "comboBoxTipoCuenta";
-            this.comboBoxTipoCuenta.Size = new System.Drawing.Size(290, 21);
+            this.comboBoxTipoCuenta.Size = new System.Drawing.Size(274, 21);
             this.comboBoxTipoCuenta.TabIndex = 9;
             // 
             // dateTimePicker1
             // 
-            this.dateTimePicker1.Location = new System.Drawing.Point(94, 88);
+            this.dateTimePicker1.Format = System.Windows.Forms.DateTimePickerFormat.Short;
+            this.dateTimePicker1.Location = new System.Drawing.Point(59, 97);
             this.dateTimePicker1.Name = "dateTimePicker1";
-            this.dateTimePicker1.Size = new System.Drawing.Size(239, 20);
+            this.dateTimePicker1.Size = new System.Drawing.Size(274, 20);
             this.dateTimePicker1.TabIndex = 8;
             // 
             // comboBoxMoneda
             // 
             this.comboBoxMoneda.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxMoneda.FormattingEnabled = true;
-            this.comboBoxMoneda.Location = new System.Drawing.Point(59, 64);
+            this.comboBoxMoneda.Location = new System.Drawing.Point(59, 70);
             this.comboBoxMoneda.Name = "comboBoxMoneda";
             this.comboBoxMoneda.Size = new System.Drawing.Size(274, 21);
             this.comboBoxMoneda.TabIndex = 7;
@@ -116,9 +117,9 @@
             // 
             this.comboBoxPais.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxPais.FormattingEnabled = true;
-            this.comboBoxPais.Location = new System.Drawing.Point(42, 40);
+            this.comboBoxPais.Location = new System.Drawing.Point(59, 43);
             this.comboBoxPais.Name = "comboBoxPais";
-            this.comboBoxPais.Size = new System.Drawing.Size(291, 21);
+            this.comboBoxPais.Size = new System.Drawing.Size(274, 21);
             this.comboBoxPais.TabIndex = 6;
             // 
             // textBoxNumero
@@ -131,25 +132,25 @@
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(9, 114);
+            this.label5.Location = new System.Drawing.Point(9, 123);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(28, 13);
+            this.label5.Size = new System.Drawing.Size(40, 26);
             this.label5.TabIndex = 4;
-            this.label5.Text = "Tipo";
+            this.label5.Text = "Tipo \r\ncuenta";
             // 
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(9, 92);
+            this.label4.Location = new System.Drawing.Point(9, 91);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(79, 13);
+            this.label4.Size = new System.Drawing.Size(46, 26);
             this.label4.TabIndex = 3;
-            this.label4.Text = "Fecha apertura";
+            this.label4.Text = "Fecha \r\napertura";
             // 
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(9, 67);
+            this.label3.Location = new System.Drawing.Point(9, 73);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(46, 13);
             this.label3.TabIndex = 2;
@@ -158,11 +159,12 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(9, 43);
+            this.label2.Location = new System.Drawing.Point(9, 46);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(27, 13);
             this.label2.TabIndex = 1;
             this.label2.Text = "Pais";
+            this.label2.Click += new System.EventHandler(this.label2_Click);
             // 
             // label1
             // 
@@ -182,9 +184,10 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(383, 186);
+            this.ClientSize = new System.Drawing.Size(409, 208);
             this.Controls.Add(this.groupBox1);
             this.Name = "EdicionCuenta";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "EdicionCuenta";
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
