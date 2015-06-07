@@ -523,8 +523,20 @@ BEGIN /* *************** MIGRACION *************** */
 		VALUES (1,1), (1,2), (1,3), (1,4), (1,9), (1,10), (1,11),
 				(2,4), (2,5), (2,6), (2,7), (2,8), (2,9), (2,10)
 -------------------------------------------------------------------------------------------	
-	INSERT INTO HHHH.preguntas(pregunta)
+	INSERT INTO HHHH.preguntas(Pregunta)
 		VALUES('¿Sos puto?')
+	INSERT INTO HHHH.preguntas(Pregunta)
+		VALUES('Nombre de la primer mascota')
+	INSERT INTO HHHH.preguntas(Pregunta)
+		VALUES('Apellido de soltera de la madre')
+	INSERT INTO HHHH.preguntas(Pregunta)
+		VALUES('Nombre de profesor favorito')
+	INSERT INTO HHHH.preguntas(Pregunta)
+		VALUES('Profesion del abuelo')
+	INSERT INTO HHHH.preguntas(Pregunta)
+		VALUES('Libro preferido')
+	INSERT INTO HHHH.preguntas(Pregunta)
+		VALUES('Pelicula preferida')
 END
 GO
 
