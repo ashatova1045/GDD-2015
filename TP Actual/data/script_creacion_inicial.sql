@@ -1463,7 +1463,7 @@ GO
 CREATE PROCEDURE HHHH.ObtenerUsuariosClientes
 AS
 	BEGIN
-		SELECT us.* 
+		SELECT us.*, cli.Id_cliente
 		FROM HHHH.usuarios us
 		JOIN HHHH.clientes cli
 		ON cli.Id_usuario = us.Id_usuario
