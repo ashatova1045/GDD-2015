@@ -30,7 +30,7 @@ namespace PagoElectronico.OperacionesDB.ConexionDB
         }
 
         //invocar storeProcedures en la DB
-        public static DataTable invocarStoreProcedure(SqlConnection conexionDB, string nombreProcedure, List<SqlParameter> parametros)
+        private static DataTable invocarStoreProcedure(SqlConnection conexionDB, string nombreProcedure, List<SqlParameter> parametros)
         {
             SqlCommand comandoSQL = new SqlCommand("HHHH."+nombreProcedure, conexionDB);
             comandoSQL.CommandType = CommandType.StoredProcedure;
