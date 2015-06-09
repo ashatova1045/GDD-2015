@@ -104,6 +104,14 @@ namespace PagoElectronico.ABM_Cliente
                     errorProvider1.SetError(textBoxPW, "Password no válido");
                     correcto = false;
                 }
+                else
+                {
+                    if (TXT_RepetirPassword.Text != textBoxPW.Text)
+                    {
+                        errorProvider1.SetError(TXT_RepetirPassword, "Las password no coinciden");
+                        correcto = false;
+                    }
+                }
 
                 if (comboBoxPreg.SelectedValue == null)
                 {
@@ -114,12 +122,6 @@ namespace PagoElectronico.ABM_Cliente
                 if (!ValidadorHelper.ValidarFrase(textBoxRes.Text))
                 {
                     errorProvider1.SetError(textBoxRes, "Respuesta no válida");
-                    correcto = false;
-                }
-
-                if (TXT_RepetirPassword.Text!=textBoxPW.Text){
-
-                    errorProvider1.SetError(TXT_RepetirPassword, "Las password no coinciden");
                     correcto = false;
                 }
             }
@@ -239,6 +241,8 @@ namespace PagoElectronico.ABM_Cliente
             textBoxUser.Enabled = false;
             textBoxPW.Text = "******";
             textBoxPW.Enabled = false;
+            TXT_RepetirPassword.Enabled = false;
+            TXT_RepetirPassword.Text = "******";
             comboBoxPreg.SelectedValue = cell["id_pregunta"].Value;
             comboBoxPreg.Enabled = false;
             textBoxRes.Text = "******";
@@ -306,45 +310,6 @@ namespace PagoElectronico.ABM_Cliente
                 checkBoxCliente.Text = "Habilitado";
             else
                 checkBoxCliente.Text = "Deshabilitado";
-        }
-
-        private void label13_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void TXT_RepetirPassword_KeyPress(object sender, KeyPressEventArgs e)
-        {
-            if (textBoxPW.Text == TXT_RepetirPassword.Text)
-            {
-                LB_MensajeError.Visible = false;
-            }
-            else 
-            {
-                LB_MensajeError.Visible = true;
-            }
-        }
-
-        private void label19_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void TXT_RepetirPassword_TextChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void TXT_RepetirPassword_KeyUp(object sender, KeyEventArgs e)
-        {
-            if (textBoxPW.Text == TXT_RepetirPassword.Text)
-            {
-                LB_MensajeError.Visible = false;
-            }
-            else
-            {
-                LB_MensajeError.Visible = true;
-            }
         }
     }
 }

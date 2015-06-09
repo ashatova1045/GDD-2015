@@ -62,6 +62,8 @@
             this.errorProvider1 = new System.Windows.Forms.ErrorProvider(this.components);
             this.button2 = new System.Windows.Forms.Button();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.TXT_RepetirPassword = new System.Windows.Forms.TextBox();
+            this.LB_RepetirPassword = new System.Windows.Forms.Label();
             this.comboBoxPreg = new System.Windows.Forms.ComboBox();
             this.checkBoxEstado = new System.Windows.Forms.CheckBox();
             this.labelEstado = new System.Windows.Forms.Label();
@@ -74,9 +76,6 @@
             this.label15 = new System.Windows.Forms.Label();
             this.textBoxUser = new System.Windows.Forms.TextBox();
             this.label14 = new System.Windows.Forms.Label();
-            this.LB_RepetirPassword = new System.Windows.Forms.Label();
-            this.TXT_RepetirPassword = new System.Windows.Forms.TextBox();
-            this.LB_MensajeError = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).BeginInit();
             this.groupBox2.SuspendLayout();
@@ -163,7 +162,6 @@
             this.label13.Size = new System.Drawing.Size(69, 13);
             this.label13.TabIndex = 25;
             this.label13.Text = "Nacionalidad";
-            this.label13.Click += new System.EventHandler(this.label13_Click);
             // 
             // textBox9
             // 
@@ -381,7 +379,6 @@
             // 
             // groupBox2
             // 
-            this.groupBox2.Controls.Add(this.LB_MensajeError);
             this.groupBox2.Controls.Add(this.TXT_RepetirPassword);
             this.groupBox2.Controls.Add(this.LB_RepetirPassword);
             this.groupBox2.Controls.Add(this.comboBoxPreg);
@@ -403,10 +400,27 @@
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Datos de la cuenta";
             // 
+            // TXT_RepetirPassword
+            // 
+            this.TXT_RepetirPassword.Location = new System.Drawing.Point(68, 69);
+            this.TXT_RepetirPassword.Name = "TXT_RepetirPassword";
+            this.TXT_RepetirPassword.PasswordChar = '*';
+            this.TXT_RepetirPassword.Size = new System.Drawing.Size(183, 20);
+            this.TXT_RepetirPassword.TabIndex = 17;
+            // 
+            // LB_RepetirPassword
+            // 
+            this.LB_RepetirPassword.AutoSize = true;
+            this.LB_RepetirPassword.Location = new System.Drawing.Point(7, 63);
+            this.LB_RepetirPassword.Name = "LB_RepetirPassword";
+            this.LB_RepetirPassword.Size = new System.Drawing.Size(52, 26);
+            this.LB_RepetirPassword.TabIndex = 22;
+            this.LB_RepetirPassword.Text = "Repetir \r\npassword";
+            // 
             // comboBoxPreg
             // 
             this.comboBoxPreg.FormattingEnabled = true;
-            this.comboBoxPreg.Location = new System.Drawing.Point(68, 109);
+            this.comboBoxPreg.Location = new System.Drawing.Point(68, 95);
             this.comboBoxPreg.Name = "comboBoxPreg";
             this.comboBoxPreg.Size = new System.Drawing.Size(183, 21);
             this.comboBoxPreg.TabIndex = 18;
@@ -453,7 +467,7 @@
             // label17
             // 
             this.label17.AutoSize = true;
-            this.label17.Location = new System.Drawing.Point(7, 136);
+            this.label17.Location = new System.Drawing.Point(7, 122);
             this.label17.Name = "label17";
             this.label17.Size = new System.Drawing.Size(58, 13);
             this.label17.TabIndex = 7;
@@ -461,7 +475,7 @@
             // 
             // textBoxRes
             // 
-            this.textBoxRes.Location = new System.Drawing.Point(68, 136);
+            this.textBoxRes.Location = new System.Drawing.Point(68, 122);
             this.textBoxRes.Name = "textBoxRes";
             this.textBoxRes.PasswordChar = '*';
             this.textBoxRes.Size = new System.Drawing.Size(183, 20);
@@ -470,7 +484,7 @@
             // label16
             // 
             this.label16.AutoSize = true;
-            this.label16.Location = new System.Drawing.Point(7, 104);
+            this.label16.Location = new System.Drawing.Point(7, 90);
             this.label16.Name = "label16";
             this.label16.Size = new System.Drawing.Size(53, 26);
             this.label16.TabIndex = 4;
@@ -508,38 +522,6 @@
             this.label14.Size = new System.Drawing.Size(55, 13);
             this.label14.TabIndex = 0;
             this.label14.Text = "Username";
-            // 
-            // LB_RepetirPassword
-            // 
-            this.LB_RepetirPassword.AutoSize = true;
-            this.LB_RepetirPassword.Location = new System.Drawing.Point(7, 63);
-            this.LB_RepetirPassword.Name = "LB_RepetirPassword";
-            this.LB_RepetirPassword.Size = new System.Drawing.Size(52, 26);
-            this.LB_RepetirPassword.TabIndex = 22;
-            this.LB_RepetirPassword.Text = "Repetir \r\npassword";
-            // 
-            // TXT_RepetirPassword
-            // 
-            this.TXT_RepetirPassword.Location = new System.Drawing.Point(68, 69);
-            this.TXT_RepetirPassword.Name = "TXT_RepetirPassword";
-            this.TXT_RepetirPassword.PasswordChar = '*';
-            this.TXT_RepetirPassword.Size = new System.Drawing.Size(183, 20);
-            this.TXT_RepetirPassword.TabIndex = 17;
-            this.TXT_RepetirPassword.TextChanged += new System.EventHandler(this.TXT_RepetirPassword_TextChanged);
-            this.TXT_RepetirPassword.KeyUp += new System.Windows.Forms.KeyEventHandler(this.TXT_RepetirPassword_KeyUp);
-            this.TXT_RepetirPassword.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.TXT_RepetirPassword_KeyPress);
-            // 
-            // LB_MensajeError
-            // 
-            this.LB_MensajeError.AutoSize = true;
-            this.LB_MensajeError.ForeColor = System.Drawing.Color.Red;
-            this.LB_MensajeError.Location = new System.Drawing.Point(66, 92);
-            this.LB_MensajeError.Name = "LB_MensajeError";
-            this.LB_MensajeError.Size = new System.Drawing.Size(136, 13);
-            this.LB_MensajeError.TabIndex = 24;
-            this.LB_MensajeError.Text = "Las password no coinciden";
-            this.LB_MensajeError.Visible = false;
-            this.LB_MensajeError.Click += new System.EventHandler(this.label19_Click);
             // 
             // Nuevo_Cliente
             // 
@@ -612,6 +594,5 @@
         private System.Windows.Forms.ComboBox comboBoxPreg;
         private System.Windows.Forms.TextBox TXT_RepetirPassword;
         private System.Windows.Forms.Label LB_RepetirPassword;
-        private System.Windows.Forms.Label LB_MensajeError;
     }
 }

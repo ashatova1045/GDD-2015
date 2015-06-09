@@ -418,9 +418,9 @@ BEGIN /* *************** MIGRACION *************** */
 				('Oro', 1,0,30,1,3)
 -------------------------------------------------------------------------------------------			
 	--SET IDENTITY_INSERT HHHH.cuentas ON
-	INSERT INTO HHHH.cuentas(Id_cuenta, Id_pais, Fecha_apertura, Id_cliente,Id_moneda,Saldo,Estado,Id_tipo_cuenta)
+	INSERT INTO HHHH.cuentas(Id_cuenta, Id_pais, Fecha_apertura, Id_cliente,Id_moneda,Estado,Id_tipo_cuenta)
 		SELECT DISTINCT M.Cuenta_Numero, M.Cuenta_Pais_Codigo, M.Cuenta_Fecha_Creacion, 
-				C.Id_cliente,1,100,'H',1
+				C.Id_cliente,1,'H',1
 			FROM gd_esquema.Maestra M, HHHH.clientes C
 			WHERE C.Mail = M.Cli_Mail
 	--SET IDENTITY_INSERT HHHH.cuentas OFF
@@ -529,6 +529,34 @@ BEGIN /* *************** MIGRACION *************** */
 	INSERT INTO HHHH.preguntas(Pregunta)
 		VALUES('Pelicula preferida')
 END
+GO
+
+UPDATE HHHH.cuentas
+SET Saldo = Sal.faltaLoquerecibio
+FROM HHHH.cuentas cue, 
+						(
+						SELECT Cuenta_Numero, 
+								sum(Deposito_Importe)-sum(Trans_Importe)-sum(Retiro_Importe) as faltaLoquerecibio
+						FROM gd_esquema.Maestra
+						WHERE Deposito_Codigo is not null or
+								Transf_Fecha is not null or
+								Retiro_Codigo is not null or
+								Cheque_Numero is not null
+						GROUP BY Cuenta_Numero
+						) Sal
+WHERE cue.Id_cuenta = Sal.Cuenta_Numero
+GO
+
+
+UPDATE HHHH.cuentas
+SET Saldo += TransfRec.transfRec
+FROM HHHH.cuentas cue,
+						(SELECT Cuenta_Dest_Numero, sum(Trans_Importe) as transfRec
+						FROM gd_esquema.Maestra
+						WHERE Trans_Importe is not null
+						GROUP BY Cuenta_Dest_Numero
+						) TransfRec
+WHERE cue.Id_cuenta = TransfRec.Cuenta_Dest_Numero
 GO
 
 /* *************** CREACION DE STORED PROCEDURES *************** */
