@@ -109,6 +109,7 @@
             this.dataGridView1.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridView1.Location = new System.Drawing.Point(12, 71);
+            this.dataGridView1.MultiSelect = false;
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.ReadOnly = true;
             this.dataGridView1.RowHeadersVisible = false;
@@ -137,7 +138,7 @@
             this.Controls.Add(this.groupBox1);
             this.Name = "AdministrarCuentas";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "AdministrarCuentas";
+            this.Text = "Administrar Cuentas";
             this.Load += new System.EventHandler(this.AdministrarCuentas_Load);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();

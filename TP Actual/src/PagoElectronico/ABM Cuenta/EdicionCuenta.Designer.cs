@@ -98,6 +98,7 @@
             // 
             // dateTimePicker1
             // 
+            this.dateTimePicker1.Enabled = false;
             this.dateTimePicker1.Format = System.Windows.Forms.DateTimePickerFormat.Short;
             this.dateTimePicker1.Location = new System.Drawing.Point(59, 97);
             this.dateTimePicker1.Name = "dateTimePicker1";
@@ -125,6 +126,7 @@
             // textBoxNumero
             // 
             this.textBoxNumero.Location = new System.Drawing.Point(59, 17);
+            this.textBoxNumero.MaxLength = 18;
             this.textBoxNumero.Name = "textBoxNumero";
             this.textBoxNumero.Size = new System.Drawing.Size(274, 20);
             this.textBoxNumero.TabIndex = 5;
@@ -164,7 +166,6 @@
             this.label2.Size = new System.Drawing.Size(27, 13);
             this.label2.TabIndex = 1;
             this.label2.Text = "Pais";
-            this.label2.Click += new System.EventHandler(this.label2_Click);
             // 
             // label1
             // 
@@ -188,7 +189,7 @@
             this.Controls.Add(this.groupBox1);
             this.Name = "EdicionCuenta";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "EdicionCuenta";
+            this.Text = "Edicion Cuenta";
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).EndInit();

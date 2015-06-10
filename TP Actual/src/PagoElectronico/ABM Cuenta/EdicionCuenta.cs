@@ -25,7 +25,10 @@ namespace PagoElectronico.ABM_Cuenta
                 button1.Click += new System.EventHandler(modCuenta);
             }
             else
+            {
                 button1.Click += new System.EventHandler(nuevaCuenta);
+                dateTimePicker1.Value = Sesion.fecha;
+            }
 
         }
         private void cargarDatos(DataGridViewCellCollection cell)
@@ -144,11 +147,6 @@ namespace PagoElectronico.ABM_Cuenta
                 MessageBox.Show("Cuenta creada exitosamente");
                 button2_Click(null, null);
             }
-        }
-
-        private void label2_Click(object sender, EventArgs e)
-        {
-
         }
     }
 }

@@ -1202,7 +1202,7 @@ CREATE PROCEDURE HHHH.ObtenerCuentas
 AS
 	BEGIN
 		SELECT cue.Id_cuenta as 'Cuenta', pa.Descripcion as 'Pais', cue.Id_pais, tp.Descripcion as 'Tipo cuenta', cue.Id_moneda,
-				 cue.Fecha_apertura as 'Fecha apertura', mon.Descripcion, cue.Saldo, cue.Estado
+				 cue.Fecha_apertura as 'Fecha apertura', mon.Descripcion as 'Moneda', cue.Saldo, cue.Estado
 		FROM HHHH.cuentas cue 
 		JOIN HHHH.clientes cli 
         ON cli.Id_cliente = cue.Id_cliente and 
