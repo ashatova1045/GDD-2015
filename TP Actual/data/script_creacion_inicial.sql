@@ -515,8 +515,6 @@ BEGIN /* *************** MIGRACION *************** */
 				(2,4), (2,5), (2,6), (2,7), (2,8), (2,9), (2,10)
 -------------------------------------------------------------------------------------------	
 	INSERT INTO HHHH.preguntas(Pregunta)
-		VALUES('¿Sos puto?')
-	INSERT INTO HHHH.preguntas(Pregunta)
 		VALUES('Nombre de la primer mascota')
 	INSERT INTO HHHH.preguntas(Pregunta)
 		VALUES('Apellido de soltera de la madre')
@@ -538,10 +536,7 @@ FROM HHHH.cuentas cue,
 						SELECT Cuenta_Numero, 
 								sum(Deposito_Importe)-sum(Trans_Importe)-sum(Retiro_Importe) as faltaLoquerecibio
 						FROM gd_esquema.Maestra
-						WHERE Deposito_Codigo is not null or
-								Transf_Fecha is not null or
-								Retiro_Codigo is not null or
-								Cheque_Numero is not null
+						WHERE Factura_Numero is null
 						GROUP BY Cuenta_Numero
 						) Sal
 WHERE cue.Id_cuenta = Sal.Cuenta_Numero
@@ -553,7 +548,7 @@ SET Saldo += TransfRec.transfRec
 FROM HHHH.cuentas cue,
 						(SELECT Cuenta_Dest_Numero, sum(Trans_Importe) as transfRec
 						FROM gd_esquema.Maestra
-						WHERE Trans_Importe is not null
+						WHERE Factura_Numero is null
 						GROUP BY Cuenta_Dest_Numero
 						) TransfRec
 WHERE cue.Id_cuenta = TransfRec.Cuenta_Dest_Numero
