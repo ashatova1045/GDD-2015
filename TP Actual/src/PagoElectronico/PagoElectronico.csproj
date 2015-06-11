@@ -72,6 +72,12 @@
     <Compile Include="ABM Cuenta\EdicionCuenta.Designer.cs">
       <DependentUpon>EdicionCuenta.cs</DependentUpon>
     </Compile>
+    <Compile Include="ABM Cuenta\ProlongacionCuentas.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ABM Cuenta\ProlongacionCuentas.Designer.cs">
+      <DependentUpon>ProlongacionCuentas.cs</DependentUpon>
+    </Compile>
     <Compile Include="ABM de Usuario\Form1.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -184,6 +190,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="ABM Cuenta\EdicionCuenta.resx">
       <DependentUpon>EdicionCuenta.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ABM Cuenta\ProlongacionCuentas.resx">
+      <DependentUpon>ProlongacionCuentas.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="ABM Rol\AdministrarRoles.resx">
       <DependentUpon>AdministrarRoles.cs</DependentUpon>

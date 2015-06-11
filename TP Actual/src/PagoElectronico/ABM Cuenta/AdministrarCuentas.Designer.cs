@@ -36,6 +36,7 @@
             this.comboBox1 = new System.Windows.Forms.ComboBox();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
             this.button2 = new System.Windows.Forms.Button();
+            this.btnProlongar = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.SuspendLayout();
@@ -51,6 +52,7 @@
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.btnProlongar);
             this.groupBox1.Controls.Add(this.button4);
             this.groupBox1.Controls.Add(this.button3);
             this.groupBox1.Controls.Add(this.button1);
@@ -58,7 +60,7 @@
             this.groupBox1.Controls.Add(this.label1);
             this.groupBox1.Location = new System.Drawing.Point(12, 12);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(508, 53);
+            this.groupBox1.Size = new System.Drawing.Size(614, 53);
             this.groupBox1.TabIndex = 1;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Acciones";
@@ -115,13 +117,13 @@
             this.dataGridView1.ReadOnly = true;
             this.dataGridView1.RowHeadersVisible = false;
             this.dataGridView1.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dataGridView1.Size = new System.Drawing.Size(508, 191);
+            this.dataGridView1.Size = new System.Drawing.Size(587, 191);
             this.dataGridView1.TabIndex = 2;
             this.dataGridView1.SelectionChanged += new System.EventHandler(this.dataGridView1_SelectionChanged);
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(445, 268);
+            this.button2.Location = new System.Drawing.Point(524, 268);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(75, 23);
             this.button2.TabIndex = 3;
@@ -129,11 +131,21 @@
             this.button2.UseVisualStyleBackColor = true;
             this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
+            // btnProlongar
+            // 
+            this.btnProlongar.Location = new System.Drawing.Point(508, 14);
+            this.btnProlongar.Name = "btnProlongar";
+            this.btnProlongar.Size = new System.Drawing.Size(98, 23);
+            this.btnProlongar.TabIndex = 5;
+            this.btnProlongar.Text = "Prolongar cuenta";
+            this.btnProlongar.UseVisualStyleBackColor = true;
+            this.btnProlongar.Click += new System.EventHandler(this.btnProlongar_Click);
+            // 
             // AdministrarCuentas
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(532, 299);
+            this.ClientSize = new System.Drawing.Size(631, 299);
             this.Controls.Add(this.button2);
             this.Controls.Add(this.dataGridView1);
             this.Controls.Add(this.groupBox1);
@@ -158,5 +170,6 @@
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.Button button3;
         private System.Windows.Forms.Button button4;
+        private System.Windows.Forms.Button btnProlongar;
     }
 }

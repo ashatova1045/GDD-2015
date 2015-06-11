@@ -127,5 +127,25 @@ namespace PagoElectronico.ABM_Cuenta
             if (ConexionDB.Procedure("bajaCuenta", parametros.get()))
                 MessageBox.Show("Cuenta borrada");
         }
+
+        private void btnProlongar_Click(object sender, EventArgs e)
+        {
+            if (!(dataGridView1.SelectedRows.Count > 0))
+            {
+                MessageBox.Show("Seleccione una cuenta para prolongar.");
+                return;
+            }
+            char estado = Convert.ToChar(dataGridView1.SelectedRows[0].Cells["Estado"]);
+
+            if (estado == 'P')
+            {
+                MessageBox.Show("Pague la activacion de su cuenta antes de prolongarla.");
+                return;
+            }
+
+            new ProlongacionCuentas(dataGridView1.SelectedRows[0].Cells).Show(this);
+            this.Hide();
+
+        }
     }
 }
