@@ -112,5 +112,20 @@ namespace PagoElectronico.ABM_Cuenta
             new EdicionCuenta(null, Convert.ToDecimal(comboBox1.SelectedValue)).Show(this);
             this.Hide();
         }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            if(!(dataGridView1.SelectedRows.Count > 0))
+                MessageBox.Show("Seleccione una cuenta para borrar");
+
+            decimal ncuenta = Convert.ToDecimal(dataGridView1.SelectedRows[0].Cells["Cuenta"].Value);
+
+            SQLParametros parametros = new SQLParametros();
+            parametros.add("@cuenta", ncuenta);
+            parametros.add("@fecha", Sesion.fecha);
+
+            if (ConexionDB.Procedure("bajaCuenta", parametros.get()))
+                MessageBox.Show("Cuenta borrada");
+        }
     }
 }

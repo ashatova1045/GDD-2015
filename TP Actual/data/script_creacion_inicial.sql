@@ -248,6 +248,7 @@ BEGIN /* *************** CREACION DE TABLAS *************** */
 		Id_pais numeric(18,0) CONSTRAINT FK_cuentas_pais FOREIGN KEY REFERENCES HHHH.paises(Codigo),
 		Id_moneda numeric(18,0),
 		Fecha_apertura datetime,
+		Fecha_cierre datetime,
 		Id_tipo_cuenta numeric(18,0) CONSTRAINT FK_cuentas_tc FOREIGN KEY REFERENCES HHHH.tipo_cuenta(Id_tipo_cuenta),
 		Id_cliente numeric(18,0) NOT NULL CONSTRAINT FK_cuentas_cliente FOREIGN KEY REFERENCES HHHH.clientes(Id_cliente),
 		Estado NVARCHAR DEFAULT 'P' CHECK (Estado IN ('P','C','H','I')), -- pend act, cerrada, habilida, inhabilitada
@@ -1255,6 +1256,26 @@ AS
 	END
 GO
 
+CREATE PROCEDURE HHHH.bajaCuenta
+@cuenta numeric(18,0),
+@fecha datetime
+AS
+	BEGIN
+
+		--si hay una transaccion sin cobrar
+		IF EXISTS (select 1 from HHHH.movimientos where Id_factura is null and Id_cuenta = @cuenta and Id_transferencia is not null)
+			BEGIN
+				RAISERROR('Tiene transacciones sin cobrar',16,1)
+				RETURN
+			END
+		
+		UPDATE HHHH.cuentas
+			SET Estado='B',
+				fecha_cierre=@fecha
+			WHERE Id_cuenta=@cuenta
+	END
+GO
+
 
 -----------------LISTADOS ANA------------------------
 CREATE PROCEDURE HHHH.generarListado0
@@ -1386,9 +1407,6 @@ AS
 GO
 
 ----------------------------------------------------------------------------------------------
-
-update HHHH.cuentas
-set Id_tipo_cuenta =1, Estado = 'H'
 GO
 
 
