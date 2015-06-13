@@ -135,7 +135,7 @@ namespace PagoElectronico.ABM_Cuenta
                 MessageBox.Show("Seleccione una cuenta para prolongar.");
                 return;
             }
-            char estado = Convert.ToChar(dataGridView1.SelectedRows[0].Cells["Estado"]);
+            char estado = Convert.ToChar(dataGridView1.SelectedRows[0].Cells["Estado"].Value);
 
             if (estado == 'P')
             {

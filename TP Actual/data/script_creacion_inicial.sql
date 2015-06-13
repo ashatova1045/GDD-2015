@@ -342,7 +342,7 @@ BEGIN /* *************** CREACION DE TABLAS *************** */
 	CREATE TABLE HHHH.movimientos(
 		Id_movimiento numeric(18,0) IDENTITY(1,1) PRIMARY KEY,
 		Id_factura numeric(18,0) CONSTRAINT FK_movimientos_facturas REFERENCES HHHH.facturas(Id_factura),
-		Tipo_movimiento char(1) NOT NULL CHECK (Tipo_movimiento IN ('T','C')), --  T transferencia , C cambio de cuenta 
+		Tipo_movimiento char(1) NOT NULL CHECK (Tipo_movimiento IN ('T','C','P')), --  T transferencia , C cambio de cuenta, P pago cuenta nueva (pend act)
 		Costo numeric(18,2) NOT NULL,
 		Id_moneda numeric(18,0) CONSTRAINT FK_movimientos_monedas REFERENCES HHHH.monedas(Id_moneda),
 		Id_cuenta numeric(18,0) CONSTRAINT FK_movimientos_cuentas REFERENCES HHHH.cuentas(Id_cuenta),
@@ -967,9 +967,11 @@ AS
 		END*/
 	BEGIN
 		select convert(date,Fecha) AS Fecha, HHHH.GenerarDescripcion (mov.Tipo_movimiento,mov.Id_transferencia,mov.Dias_comprados,mov.Cambio_tipo_cuenta) AS Descripcion,
-				HHHH.impconmoneda(tr.Importe,mov.Id_moneda) AS Importe,HHHH.impconmoneda(mov.Costo,mov.Id_moneda) AS Costo_Final
-			from HHHH.movimientos mov, HHHH.transferencias tr
-			where Id_factura is null and tr.Id_transferencia = mov.Id_transferencia
+				HHHH.impconmoneda(tr.Importe,mov.Id_moneda) AS Importe,HHHH.impconmoneda(mov.Costo,mov.Id_moneda) AS Costo
+			from HHHH.movimientos mov
+			LEFT JOIN HHHH.transferencias tr
+			ON tr.Id_transferencia = mov.Id_transferencia
+			where Id_factura is null 
 			 and HHHH.obtenerUser(mov.Id_cuenta) = @user_id
 	END
 GO
@@ -991,8 +993,10 @@ AS
 		
 		UPDATE HHHH.movimientos
 		SET Id_factura = @FacturaActual
-		FROM HHHH.movimientos mov, HHHH.transferencias tr
-		WHERE Id_factura is null and tr.Id_transferencia = mov.Id_transferencia
+		FROM HHHH.movimientos mov
+		LEFT JOIN HHHH.transferencias tr
+		ON tr.Id_transferencia = mov.Id_transferencia
+		WHERE Id_factura is null
 			  and HHHH.obtenerUser(mov.Id_cuenta) = @user_id
 			  
 			 
@@ -1002,7 +1006,7 @@ AS
 						   WHERE mov.Id_factura = @FacturaActual
 								 and HHHH.obtenerUser(mov.Id_cuenta) = @user_id)
 		WHERE Id_factura = @FacturaActual
-
+--cobrar cambiar estado de cuenta
 
 		UPDATE HHHH.Cuentas
 		SET estado = 'I' FROM 
@@ -1030,9 +1034,11 @@ AS
 	BEGIN
 		SELECT convert(date,tr.Fecha_transferencia) AS Fecha, HHHH.GenerarDescripcion (mov.Tipo_movimiento,mov.Id_transferencia,mov.Dias_comprados,mov.Cambio_tipo_cuenta) AS Descripcion,
 				HHHH.impconmoneda(tr.Importe,mov.Id_moneda) AS Importe,HHHH.impconmoneda(mov.Costo,mov.Id_moneda) AS Costo_Final
-			FROM HHHH.movimientos mov, HHHH.transferencias tr
-			WHERE mov.Id_factura = @id_factura and
-				  tr.Id_transferencia = mov.Id_transferencia
+			FROM HHHH.movimientos mov
+			LEFT JOIN HHHH.transferencias tr
+			ON tr.Id_transferencia = mov.Id_transferencia
+			WHERE mov.Id_factura = @id_factura
+				  
 	END
 GO
 
@@ -1252,6 +1258,9 @@ AS
 			BEGIN
 				INSERT HHHH.cuentas(Id_cuenta,Id_cliente,Id_moneda,Id_pais,Id_tipo_cuenta,Fecha_apertura,Saldo,Estado)
 					VALUES(@Id_cuenta,@Id_cliente,@Id_moneda,@Id_pais,@id_tipoCta,@FechaApert,0,'P')
+				
+				INSERT HHHH.movimientos(Tipo_movimiento,Costo,Dias_comprados,Fecha,Id_cuenta,Id_moneda)
+				VALUES('P',10,-1,@FechaApert,@Id_cuenta,@Id_moneda) 
 			END
 	END
 GO
