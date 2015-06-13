@@ -23,6 +23,7 @@ namespace PagoElectronico.Depositos
         decimal importeIngresado;
         decimal tipoMoneda;
 
+        decimal monedaDeLaCuentaSeleccionada;
 
         public RealizarDeposito()
         {
@@ -32,8 +33,6 @@ namespace PagoElectronico.Depositos
 
             SQLParametros parametrosTarjetas = new SQLParametros();
             parametrosTarjetas.add("@idUsuarioLogeado", Sesion.user_id);
-
-
 
 
             if (ConexionDB.Procedure("seleccionarCuentas", parametrosCuentas.get(), out tablaCuentas))
@@ -46,6 +45,7 @@ namespace PagoElectronico.Depositos
                 seleccionCuenta.DataSource = tablaCuentas;
                 seleccionCuenta.DisplayMember = "Id_cuenta";
                 seleccionCuenta.ValueMember = "Id_cuenta";
+                seleccionCuenta.SelectedIndex = -1;
 
                 if (ConexionDB.Procedure("seleccionarTarjetas", parametrosTarjetas.get(), out tablaTarjetas))
                 {
@@ -100,10 +100,13 @@ namespace PagoElectronico.Depositos
 
         }
 
-        private void seleccionCuenta_SelectedIndexChanged(object sender, EventArgs e)
+        private void seleccionCuenta_SelectedIndexChange(object sender, EventArgs e)
         {
             seleccionCuenta.DropDownStyle = ComboBoxStyle.DropDownList;
-
+            monedaDeLaCuentaSeleccionada = Convert.ToDecimal(((DataRowView)seleccionCuenta.SelectedItem)["id_moneda"]);
+            txtDesc.Text = (tablaMonedas.Select("id_moneda =" +monedaDeLaCuentaSeleccionada)[0]["Descripcion"]).ToString();
+            txtCosto.Clear();
+            botonConfirmar.Enabled = true;
         }
         private void volverFuncionalidades_Click_1(object sender, EventArgs e)
         {
@@ -111,6 +114,15 @@ namespace PagoElectronico.Depositos
             Owner.Show();
             this.Close();
         }
+
+        private void bEquivalente_Click(object sender, EventArgs e)
+        {
+            txtCosto.Text = Convert.ToString(ConexionDB.correrQuery(Sesion.conexion, "select hhhh.convertirmoneda("
+                    + seleccionMoneda.SelectedValue.ToString() + ","
+                    + monedaDeLaCuentaSeleccionada + ","
+                    + seleccionImporte.Value.ToString().Replace(',', '.') + ")").Rows[0][0]).ToString();
+        }
+
 
     }
 }

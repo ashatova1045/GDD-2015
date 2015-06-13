@@ -23,7 +23,10 @@ namespace PagoElectronico.ABM_Rol
                 comboBox1.ValueMember = "Id_rol";
                 comboBox1.Text = "Elija un Rol";
                 comboBox1.Update();
+                comboBox1.SelectedIndex = -1;
             }
+
+
 
         }
 
@@ -123,9 +126,10 @@ namespace PagoElectronico.ABM_Rol
 
             button1.Enabled = false;
            
-            foreach (object itemChecked in checkedListBox1.CheckedItems)
+            foreach (Object itemChecked in checkedListBox1.CheckedItems)
             {
                 funciones = funciones + "," + itemChecked.ToString();
+               
             }
 
             SQLParametros parametros = new SQLParametros();
@@ -135,6 +139,7 @@ namespace PagoElectronico.ABM_Rol
             parametros.add("@estado", estado);
 
             ConexionDB.Procedure("asignarNuevasFuncRol", parametros.get());
+
 
             this.ActualizarRoles();
         }

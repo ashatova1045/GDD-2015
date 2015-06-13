@@ -182,13 +182,13 @@ namespace PagoElectronico.Retiros
                 correcto = false;
                 errorProvider1.SetError(Cuenta_CB, "La cuenta no tiene saldo");
             }
-
+/*
             if ((Cuenta_CB.SelectedIndex != -1) && (decimal.Parse((cuentas.Rows[Cuenta_CB.SelectedIndex]["saldo"]).ToString())) < Importe_NUD.Value)//El importe debe ser menor al saldo de la cuenta
             {
                 correcto = false;
                 errorProvider1.SetError(Importe_NUD, "La cuenta no tiene suficiente saldo");
             }
-
+    lo comento porque la base de datos hace una validacion mejor con conversion de moneda        */
             if (Moneda_CB.Text != "USD")//El importe debe ser en dólares
             {
                 correcto = false;

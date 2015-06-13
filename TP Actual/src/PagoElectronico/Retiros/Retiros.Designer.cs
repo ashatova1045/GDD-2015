@@ -71,7 +71,6 @@
             this.Cuenta_LB.Size = new System.Drawing.Size(61, 18);
             this.Cuenta_LB.TabIndex = 1;
             this.Cuenta_LB.Text = "Cuenta";
-            
             // 
             // Importe_LB
             // 

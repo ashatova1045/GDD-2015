@@ -38,6 +38,9 @@
             this.label4 = new System.Windows.Forms.Label();
             this.volverFuncionalidades = new System.Windows.Forms.Button();
             this.botonConfirmar = new System.Windows.Forms.Button();
+            this.txtCosto = new System.Windows.Forms.TextBox();
+            this.bEquivalente = new System.Windows.Forms.Button();
+            this.txtDesc = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.seleccionImporte)).BeginInit();
             this.SuspendLayout();
             // 
@@ -46,11 +49,11 @@
             this.seleccionCuenta.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.seleccionCuenta.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.seleccionCuenta.FormattingEnabled = true;
-            this.seleccionCuenta.Location = new System.Drawing.Point(98, 31);
+            this.seleccionCuenta.Location = new System.Drawing.Point(98, 32);
             this.seleccionCuenta.Name = "seleccionCuenta";
             this.seleccionCuenta.Size = new System.Drawing.Size(249, 21);
             this.seleccionCuenta.TabIndex = 0;
-            this.seleccionCuenta.SelectedIndexChanged += new System.EventHandler(this.seleccionCuenta_SelectedIndexChanged);
+            this.seleccionCuenta.SelectionChangeCommitted += new System.EventHandler(this.seleccionCuenta_SelectedIndexChange);
             // 
             // seleccionImporte
             // 
@@ -139,7 +142,7 @@
             // volverFuncionalidades
             // 
             this.volverFuncionalidades.BackColor = System.Drawing.Color.NavajoWhite;
-            this.volverFuncionalidades.Location = new System.Drawing.Point(51, 213);
+            this.volverFuncionalidades.Location = new System.Drawing.Point(40, 281);
             this.volverFuncionalidades.Name = "volverFuncionalidades";
             this.volverFuncionalidades.Size = new System.Drawing.Size(93, 36);
             this.volverFuncionalidades.TabIndex = 12;
@@ -150,7 +153,8 @@
             // botonConfirmar
             // 
             this.botonConfirmar.BackColor = System.Drawing.Color.Moccasin;
-            this.botonConfirmar.Location = new System.Drawing.Point(236, 212);
+            this.botonConfirmar.Enabled = false;
+            this.botonConfirmar.Location = new System.Drawing.Point(225, 280);
             this.botonConfirmar.Name = "botonConfirmar";
             this.botonConfirmar.Size = new System.Drawing.Size(204, 37);
             this.botonConfirmar.TabIndex = 13;
@@ -158,12 +162,40 @@
             this.botonConfirmar.UseVisualStyleBackColor = false;
             this.botonConfirmar.Click += new System.EventHandler(this.botonConfirmar_Click_1);
             // 
+            // txtCosto
+            // 
+            this.txtCosto.Location = new System.Drawing.Point(406, 114);
+            this.txtCosto.Name = "txtCosto";
+            this.txtCosto.Size = new System.Drawing.Size(71, 20);
+            this.txtCosto.TabIndex = 14;
+            // 
+            // bEquivalente
+            // 
+            this.bEquivalente.BackColor = System.Drawing.Color.Moccasin;
+            this.bEquivalente.Location = new System.Drawing.Point(425, 67);
+            this.bEquivalente.Name = "bEquivalente";
+            this.bEquivalente.Size = new System.Drawing.Size(139, 34);
+            this.bEquivalente.TabIndex = 15;
+            this.bEquivalente.Text = "Ver Equivalente";
+            this.bEquivalente.UseVisualStyleBackColor = false;
+            this.bEquivalente.Click += new System.EventHandler(this.bEquivalente_Click);
+            // 
+            // txtDesc
+            // 
+            this.txtDesc.Location = new System.Drawing.Point(503, 114);
+            this.txtDesc.Name = "txtDesc";
+            this.txtDesc.Size = new System.Drawing.Size(71, 20);
+            this.txtDesc.TabIndex = 16;
+            // 
             // RealizarDeposito
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.PaleGoldenrod;
-            this.ClientSize = new System.Drawing.Size(599, 265);
+            this.ClientSize = new System.Drawing.Size(599, 345);
+            this.Controls.Add(this.txtDesc);
+            this.Controls.Add(this.bEquivalente);
+            this.Controls.Add(this.txtCosto);
             this.Controls.Add(this.botonConfirmar);
             this.Controls.Add(this.volverFuncionalidades);
             this.Controls.Add(this.label4);
@@ -177,7 +209,7 @@
             this.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.5F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Underline))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Name = "RealizarDeposito";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "RealizarDeposito";
+            this.Text = "Realizar Deposito";
             this.Load += new System.EventHandler(this.RealizarDeposito_Load);
             ((System.ComponentModel.ISupportInitialize)(this.seleccionImporte)).EndInit();
             this.ResumeLayout(false);
@@ -197,6 +229,9 @@
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Button volverFuncionalidades;
         private System.Windows.Forms.Button botonConfirmar;
+        private System.Windows.Forms.TextBox txtCosto;
+        private System.Windows.Forms.Button bEquivalente;
+        private System.Windows.Forms.TextBox txtDesc;
 
     }
 }

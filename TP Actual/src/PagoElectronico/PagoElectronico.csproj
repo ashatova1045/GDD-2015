@@ -159,11 +159,11 @@
     <Compile Include="Transferencias\Transferencias.Designer.cs">
       <DependentUpon>Transferencias.cs</DependentUpon>
     </Compile>
-    <Compile Include="Retiros\Form1.cs">
+    <Compile Include="Retiros\Retiros.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Retiros\Form1.Designer.cs">
-      <DependentUpon>Form1.cs</DependentUpon>
+    <Compile Include="Retiros\Retiros.Designer.cs">
+      <DependentUpon>Retiros.cs</DependentUpon>
     </Compile>
     <Compile Include="Depositos\RealizarDeposito.cs">
       <SubType>Form</SubType>
@@ -238,8 +238,8 @@
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Retiros\Form1.resx">
-      <DependentUpon>Form1.cs</DependentUpon>
+    <EmbeddedResource Include="Retiros\Retiros.resx">
+      <DependentUpon>Retiros.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Transferencias\Transferencias.resx">
       <DependentUpon>Transferencias.cs</DependentUpon>

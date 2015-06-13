@@ -148,16 +148,16 @@ GO
 	go
 	
 	CREATE FUNCTION HHHH.convertirmoneda(@monedaOriginal numeric(18,0),@monedaConvertida numeric(18,0),@monto numeric(18,2))
-	RETURNS numeric(18,2)
+	RETURNS numeric(18,4)
 	AS
 	BEGIN
-		declare @valorEnUSD numeric(18,2)=	(select @monto*cambio
+		declare @valorEnUSD numeric(18,4)=	(select @monto*cambio
 												from hhhh.tipo_de_cambio
 												where id_moneda=@monedaOriginal)
-		declare @valorconvertido numeric(18,2) =(select @valorEnUSD/cambio
+		declare @valorconvertido numeric(18,4) =(select @valorEnUSD/cambio
 													from hhhh.tipo_de_cambio
 													where id_moneda = @monedaConvertida)
-		RETURN @valorconvertido
+		RETURN @valorconvertido 
 	END
 GO
 GO
@@ -798,24 +798,15 @@ CREATE PROCEDURE HHHH.validarDeposito
 		END
 		
 		INSERT INTO HHHH.depositos(Id_cuenta, Importe, Id_tipo_moneda, Id_tarjeta, Fecha_deposito)
-			VALUES (@nroCuenta, @importeIngresado, @tipoMoneda, @esValidaTarjeta, @fechaAhora)
+			VALUES (@nroCuenta, @importeIngresado, @tipoMoneda, @esValidaTarjeta, @fechaAhora)	
 			
-		
-		DECLARE @saldoActual numeric (18,2)
-			SET @saldoActual = (SELECT Saldo FROM HHHH.cuentas WHERE Id_cuenta = @nroCuenta)
-			IF @saldoActual is NULL
-				UPDATE HHHH.cuentas
-					SET Saldo = @importeIngresado
-					WHERE Id_cuenta = @nroCuenta	
-			IF @saldoActual is NOT NULL
-				UPDATE HHHH.cuentas
-					SET Saldo = Saldo + @importeIngresado
-					WHERE Id_cuenta = @nroCuenta							
+			UPDATE HHHH.cuentas
+				SET Saldo = Saldo + hhhh.convertirmoneda(@tipoMoneda,cuentas.Id_moneda,@importeIngresado)
+				WHERE Id_cuenta = @nroCuenta							
 		END		
 		
 
 GO
-
 
 CREATE PROCEDURE HHHH.retiro
 	@cuenta numeric(18,0),
@@ -839,6 +830,14 @@ AS
 		IF (@Estado = 'I')
 			BEGIN
 				RAISERROR('Un cliete inhabilitado no puede realizar retiros',16,1)
+				RETURN
+			END
+		
+		--si existe un saldo menor, tira error
+		IF exists (select saldo from HHHH.cuentas where Id_cuenta=@cuenta and saldo < hhhh.convertirmoneda(@moneda,Id_moneda,@importe))
+			BEGIN
+				RAISERROR('No tiene dinero suficiente en su cuenta.',16,1)
+				RETURN
 			END
 
 		INSERT INTO HHHH.cheques(Fecha_cheque, Importe, Destinatario, Id_banco)
@@ -848,7 +847,7 @@ AS
 			VALUES(@cuenta, @importe, (SELECT IDENT_CURRENT('HHHH.cheques')), @fechaRetiro, @moneda)
 	
 		UPDATE HHHH.cuentas
-			SET Saldo -= @importe
+			SET Saldo -= hhhh.convertirmoneda(@moneda,Id_moneda,@importe)
 			WHERE Id_cuenta = @cuenta
 	END
 GO	
@@ -1211,7 +1210,7 @@ CREATE PROCEDURE HHHH.ObtenerCuentas
 @Id_usuario numeric(18,0)
 AS
 	BEGIN
-		SELECT cue.Id_cuenta as 'Cuenta', pa.Descripcion as 'Pais', cue.Id_pais,tp.Id_tipo_cuenta, tp.Descripcion as 'Tipo cuenta',tp.Duracion, cue.Id_moneda,
+		SELECT cue.Id_cuenta as 'Cuenta', pa.Descripcion as 'Pais', cue.Id_pais,tp.Id_tipo_cuenta, tp.Descripcion as 'Tipo cuenta', cue.Id_moneda,
 				 cue.Fecha_apertura as 'Fecha apertura', mon.Descripcion as 'Moneda', cue.Saldo, cue.Estado
 		FROM HHHH.cuentas cue 
 		JOIN HHHH.clientes cli 
@@ -1661,5 +1660,19 @@ AS
 		FROM HHHH.transferencias 
 		WHERE Cuenta_origen = @Id_cuenta
         ORDER BY Fecha_transferencia DESC
+    END
+GO
+
+CREATE PROCEDURE HHHH.valorParaMiCueneta
+@cantPeriodos numeric(3,0),
+@cuenta numeric(18,0),
+@tipocuenta numeric (18,0)
+AS
+	BEGIN
+		declare @valorenusd numeric (18,2) = (SELECT @cantPeriodos * t.Costo_cuenta
+												FROM HHHH.tipo_cuenta t
+												where t.Id_tipo_cuenta=@tipocuenta)
+		declare @valorMiMon numeric (18,2)=(select HHHH.convertirmoneda(t.Id_moneda_cuenta,c.Id_moneda,@valorenusd) from HHHH.tipo_cuenta t,HHHH.cuentas c)
+		select @valorMiMon					
     END
 GO
