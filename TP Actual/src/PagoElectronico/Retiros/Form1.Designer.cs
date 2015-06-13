@@ -71,7 +71,7 @@
             this.Cuenta_LB.Size = new System.Drawing.Size(61, 18);
             this.Cuenta_LB.TabIndex = 1;
             this.Cuenta_LB.Text = "Cuenta";
-            this.Cuenta_LB.Click += new System.EventHandler(this.label1_Click);
+            
             // 
             // Importe_LB
             // 
@@ -82,7 +82,6 @@
             this.Importe_LB.Size = new System.Drawing.Size(65, 18);
             this.Importe_LB.TabIndex = 3;
             this.Importe_LB.Text = "Importe";
-            this.Importe_LB.Click += new System.EventHandler(this.label1_Click_1);
             // 
             // Importe_NUD
             // 
@@ -96,7 +95,6 @@
             this.Importe_NUD.Name = "Importe_NUD";
             this.Importe_NUD.Size = new System.Drawing.Size(120, 20);
             this.Importe_NUD.TabIndex = 4;
-            this.Importe_NUD.ValueChanged += new System.EventHandler(this.Importe_NUD_ValueChanged);
             // 
             // Moneda_LB
             // 
@@ -116,7 +114,6 @@
             this.Moneda_CB.Name = "Moneda_CB";
             this.Moneda_CB.Size = new System.Drawing.Size(121, 21);
             this.Moneda_CB.TabIndex = 6;
-            this.Moneda_CB.SelectedIndexChanged += new System.EventHandler(this.Moneda_CB_SelectedIndexChanged);
             this.Moneda_CB.Click += new System.EventHandler(this.Moneda_CB_Click);
             // 
             // RealizarCheque_BTN
@@ -159,7 +156,6 @@
             this.NoDoc_TXT.Name = "NoDoc_TXT";
             this.NoDoc_TXT.Size = new System.Drawing.Size(121, 20);
             this.NoDoc_TXT.TabIndex = 12;
-            this.NoDoc_TXT.TextChanged += new System.EventHandler(this.NoDoc_TXT_TextChanged);
             // 
             // pictureBox1
             // 
@@ -188,7 +184,6 @@
             this.Banco_CB.Name = "Banco_CB";
             this.Banco_CB.Size = new System.Drawing.Size(121, 21);
             this.Banco_CB.TabIndex = 15;
-            this.Banco_CB.SelectedIndexChanged += new System.EventHandler(this.comboBox1_SelectedIndexChanged);
             this.Banco_CB.Click += new System.EventHandler(this.Banco_CB_Click);
             // 
             // errorProvider1
@@ -217,7 +212,6 @@
             this.Name = "RetiroEfectivo_FRM";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Retiro de Efectivo";
-            this.Load += new System.EventHandler(this.RetiroEfectivo_FRM_Load);
             ((System.ComponentModel.ISupportInitialize)(this.Importe_NUD)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).EndInit();

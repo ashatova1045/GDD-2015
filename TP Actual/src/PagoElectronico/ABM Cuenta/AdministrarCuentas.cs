@@ -18,38 +18,38 @@ namespace PagoElectronico.ABM_Cuenta
             InitializeComponent();
         }
 
-        private void comboBox1_SelectionChangeCommitted(object sender, EventArgs e)
+        public void actualizarCuentas()
         {
             SQLParametros parametros = new SQLParametros();
             parametros.add("@Id_usuario", Convert.ToDecimal(comboBox1.SelectedValue));
 
             DataTable cuentas;
 
-            if(ConexionDB.Procedure("ObtenerCuentas", parametros.get(), out cuentas))
+            if (ConexionDB.Procedure("ObtenerCuentas", parametros.get(), out cuentas))
             {
-                dataGridView1.DataSource = cuentas;
+                dataGridView1.DataSource = cuentas.Select("estado <> 'C'").CopyToDataTable();
 
-                string[] ColOcultas = { "Id_pais", "Id_moneda", "Id_moneda" };
+                string[] ColOcultas = { "Id_pais", "Id_moneda", "Id_moneda","duracion","id_tipo_cuenta"};
 
                 foreach (string i in ColOcultas)
                 {
                     dataGridView1.Columns[i].Visible = false;
                 }
-
                 button1.Enabled = true;
             }
-
-            
+        }
+        private void comboBox1_SelectionChangeCommitted(object sender, EventArgs e)
+        {
+            actualizarCuentas();   
         }
 
         private void AdministrarCuentas_Load(object sender, EventArgs e)
         {
             button3.Enabled = false;
-            button4.Enabled = false;
             button1.Enabled = false;
 
             if (Sesion.rol_id == 1)
-            {
+            {          
                 DataTable Usuarios;
 
                 if (ConexionDB.Procedure("ObtenerUsuariosClientes", null, out Usuarios))
@@ -63,6 +63,8 @@ namespace PagoElectronico.ABM_Cuenta
             }
             else 
             {
+                button3.Visible = false;
+
                 DataTable user = new DataTable();
                 user.Columns.Add("usuario");
                 user.Columns.Add("id");
@@ -125,7 +127,10 @@ namespace PagoElectronico.ABM_Cuenta
             parametros.add("@fecha", Sesion.fecha);
 
             if (ConexionDB.Procedure("bajaCuenta", parametros.get()))
+            {
                 MessageBox.Show("Cuenta borrada");
+                actualizarCuentas();
+            }
         }
 
         private void btnProlongar_Click(object sender, EventArgs e)
@@ -145,6 +150,11 @@ namespace PagoElectronico.ABM_Cuenta
 
             new ProlongacionCuentas(dataGridView1.SelectedRows[0].Cells).Show(this);
             this.Hide();
+
+        }
+
+        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
 
         }
     }

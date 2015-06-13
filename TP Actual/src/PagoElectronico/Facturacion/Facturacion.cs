@@ -84,6 +84,7 @@ namespace PagoElectronico.Facturacion
             {
                 new Factura(Convert.ToInt32(comboBox1.SelectedValue)).Show(this);
                 this.Hide();
+                actualizarMov(comboBox1.SelectedText, Convert.ToDecimal(comboBox1.SelectedValue));
             }
             
         }
@@ -92,7 +93,7 @@ namespace PagoElectronico.Facturacion
         {
             try
             {
-                int user = Convert.ToInt32(comboBox1.SelectedValue);
+                decimal user = Convert.ToDecimal(comboBox1.SelectedValue);
                 actualizarMov(comboBox1.SelectedText, user);
             }
             catch (NullReferenceException) { }

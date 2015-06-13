@@ -77,6 +77,7 @@ namespace PagoElectronico.ABM_Cuenta
 
         private void button2_Click(object sender, EventArgs e)
         {
+            ((AdministrarCuentas)Owner).actualizarCuentas();
             Owner.Show();
             this.Close();
         }
@@ -147,6 +148,11 @@ namespace PagoElectronico.ABM_Cuenta
                 MessageBox.Show("Cuenta creada exitosamente");
                 button2_Click(null, null);
             }
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

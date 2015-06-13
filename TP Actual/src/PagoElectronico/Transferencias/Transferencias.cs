@@ -96,7 +96,7 @@ namespace PagoElectronico.Transferencias
 
             if(ConexionDB.Procedure("transferencia",parametros.get()))
             {
-                MessageBox.Show("Se han descontado de su cuenta " + nImporte.Value + " " + txtMonedaATransferir.Text + " y " + cuentaSeleccionada["costo_transf"] + " " + txtMoneda2.Text + " de comision.");
+                MessageBox.Show("Se han descontado de su cuenta " + nImporte.Value + " " + txtMonedaATransferir.Text);
                 actualizarCuentas();
                 actualizarCuentaSeleccionada();
             }

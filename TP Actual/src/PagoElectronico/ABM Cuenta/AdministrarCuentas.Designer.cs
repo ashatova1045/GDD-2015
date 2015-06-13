@@ -30,13 +30,13 @@
         {
             this.label1 = new System.Windows.Forms.Label();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.btnProlongar = new System.Windows.Forms.Button();
             this.button4 = new System.Windows.Forms.Button();
             this.button3 = new System.Windows.Forms.Button();
             this.button1 = new System.Windows.Forms.Button();
             this.comboBox1 = new System.Windows.Forms.ComboBox();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
             this.button2 = new System.Windows.Forms.Button();
-            this.btnProlongar = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.SuspendLayout();
@@ -64,6 +64,16 @@
             this.groupBox1.TabIndex = 1;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Acciones";
+            // 
+            // btnProlongar
+            // 
+            this.btnProlongar.Location = new System.Drawing.Point(508, 14);
+            this.btnProlongar.Name = "btnProlongar";
+            this.btnProlongar.Size = new System.Drawing.Size(98, 23);
+            this.btnProlongar.TabIndex = 5;
+            this.btnProlongar.Text = "Prolongar cuenta";
+            this.btnProlongar.UseVisualStyleBackColor = true;
+            this.btnProlongar.Click += new System.EventHandler(this.btnProlongar_Click);
             // 
             // button4
             // 
@@ -104,6 +114,7 @@
             this.comboBox1.Size = new System.Drawing.Size(144, 21);
             this.comboBox1.TabIndex = 1;
             this.comboBox1.SelectionChangeCommitted += new System.EventHandler(this.comboBox1_SelectionChangeCommitted);
+            this.comboBox1.SelectedIndexChanged += new System.EventHandler(this.comboBox1_SelectedIndexChanged);
             // 
             // dataGridView1
             // 
@@ -130,16 +141,6 @@
             this.button2.Text = "Volver";
             this.button2.UseVisualStyleBackColor = true;
             this.button2.Click += new System.EventHandler(this.button2_Click);
-            // 
-            // btnProlongar
-            // 
-            this.btnProlongar.Location = new System.Drawing.Point(508, 14);
-            this.btnProlongar.Name = "btnProlongar";
-            this.btnProlongar.Size = new System.Drawing.Size(98, 23);
-            this.btnProlongar.TabIndex = 5;
-            this.btnProlongar.Text = "Prolongar cuenta";
-            this.btnProlongar.UseVisualStyleBackColor = true;
-            this.btnProlongar.Click += new System.EventHandler(this.btnProlongar_Click);
             // 
             // AdministrarCuentas
             // 

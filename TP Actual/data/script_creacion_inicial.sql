@@ -342,7 +342,7 @@ BEGIN /* *************** CREACION DE TABLAS *************** */
 	CREATE TABLE HHHH.movimientos(
 		Id_movimiento numeric(18,0) IDENTITY(1,1) PRIMARY KEY,
 		Id_factura numeric(18,0) CONSTRAINT FK_movimientos_facturas REFERENCES HHHH.facturas(Id_factura),
-		Tipo_movimiento char(1) NOT NULL CHECK (Tipo_movimiento IN ('T','C','P')), --  T transferencia , C cambio de cuenta, P pago cuenta nueva (pend act)
+		Tipo_movimiento char(1) NOT NULL CHECK (Tipo_movimiento IN ('T','C','P')), --  T transferencia , C cambio de cuenta, P pago cuenta
 		Costo numeric(18,2) NOT NULL,
 		Id_moneda numeric(18,0) CONSTRAINT FK_movimientos_monedas REFERENCES HHHH.monedas(Id_moneda),
 		Id_cuenta numeric(18,0) CONSTRAINT FK_movimientos_cuentas REFERENCES HHHH.cuentas(Id_cuenta),
@@ -414,9 +414,9 @@ BEGIN /* *************** MIGRACION *************** */
 -------------------------------------------------------------------------------------------	
 	INSERT INTO HHHH.Tipo_Cuenta(Descripcion, Id_moneda_cuenta, Costo_transf, Duracion, Id_moneda_transf, Costo_cuenta)
 		VALUES ('Gratuita', 1,3,30,1,0),
-				('Bronce', 1,2,30,1,1),
-				('Plata', 1,1,30,1,2),
-				('Oro', 1,0,30,1,3)
+				('Bronce', 1,2,20,1,1),
+				('Plata', 1,1,15,1,2),
+				('Oro', 1,0,10,1,3)
 -------------------------------------------------------------------------------------------			
 	--SET IDENTITY_INSERT HHHH.cuentas ON
 	INSERT INTO HHHH.cuentas(Id_cuenta, Id_pais, Fecha_apertura, Id_cliente,Id_moneda,Estado,Id_tipo_cuenta)
@@ -716,11 +716,11 @@ AS
 			VALUES (@origen,@fecha,@moneda,(SELECT IDENT_CURRENT('HHHH.transferencias')),'T',@costo)
 		
 		UPDATE HHHH.cuentas
-			SET Saldo -= @importe +@costo
+			SET Saldo -= hhhh.convertirmoneda(@moneda,Id_moneda,@importe)
 			WHERE Id_cuenta = @origen
 		
 		UPDATE HHHH.cuentas
-			SET Saldo += @importe
+			SET Saldo += hhhh.convertirmoneda(@moneda,Id_moneda,@importe)
 			WHERE Id_cuenta = @destino
     END				
 		
@@ -1008,6 +1008,11 @@ AS
 		WHERE Id_factura = @FacturaActual
 --cobrar cambiar estado de cuenta
 
+		UPDATE HHHH.cuentas
+		SET Estado = 'H'
+		where cuentas.Id_cuenta in(SELECT ID_cuenta from HHHH.movimientos
+									where Id_factura = @FacturaActual and Tipo_movimiento = 'P')
+/*
 		UPDATE HHHH.Cuentas
 		SET estado = 'I' FROM 
 			(SELECT * FROM
@@ -1016,16 +1021,20 @@ AS
 					Tipo_movimiento = 'T' 
 				 GROUP BY Id_cuenta) CantMovXCuenta
 			WHERE CantMovXCuenta.cant > 5) cue
-		WHERE HHHH.Cuentas.Id_cuenta = cue.Id_cuenta
-				
+		WHERE HHHH.Cuentas.Id_cuenta = cue.Id_cuenta */
+		
+		update HHHH.cuentas
+		set estado = 'I'
+		WHERE Id_cuenta in (SELECT id_cuenta FROM HHHH.movimientos
+								WHERE Id_factura = @FacturaActual AND Tipo_movimiento = 'T' 
+								GROUP BY Id_cuenta
+								having COUNT(*) > 5)
+
 		SELECT fac.Id_factura, cli.Nombre+' '+cli.Apellido as nombre, us.Usuario, fac.Fecha_factura, fac.Monto_total
 		FROM HHHH.facturas fac, HHHH.clientes cli, HHHH.usuarios us
 		WHERE fac.Id_factura = @FacturaActual 
 			  and fac.Id_cliente = cli.Id_cliente and cli.Id_usuario = us.Id_usuario
-					  
 
-
-	
 GO
 
 CREATE PROCEDURE HHHH.itemFactura(
@@ -1198,12 +1207,11 @@ AS
 	END
 GO
 
-
 CREATE PROCEDURE HHHH.ObtenerCuentas
 @Id_usuario numeric(18,0)
 AS
 	BEGIN
-		SELECT cue.Id_cuenta as 'Cuenta', pa.Descripcion as 'Pais', cue.Id_pais, tp.Descripcion as 'Tipo cuenta', cue.Id_moneda,
+		SELECT cue.Id_cuenta as 'Cuenta', pa.Descripcion as 'Pais', cue.Id_pais,tp.Id_tipo_cuenta, tp.Descripcion as 'Tipo cuenta',tp.Duracion, cue.Id_moneda,
 				 cue.Fecha_apertura as 'Fecha apertura', mon.Descripcion as 'Moneda', cue.Saldo, cue.Estado
 		FROM HHHH.cuentas cue 
 		JOIN HHHH.clientes cli 
@@ -1256,11 +1264,16 @@ AS
 			END
 		ELSE
 			BEGIN
-				INSERT HHHH.cuentas(Id_cuenta,Id_cliente,Id_moneda,Id_pais,Id_tipo_cuenta,Fecha_apertura,Saldo,Estado)
-					VALUES(@Id_cuenta,@Id_cliente,@Id_moneda,@Id_pais,@id_tipoCta,@FechaApert,0,'P')
+				declare @costoCuenta numeric(18,2)
+				declare @duracion int
+				select @costoCuenta = hhhh.convertirmoneda(Id_moneda_cuenta,@Id_moneda,Costo_cuenta), @duracion = Duracion 
+					from HHHH.tipo_cuenta where Id_tipo_cuenta=@id_tipoCta
+				
+				INSERT HHHH.cuentas(Id_cuenta,Id_cliente,Id_moneda,Id_pais,Id_tipo_cuenta,Fecha_apertura,Saldo,Estado,Fecha_cierre)
+					VALUES(@Id_cuenta,@Id_cliente,@Id_moneda,@Id_pais,@id_tipoCta,@FechaApert,0,'P',dateadd(day,@duracion,@FechaApert))
 				
 				INSERT HHHH.movimientos(Tipo_movimiento,Costo,Dias_comprados,Fecha,Id_cuenta,Id_moneda)
-				VALUES('P',10,-1,@FechaApert,@Id_cuenta,@Id_moneda) 
+					VALUES('P',@costoCuenta,@duracion,@FechaApert,@Id_cuenta,@Id_moneda) 
 			END
 	END
 GO
@@ -1272,14 +1285,14 @@ AS
 	BEGIN
 
 		--si hay una transaccion sin cobrar
-		IF EXISTS (select 1 from HHHH.movimientos where Id_factura is null and Id_cuenta = @cuenta and Id_transferencia is not null)
+		IF EXISTS (select 1 from HHHH.movimientos where Id_factura is null and Id_cuenta = @cuenta)
 			BEGIN
 				RAISERROR('Tiene transacciones sin cobrar',16,1)
 				RETURN
 			END
 		
 		UPDATE HHHH.cuentas
-			SET Estado='B',
+			SET Estado='C',
 				fecha_cierre=@fecha
 			WHERE Id_cuenta=@cuenta
 	END

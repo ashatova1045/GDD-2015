@@ -22,20 +22,8 @@ namespace PagoElectronico.ABM_Cuenta
         {
             txtCuenta.Text = cuenta["Cuenta"].Value.ToString();
             txtEstado.Text = cuenta["Estado"].Value.ToString();
-
-            DataTable tipoCuentas;
-            ConexionDB.Procedure("ObtenerTipoCuentas", null, out tipoCuentas);
-            cbTipo.DataSource = tipoCuentas;
-            cbTipo.DisplayMember = "Descripcion";
-            cbTipo.ValueMember = "Id_tipo_cuenta";
-
-            if (txtEstado.Text != "I")
-            {
-                cbTipo.Enabled = false;
-                cbTipo.Text = "Inhabilitado";
-    //            MessageBox.Show("Solo puede cambiar su tipo de cuenta cuando esta inhabilitada. Espere a que se acabe su tiempo con esta cuenta.");
-            }
-            
+            txtTipo.Text = cuenta["Tipo cuenta"].Value.ToString();
+            txtDuracion.Text = cuenta["duracion"].Value.ToString();
         }
 
         private void btnVolver_Click(object sender, EventArgs e)
@@ -43,6 +31,5 @@ namespace PagoElectronico.ABM_Cuenta
             Owner.Show();
             this.Close();
         }
-
     }
 }

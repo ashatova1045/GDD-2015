@@ -111,6 +111,7 @@
             // AnioTextBox
             // 
             this.AnioTextBox.Location = new System.Drawing.Point(197, 33);
+            this.AnioTextBox.MaxLength = 4;
             this.AnioTextBox.Name = "AnioTextBox";
             this.AnioTextBox.Size = new System.Drawing.Size(100, 20);
             this.AnioTextBox.TabIndex = 8;

@@ -61,31 +61,7 @@ namespace PagoElectronico.Retiros
             ConexionDB.Procedure("ObtenerCliente", parametros.get(), out cliente);
         }
 
-        private void label1_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void label1_Click_1(object sender, EventArgs e)
-        {
-
-        }
-
-        private void dateTimePicker1_ValueChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        
-        private void Importe_NUD_ValueChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void pictureBox1_Click(object sender, EventArgs e)
-        {
-
-        }
+       
 
         private void RealizarCheque_BTN_Click(object sender, EventArgs e)
         {
@@ -127,15 +103,7 @@ namespace PagoElectronico.Retiros
 
         }
 
-        private void NoDoc_TXT_TextChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void Moneda_CB_SelectedIndexChanged(object sender, EventArgs e)
-        {
-
-        }
+        
 
         private void Moneda_CB_Click(object sender, EventArgs e)
         {
@@ -155,10 +123,6 @@ namespace PagoElectronico.Retiros
             this.Close();
         }
 
-        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
-        {
-
-        }
 
         private void Banco_CB_Click(object sender, EventArgs e)
         {
@@ -210,7 +174,7 @@ namespace PagoElectronico.Retiros
             if (( Cuenta_CB.SelectedIndex != -1) && (cuentas.Rows[Cuenta_CB.SelectedIndex]["estado"].ToString()) != "H")//La cuenta debe estar habilitada
             {
                 correcto = false;
-                errorProvider1.SetError(Cuenta_CB, "La cuenta no se encuentra habiitada");
+                errorProvider1.SetError(Cuenta_CB, "La cuenta no se encuentra habilitada");
             }
 
             if ((Cuenta_CB.SelectedIndex != -1) &&(decimal.Parse((cuentas.Rows[Cuenta_CB.SelectedIndex]["saldo"]).ToString()) <= 0))//La cuenta debe tener saldo
@@ -228,15 +192,11 @@ namespace PagoElectronico.Retiros
             if (Moneda_CB.Text != "USD")//El importe debe ser en dólares
             {
                 correcto = false;
-                errorProvider1.SetError(Moneda_CB, "El importe debe ser en USD"); 
+                errorProvider1.SetError(Moneda_CB, "El importe debe ser en USD");
             }
+            
 
             return correcto;
-        }
-
-        private void RetiroEfectivo_FRM_Load(object sender, EventArgs e)
-        {
-
         }
     }
 }
