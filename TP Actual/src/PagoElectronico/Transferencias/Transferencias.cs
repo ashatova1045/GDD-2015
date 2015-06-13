@@ -118,5 +118,10 @@ namespace PagoElectronico.Transferencias
             actualizarImporteATransferir();
         }
 
+        private void cbImporteMoneda_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+
     }
 }
