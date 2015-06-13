@@ -42,12 +42,13 @@
             this.label6 = new System.Windows.Forms.Label();
             this.txtPrecio = new System.Windows.Forms.TextBox();
             this.txtTipo = new System.Windows.Forms.TextBox();
+            this.btnCalcular = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.nuuSuscripciones)).BeginInit();
             this.SuspendLayout();
             // 
             // btnVolver
             // 
-            this.btnVolver.Location = new System.Drawing.Point(171, 214);
+            this.btnVolver.Location = new System.Drawing.Point(171, 232);
             this.btnVolver.Name = "btnVolver";
             this.btnVolver.Size = new System.Drawing.Size(66, 23);
             this.btnVolver.TabIndex = 0;
@@ -110,12 +111,13 @@
             // 
             // btnProlongar
             // 
-            this.btnProlongar.Location = new System.Drawing.Point(34, 214);
+            this.btnProlongar.Location = new System.Drawing.Point(34, 232);
             this.btnProlongar.Name = "btnProlongar";
             this.btnProlongar.Size = new System.Drawing.Size(66, 23);
             this.btnProlongar.TabIndex = 9;
             this.btnProlongar.Text = "Prolongar";
             this.btnProlongar.UseVisualStyleBackColor = true;
+            this.btnProlongar.Click += new System.EventHandler(this.btnProlongar_Click);
             // 
             // label5
             // 
@@ -154,7 +156,7 @@
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(12, 171);
+            this.label6.Location = new System.Drawing.Point(12, 195);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(60, 13);
             this.label6.TabIndex = 12;
@@ -163,7 +165,7 @@
             // txtPrecio
             // 
             this.txtPrecio.Enabled = false;
-            this.txtPrecio.Location = new System.Drawing.Point(149, 171);
+            this.txtPrecio.Location = new System.Drawing.Point(149, 195);
             this.txtPrecio.Name = "txtPrecio";
             this.txtPrecio.Size = new System.Drawing.Size(121, 20);
             this.txtPrecio.TabIndex = 13;
@@ -176,11 +178,23 @@
             this.txtTipo.Size = new System.Drawing.Size(121, 20);
             this.txtTipo.TabIndex = 14;
             // 
+            // btnCalcular
+            // 
+            this.btnCalcular.Location = new System.Drawing.Point(12, 171);
+            this.btnCalcular.Name = "btnCalcular";
+            this.btnCalcular.Size = new System.Drawing.Size(106, 21);
+            this.btnCalcular.TabIndex = 15;
+            this.btnCalcular.Text = "Calcular precio";
+            this.btnCalcular.UseCompatibleTextRendering = true;
+            this.btnCalcular.UseVisualStyleBackColor = true;
+            this.btnCalcular.Click += new System.EventHandler(this.btnCalcular_Click);
+            // 
             // ProlongacionCuentas
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(282, 240);
+            this.ClientSize = new System.Drawing.Size(282, 296);
+            this.Controls.Add(this.btnCalcular);
             this.Controls.Add(this.txtTipo);
             this.Controls.Add(this.txtPrecio);
             this.Controls.Add(this.label6);
@@ -219,5 +233,6 @@
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.TextBox txtPrecio;
         private System.Windows.Forms.TextBox txtTipo;
+        private System.Windows.Forms.Button btnCalcular;
     }
 }

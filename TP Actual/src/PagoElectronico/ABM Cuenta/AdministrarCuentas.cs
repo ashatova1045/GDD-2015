@@ -29,7 +29,7 @@ namespace PagoElectronico.ABM_Cuenta
             {
                 dataGridView1.DataSource = cuentas.Select("estado <> 'C'").CopyToDataTable();
 
-                string[] ColOcultas = { "Id_pais", "Id_moneda", "Id_moneda","duracion","id_tipo_cuenta"};
+                string[] ColOcultas = { "Id_pais", "Id_moneda", "Id_moneda","id_tipo_cuenta"};
 
                 foreach (string i in ColOcultas)
                 {
