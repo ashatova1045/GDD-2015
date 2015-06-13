@@ -157,6 +157,7 @@
             this.cbImporteMoneda.Name = "cbImporteMoneda";
             this.cbImporteMoneda.Size = new System.Drawing.Size(91, 21);
             this.cbImporteMoneda.TabIndex = 11;
+            this.cbImporteMoneda.SelectedIndexChanged += new System.EventHandler(this.cbImporteMoneda_SelectedIndexChanged);
             // 
             // txtMoneda
             // 
