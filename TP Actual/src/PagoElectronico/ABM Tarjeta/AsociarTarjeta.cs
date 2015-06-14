@@ -9,11 +9,15 @@ namespace PagoElectronico.ABM_Tarjeta
 {
     public partial class AsociarTarjeta : Form
     {
-        bool modificacion = false;
-        decimal idt;
-        public AsociarTarjeta(decimal idtarjeta)
+        private bool modificacion = false;
+        private decimal idt;
+        private decimal ID_cliente;
+
+        public AsociarTarjeta(decimal idtarjeta, decimal id_cliente)
         {
             InitializeComponent();
+
+            ID_cliente = id_cliente;
 
             DataTable banco;
             SQLParametros parametros = new SQLParametros();
@@ -76,7 +80,7 @@ namespace PagoElectronico.ABM_Tarjeta
             }
             SQLParametros parametros = new SQLParametros();
 
-            parametros.add("@idcliente",Sesion.cliente_id);
+            parametros.add("@idcliente",ID_cliente);
             parametros.add("@idtarjeta", idt);
             parametros.add("@tarjeta", txttarjeta.Text);
             parametros.add("@emision", dtEmision.Value);

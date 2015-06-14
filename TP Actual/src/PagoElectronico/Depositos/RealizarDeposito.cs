@@ -77,7 +77,7 @@ namespace PagoElectronico.Depositos
         private void botonConfirmar_Click_1(object sender, EventArgs e)
         {
            
-            importeIngresado = actualizarImporteATransferir();
+            //importeIngresado = actualizarImporteATransferir();
             nroCuenta = (decimal)seleccionCuenta.SelectedValue;
             tipoMoneda =  (decimal)seleccionMoneda.SelectedValue;
             idTarjeta = (decimal)seleccionTarjeta.SelectedValue;

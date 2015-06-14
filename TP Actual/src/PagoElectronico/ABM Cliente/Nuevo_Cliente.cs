@@ -256,6 +256,8 @@ namespace PagoElectronico.ABM_Cliente
             button1.Click -=new EventHandler(button1_Click);
             button1.Click += new EventHandler(button1_Click_Modificar);
 
+            buttonTarjetas.Enabled = true;
+
 
         }
 
@@ -310,6 +312,13 @@ namespace PagoElectronico.ABM_Cliente
                 checkBoxCliente.Text = "Habilitado";
             else
                 checkBoxCliente.Text = "Deshabilitado";
+        }
+
+        private void buttonTarjetas_Click(object sender, EventArgs e)
+        {
+            new ABM_Tarjeta.mtar(idCliente).Show(this);
+            this.Hide();
+
         }
     }
 }

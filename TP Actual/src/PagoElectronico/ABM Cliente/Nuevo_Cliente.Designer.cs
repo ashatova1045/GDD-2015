@@ -76,6 +76,7 @@
             this.label15 = new System.Windows.Forms.Label();
             this.textBoxUser = new System.Windows.Forms.TextBox();
             this.label14 = new System.Windows.Forms.Label();
+            this.buttonTarjetas = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).BeginInit();
             this.groupBox2.SuspendLayout();
@@ -354,9 +355,9 @@
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(22, 360);
+            this.button1.Location = new System.Drawing.Point(426, 291);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(75, 23);
+            this.button1.Size = new System.Drawing.Size(118, 23);
             this.button1.TabIndex = 23;
             this.button1.Text = "Dar de alta";
             this.button1.UseVisualStyleBackColor = true;
@@ -379,13 +380,12 @@
             // 
             // groupBox2
             // 
+            this.groupBox2.Controls.Add(this.buttonTarjetas);
             this.groupBox2.Controls.Add(this.TXT_RepetirPassword);
             this.groupBox2.Controls.Add(this.LB_RepetirPassword);
             this.groupBox2.Controls.Add(this.comboBoxPreg);
             this.groupBox2.Controls.Add(this.checkBoxEstado);
             this.groupBox2.Controls.Add(this.labelEstado);
-            this.groupBox2.Controls.Add(this.buttonLimpiar);
-            this.groupBox2.Controls.Add(this.button3);
             this.groupBox2.Controls.Add(this.label17);
             this.groupBox2.Controls.Add(this.textBoxRes);
             this.groupBox2.Controls.Add(this.label16);
@@ -395,7 +395,7 @@
             this.groupBox2.Controls.Add(this.label14);
             this.groupBox2.Location = new System.Drawing.Point(13, 189);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(531, 165);
+            this.groupBox2.Size = new System.Drawing.Size(405, 165);
             this.groupBox2.TabIndex = 3;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Datos de la cuenta";
@@ -428,7 +428,7 @@
             // checkBoxEstado
             // 
             this.checkBoxEstado.AutoSize = true;
-            this.checkBoxEstado.Location = new System.Drawing.Point(435, 33);
+            this.checkBoxEstado.Location = new System.Drawing.Point(278, 43);
             this.checkBoxEstado.Name = "checkBoxEstado";
             this.checkBoxEstado.Size = new System.Drawing.Size(15, 14);
             this.checkBoxEstado.TabIndex = 20;
@@ -438,7 +438,7 @@
             // labelEstado
             // 
             this.labelEstado.AutoSize = true;
-            this.labelEstado.Location = new System.Drawing.Point(327, 33);
+            this.labelEstado.Location = new System.Drawing.Point(275, 24);
             this.labelEstado.Name = "labelEstado";
             this.labelEstado.Size = new System.Drawing.Size(96, 13);
             this.labelEstado.TabIndex = 10;
@@ -446,7 +446,7 @@
             // 
             // buttonLimpiar
             // 
-            this.buttonLimpiar.Location = new System.Drawing.Point(330, 108);
+            this.buttonLimpiar.Location = new System.Drawing.Point(426, 264);
             this.buttonLimpiar.Name = "buttonLimpiar";
             this.buttonLimpiar.Size = new System.Drawing.Size(118, 23);
             this.buttonLimpiar.TabIndex = 22;
@@ -456,7 +456,7 @@
             // 
             // button3
             // 
-            this.button3.Location = new System.Drawing.Point(330, 72);
+            this.button3.Location = new System.Drawing.Point(426, 235);
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(118, 23);
             this.button3.TabIndex = 21;
@@ -523,6 +523,17 @@
             this.label14.TabIndex = 0;
             this.label14.Text = "Username";
             // 
+            // buttonTarjetas
+            // 
+            this.buttonTarjetas.Enabled = false;
+            this.buttonTarjetas.Location = new System.Drawing.Point(278, 66);
+            this.buttonTarjetas.Name = "buttonTarjetas";
+            this.buttonTarjetas.Size = new System.Drawing.Size(118, 41);
+            this.buttonTarjetas.TabIndex = 23;
+            this.buttonTarjetas.Text = "Asociar Desasociar tarjeta";
+            this.buttonTarjetas.UseVisualStyleBackColor = true;
+            this.buttonTarjetas.Click += new System.EventHandler(this.buttonTarjetas_Click);
+            // 
             // Nuevo_Cliente
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -532,9 +543,11 @@
             this.Controls.Add(this.button2);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.groupBox1);
+            this.Controls.Add(this.button3);
+            this.Controls.Add(this.buttonLimpiar);
             this.Name = "Nuevo_Cliente";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Nuevo_Cliente";
+            this.Text = "Nuevo Cliente";
             this.Load += new System.EventHandler(this.Nuevo_Cliente_Load);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
@@ -594,5 +607,6 @@
         private System.Windows.Forms.ComboBox comboBoxPreg;
         private System.Windows.Forms.TextBox TXT_RepetirPassword;
         private System.Windows.Forms.Label LB_RepetirPassword;
+        private System.Windows.Forms.Button buttonTarjetas;
     }
 }

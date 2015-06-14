@@ -12,17 +12,32 @@ namespace PagoElectronico.ABM_Tarjeta
 {
     public partial class mtar : Form
     {
+        private decimal ID_cliente;
+
         public mtar()
         {
             InitializeComponent();
 
+            ID_cliente = Sesion.cliente_id;
+
             actualizar();
+
+        }
+
+        public mtar(decimal id_cliente)
+        {
+            InitializeComponent();
+
+            ID_cliente = id_cliente;
+
+            actualizar();
+
         }
 
         public void actualizar()
         {
             SQLParametros parametros = new SQLParametros();
-            parametros.add("Id_cliente", Sesion.cliente_id);
+            parametros.add("Id_cliente", ID_cliente);
 
             DataTable tarjetas;
 
@@ -49,7 +64,7 @@ namespace PagoElectronico.ABM_Tarjeta
 
         private void btModificar_Click(object sender, EventArgs e)
         {
-            new AsociarTarjeta(Convert.ToDecimal(cbTarjeta.SelectedValue)).ShowDialog(this);
+            new AsociarTarjeta(Convert.ToDecimal(cbTarjeta.SelectedValue),ID_cliente).ShowDialog(this);
             actualizar();
         }
 
@@ -73,7 +88,7 @@ namespace PagoElectronico.ABM_Tarjeta
 
         protected void btAsociar_Click(object sender, EventArgs e)
         {
-            new AsociarTarjeta(0).ShowDialog(this);
+            new AsociarTarjeta(0,ID_cliente).ShowDialog(this);
             actualizar();
         }
 

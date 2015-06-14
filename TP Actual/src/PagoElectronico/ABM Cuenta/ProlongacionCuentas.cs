@@ -43,7 +43,7 @@ namespace PagoElectronico.ABM_Cuenta
             SQLParametros param = new SQLParametros();
             param.add("@cantPeriodos", nuuSuscripciones.Value);
             param.add("@cuenta", txtCuenta.Text);
-            param.add("@tipocuenta", cuentaG["Tipo Id_moneda"].Value.ToString());
+            param.add("@tipocuenta", cuentaG["Id_tipo_cuenta"].Value.ToString());
             DataTable tipoCuentas;
             ConexionDB.Procedure("ObtenerTipoCuentas", param.get(), out tipoCuentas);
         }
