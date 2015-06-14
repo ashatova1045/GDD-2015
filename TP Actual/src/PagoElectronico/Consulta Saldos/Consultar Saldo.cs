@@ -13,6 +13,8 @@ namespace PagoElectronico.Consulta_Saldos
 {
     public partial class Consultar_Saldo : Form
     {
+        private bool salir = true;
+
         public Consultar_Saldo()
         {
             InitializeComponent();
@@ -140,8 +142,23 @@ namespace PagoElectronico.Consulta_Saldos
 
         private void button1_Click(object sender, EventArgs e)
         {
+            salir = false;
             Owner.Show();
             this.Close();
+        }
+
+        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void Consultar_Saldo_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (salir)
+            {
+                Application.Exit();
+            }
+
         }
     }
 }

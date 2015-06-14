@@ -13,7 +13,8 @@ namespace PagoElectronico.Facturacion
 {
     public partial class Factura : Form
     {
-
+        private bool salir = true;
+         
         public Factura(decimal user)
         {
             InitializeComponent();
@@ -45,8 +46,17 @@ namespace PagoElectronico.Facturacion
 
         private void button1_Click(object sender, EventArgs e)
         {
+            salir = false;
             Owner.Show();
             this.Close();
+        }
+
+        private void Factura_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (salir)
+            {
+                Application.Exit();
+            }
         }
     }
 }

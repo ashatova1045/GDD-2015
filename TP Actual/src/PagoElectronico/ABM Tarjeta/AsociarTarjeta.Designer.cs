@@ -51,7 +51,7 @@
             // 
             // txttarjeta
             // 
-            this.txttarjeta.Location = new System.Drawing.Point(126, 2);
+            this.txttarjeta.Location = new System.Drawing.Point(148, 2);
             this.txttarjeta.MaxLength = 16;
             this.txttarjeta.Name = "txttarjeta";
             this.txttarjeta.Size = new System.Drawing.Size(479, 20);
@@ -60,25 +60,27 @@
             // label1
             // 
             this.label1.AutoSize = true;
+            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Underline))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label1.Location = new System.Drawing.Point(6, 5);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(105, 13);
+            this.label1.Size = new System.Drawing.Size(126, 13);
             this.label1.TabIndex = 1;
             this.label1.Text = "Numero de la tarjeta:";
             // 
             // label2
             // 
             this.label2.AutoSize = true;
+            this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Underline))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label2.Location = new System.Drawing.Point(6, 33);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(74, 13);
+            this.label2.Size = new System.Drawing.Size(87, 13);
             this.label2.TabIndex = 2;
             this.label2.Text = "Banco emisor:";
             // 
             // dtEmision
             // 
             this.dtEmision.Format = System.Windows.Forms.DateTimePickerFormat.Short;
-            this.dtEmision.Location = new System.Drawing.Point(126, 178);
+            this.dtEmision.Location = new System.Drawing.Point(148, 183);
             this.dtEmision.Name = "dtEmision";
             this.dtEmision.Size = new System.Drawing.Size(99, 20);
             this.dtEmision.TabIndex = 4;
@@ -87,7 +89,7 @@
             // dtVencimiento
             // 
             this.dtVencimiento.Format = System.Windows.Forms.DateTimePickerFormat.Short;
-            this.dtVencimiento.Location = new System.Drawing.Point(126, 205);
+            this.dtVencimiento.Location = new System.Drawing.Point(148, 210);
             this.dtVencimiento.Name = "dtVencimiento";
             this.dtVencimiento.Size = new System.Drawing.Size(99, 20);
             this.dtVencimiento.TabIndex = 5;
@@ -95,7 +97,7 @@
             // 
             // txtCodigo
             // 
-            this.txtCodigo.Location = new System.Drawing.Point(126, 234);
+            this.txtCodigo.Location = new System.Drawing.Point(148, 239);
             this.txtCodigo.MaxLength = 3;
             this.txtCodigo.Name = "txtCodigo";
             this.txtCodigo.Size = new System.Drawing.Size(99, 20);
@@ -104,48 +106,55 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(6, 209);
+            this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Underline))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label3.Location = new System.Drawing.Point(6, 214);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(115, 13);
+            this.label3.Size = new System.Drawing.Size(136, 13);
             this.label3.TabIndex = 8;
             this.label3.Text = "Fecha de vencimiento:";
             // 
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(6, 182);
+            this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Underline))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label4.Location = new System.Drawing.Point(6, 187);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(93, 13);
+            this.label4.Size = new System.Drawing.Size(110, 13);
             this.label4.TabIndex = 7;
             this.label4.Text = "Fecha de emision:";
             // 
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(6, 237);
+            this.label6.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Underline))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label6.Location = new System.Drawing.Point(6, 242);
             this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(107, 13);
+            this.label6.Size = new System.Drawing.Size(127, 13);
             this.label6.TabIndex = 9;
             this.label6.Text = "Codigo de seguridad:";
             // 
             // btAsociar
             // 
-            this.btAsociar.Location = new System.Drawing.Point(204, 265);
+            this.btAsociar.BackColor = System.Drawing.Color.Moccasin;
+            this.btAsociar.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btAsociar.Location = new System.Drawing.Point(234, 271);
             this.btAsociar.Name = "btAsociar";
             this.btAsociar.Size = new System.Drawing.Size(97, 30);
             this.btAsociar.TabIndex = 13;
             this.btAsociar.Text = "Guardar";
-            this.btAsociar.UseVisualStyleBackColor = true;
+            this.btAsociar.UseVisualStyleBackColor = false;
             this.btAsociar.Click += new System.EventHandler(this.btAsociar_Click);
             // 
             // btVolver
             // 
-            this.btVolver.Location = new System.Drawing.Point(345, 265);
+            this.btVolver.BackColor = System.Drawing.Color.Moccasin;
+            this.btVolver.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btVolver.Location = new System.Drawing.Point(375, 271);
             this.btVolver.Name = "btVolver";
             this.btVolver.Size = new System.Drawing.Size(97, 30);
             this.btVolver.TabIndex = 14;
-            this.btVolver.Text = "Volver";
-            this.btVolver.UseVisualStyleBackColor = true;
+            this.btVolver.Text = "<< Volver";
+            this.btVolver.UseVisualStyleBackColor = false;
             this.btVolver.Click += new System.EventHandler(this.btVolver_Click);
             // 
             // dgBanco
@@ -160,7 +169,7 @@
             this.Calle,
             this.Altura,
             this.id});
-            this.dgBanco.Location = new System.Drawing.Point(126, 33);
+            this.dgBanco.Location = new System.Drawing.Point(148, 33);
             this.dgBanco.MultiSelect = false;
             this.dgBanco.Name = "dgBanco";
             this.dgBanco.ReadOnly = true;
@@ -168,6 +177,7 @@
             this.dgBanco.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dgBanco.Size = new System.Drawing.Size(479, 139);
             this.dgBanco.TabIndex = 15;
+            this.dgBanco.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgBanco_CellContentClick);
             // 
             // Nombre
             // 
@@ -228,7 +238,8 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(617, 307);
+            this.BackColor = System.Drawing.Color.PaleGoldenrod;
+            this.ClientSize = new System.Drawing.Size(656, 316);
             this.Controls.Add(this.dgBanco);
             this.Controls.Add(this.btVolver);
             this.Controls.Add(this.btAsociar);
@@ -244,6 +255,7 @@
             this.Name = "AsociarTarjeta";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Tarjeta";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.AsociarTarjeta_FormClosing);
             ((System.ComponentModel.ISupportInitialize)(this.dgBanco)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();

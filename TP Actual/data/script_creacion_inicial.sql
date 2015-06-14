@@ -1561,7 +1561,7 @@ AS
 				FROM HHHH.bancos b 
 				LEFT JOIN HHHH.paises p 
 				ON p.Codigo=Id_pais
-				WHERE b.Descripcion <> 'Banco Migracion'
+				WHERE b.Descripcion <> 'Banco migracion'
 			END
 		ELSE
 			BEGIN

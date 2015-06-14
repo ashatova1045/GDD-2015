@@ -13,6 +13,8 @@ namespace PagoElectronico.ABM_Cuenta
 {
     public partial class AdministrarCuentas : Form
     {
+        private bool salir = true;
+
         public AdministrarCuentas()
         {
             InitializeComponent();
@@ -88,6 +90,7 @@ namespace PagoElectronico.ABM_Cuenta
 
         private void button2_Click(object sender, EventArgs e)
         {
+            salir = false;
             Owner.Show();
             this.Close();
         }
@@ -156,6 +159,14 @@ namespace PagoElectronico.ABM_Cuenta
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
 
+        }
+
+        private void AdministrarCuentas_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (salir)
+            {
+                Application.Exit();
+            }
         }
     }
 }

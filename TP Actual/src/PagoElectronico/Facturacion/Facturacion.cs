@@ -13,6 +13,8 @@ namespace PagoElectronico.Facturacion
 {
     public partial class Facturacion : Form
     {
+        private bool salir = true;
+
         private void actualizarMov(string usuario, decimal userID)
         {
             label3.Text = usuario;
@@ -68,6 +70,7 @@ namespace PagoElectronico.Facturacion
 
         private void button1_Click(object sender, EventArgs e)
         {
+            salir = false;
             Owner.Show();
             this.Close();
         }
@@ -77,6 +80,7 @@ namespace PagoElectronico.Facturacion
             
             if (Sesion.rol_id != 1)
             {
+                salir = false;
                 new Factura(Sesion.user_id).Show(Owner);
                 this.Close();
             }
@@ -98,6 +102,14 @@ namespace PagoElectronico.Facturacion
             }
             catch (NullReferenceException) { }
             catch (InvalidCastException) { }
+        }
+
+        private void Facturacion_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (salir)
+            {
+                Application.Exit();
+            }
         }
     }
 }

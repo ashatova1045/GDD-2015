@@ -12,6 +12,7 @@ namespace PagoElectronico.ABM_Cuenta
 {
     public partial class ProlongacionCuentas : Form
     {
+        private bool salir = true;
         DataGridViewCellCollection cuentaG;
         public ProlongacionCuentas(DataGridViewCellCollection cuenta)
         {
@@ -29,6 +30,7 @@ namespace PagoElectronico.ABM_Cuenta
 
         private void btnVolver_Click(object sender, EventArgs e)
         {
+            salir = false;
             Owner.Show();
             this.Close();
         }
@@ -46,6 +48,14 @@ namespace PagoElectronico.ABM_Cuenta
             param.add("@tipocuenta", cuentaG["Id_tipo_cuenta"].Value.ToString());
             DataTable tipoCuentas;
             ConexionDB.Procedure("ObtenerTipoCuentas", param.get(), out tipoCuentas);
+        }
+
+        private void ProlongacionCuentas_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (salir)
+            {
+                Application.Exit();
+            }
         }
     }
 }

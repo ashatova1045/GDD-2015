@@ -169,6 +169,7 @@
             this.txtCosto.ReadOnly = true;
             this.txtCosto.Size = new System.Drawing.Size(71, 20);
             this.txtCosto.TabIndex = 14;
+            this.txtCosto.TextChanged += new System.EventHandler(this.txtCosto_TextChanged);
             // 
             // bEquivalente
             // 
@@ -185,6 +186,7 @@
             // 
             this.txtDesc.Location = new System.Drawing.Point(503, 114);
             this.txtDesc.Name = "txtDesc";
+            this.txtDesc.ReadOnly = true;
             this.txtDesc.Size = new System.Drawing.Size(71, 20);
             this.txtDesc.TabIndex = 16;
             // 
@@ -212,6 +214,7 @@
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Realizar Deposito";
             this.Load += new System.EventHandler(this.RealizarDeposito_Load);
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.RealizarDeposito_FormClosing);
             ((System.ComponentModel.ISupportInitialize)(this.seleccionImporte)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();

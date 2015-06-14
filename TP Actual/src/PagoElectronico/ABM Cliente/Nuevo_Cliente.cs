@@ -14,6 +14,8 @@ namespace PagoElectronico.ABM_Cliente
 {
     public partial class Nuevo_Cliente : Form
     {
+        private bool salir = true;
+
         public Nuevo_Cliente()
         {
             InitializeComponent();
@@ -164,6 +166,8 @@ namespace PagoElectronico.ABM_Cliente
 
         private void button2_Click(object sender, EventArgs e)
         {
+
+            salir = false;
             Owner.Show();
             this.Close();
         }
@@ -294,6 +298,7 @@ namespace PagoElectronico.ABM_Cliente
 
         private void button4_Click(object sender, EventArgs e)
         {
+            salir = false;
             new Nuevo_Cliente().Show(Owner);
             this.Close();
         }
@@ -318,6 +323,19 @@ namespace PagoElectronico.ABM_Cliente
         {
             new ABM_Tarjeta.mtar(idCliente).Show(this);
             this.Hide();
+
+        }
+
+        private void Nuevo_Cliente_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (salir)
+            {
+                Application.Exit();
+            }
+        }
+
+        private void groupBox2_Enter(object sender, EventArgs e)
+        {
 
         }
     }

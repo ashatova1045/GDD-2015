@@ -9,6 +9,8 @@ namespace PagoElectronico.ABM_Tarjeta
 {
     public partial class AsociarTarjeta : Form
     {
+        private bool salir = true;
+
         private bool modificacion = false;
         private decimal idt;
         private decimal ID_cliente;
@@ -99,8 +101,22 @@ namespace PagoElectronico.ABM_Tarjeta
 
         private void btVolver_Click(object sender, EventArgs e)
         {
+            salir = false;
             Owner.Show();
             this.Close();
+        }
+
+        private void AsociarTarjeta_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (salir)
+            {
+                Application.Exit();
+            }
+        }
+
+        private void dgBanco_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+
         }
     }
 }

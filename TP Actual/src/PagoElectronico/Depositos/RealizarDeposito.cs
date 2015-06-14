@@ -25,6 +25,8 @@ namespace PagoElectronico.Depositos
 
         decimal monedaDeLaCuentaSeleccionada;
 
+        private bool salir = true;
+
         public RealizarDeposito()
         {
             InitializeComponent();
@@ -110,7 +112,7 @@ namespace PagoElectronico.Depositos
         }
         private void volverFuncionalidades_Click_1(object sender, EventArgs e)
         {
-           
+            salir = false;
             Owner.Show();
             this.Close();
         }
@@ -122,6 +124,19 @@ namespace PagoElectronico.Depositos
                     + seleccionMoneda.SelectedValue.ToString() + ","
                     + monedaDeLaCuentaSeleccionada + ","
                     + seleccionImporte.Value.ToString().Replace(',', '.') + ")").Rows[0][0]).ToString();
+        }
+
+        private void RealizarDeposito_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (salir)
+            {
+                Application.Exit();
+            }
+        }
+
+        private void txtCosto_TextChanged(object sender, EventArgs e)
+        {
+
         }
 
 

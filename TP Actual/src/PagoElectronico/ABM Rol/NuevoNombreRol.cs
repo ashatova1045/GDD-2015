@@ -13,6 +13,8 @@ namespace PagoElectronico.ABM_Rol
 {
     public partial class NuevoNombreRol : Form
     {
+        private bool salir = true;
+
         public NuevoNombreRol()
         {
             InitializeComponent();
@@ -27,6 +29,7 @@ namespace PagoElectronico.ABM_Rol
 
             if (ConexionDB.Procedure("agregarNuevoRol", parametros.get()))
             {
+                salir = false;
                 Owner.Show();
                 this.Close();
             }
@@ -34,6 +37,7 @@ namespace PagoElectronico.ABM_Rol
 
         private void button2_Click(object sender, EventArgs e)
         {
+            salir = false;
             Owner.Show();
             this.Close();
         }
@@ -49,6 +53,19 @@ namespace PagoElectronico.ABM_Rol
             }
 
             button1.Enabled = true;
+        }
+
+        private void NuevoNombreRol_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        private void NuevoNombreRol_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (salir)
+            {
+                Application.Exit();
+            }
         }
     }
 }

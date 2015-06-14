@@ -13,6 +13,8 @@ namespace PagoElectronico.ABM_Rol
 {
     public partial class AdministrarRoles : Form
     {
+        private bool salir = true;
+
         DataTable rolesActuales;
         private void ActualizarRoles()
         {
@@ -161,6 +163,7 @@ namespace PagoElectronico.ABM_Rol
 
         private void button3_Click(object sender, EventArgs e)
         {
+            salir = false;
             Owner.Show();
             this.Close();
         }
@@ -175,6 +178,14 @@ namespace PagoElectronico.ABM_Rol
             checkBox1.Checked = false;
 
             errorProvider1.Clear();
+        }
+
+        private void AdministrarRoles_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (salir)
+            {
+                Application.Exit();
+            }
         }
     }
 }

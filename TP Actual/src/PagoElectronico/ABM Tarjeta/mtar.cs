@@ -12,6 +12,8 @@ namespace PagoElectronico.ABM_Tarjeta
 {
     public partial class mtar : Form
     {
+        private bool salir = true;
+
         private decimal ID_cliente;
 
         public mtar()
@@ -70,6 +72,7 @@ namespace PagoElectronico.ABM_Tarjeta
 
         private void btVolver_Click(object sender, EventArgs e)
         {
+            salir = false;
             Owner.Show();
             this.Close();
         }
@@ -95,6 +98,14 @@ namespace PagoElectronico.ABM_Tarjeta
         private void mtar_Load(object sender, EventArgs e)
         {
 
+        }
+
+        private void mtar_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (salir)
+            {
+                Application.Exit();
+            }
         }
     }
 }

@@ -13,6 +13,8 @@ namespace PagoElectronico.ABM_Cliente
 {
     public partial class BuscarCliente : Form
     {
+        private bool salir=true;
+
         public BuscarCliente()
         {
             InitializeComponent();
@@ -106,13 +108,14 @@ namespace PagoElectronico.ABM_Cliente
 
         private void button2_Click(object sender, EventArgs e)
         {
+            salir = false;
             Owner.Show();
             this.Close();
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
-
+            salir = false;
             DataGridViewCellCollection cell;
             if (dataGridView1.SelectedRows.Count > 0)
             {
@@ -124,6 +127,14 @@ namespace PagoElectronico.ABM_Cliente
             }
             else
                 MessageBox.Show("Debe seleccionar una fila antes");
+        }
+
+        private void BuscarCliente_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (salir)
+            {
+                Application.Exit();
+            }
         }
     }
 }

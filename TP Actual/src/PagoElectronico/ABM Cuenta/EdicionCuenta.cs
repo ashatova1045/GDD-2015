@@ -13,6 +13,7 @@ namespace PagoElectronico.ABM_Cuenta
 {
     public partial class EdicionCuenta : Form
     {
+        private bool salir = true;
         decimal user;
         public EdicionCuenta(DataGridViewCellCollection cell, decimal usuario)
         {
@@ -77,6 +78,7 @@ namespace PagoElectronico.ABM_Cuenta
 
         private void button2_Click(object sender, EventArgs e)
         {
+            salir = false;
             ((AdministrarCuentas)Owner).actualizarCuentas();
             Owner.Show();
             this.Close();
@@ -147,6 +149,19 @@ namespace PagoElectronico.ABM_Cuenta
             {
                 MessageBox.Show("Cuenta creada exitosamente");
                 button2_Click(null, null);
+            }
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void EdicionCuenta_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (salir)
+            {
+                Application.Exit();
             }
         }
 
