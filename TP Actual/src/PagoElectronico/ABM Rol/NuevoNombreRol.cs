@@ -16,6 +16,8 @@ namespace PagoElectronico.ABM_Rol
         public NuevoNombreRol()
         {
             InitializeComponent();
+
+            button1.Enabled = false;
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -36,9 +38,17 @@ namespace PagoElectronico.ABM_Rol
             this.Close();
         }
 
-        private void NuevoNombreRol_Load(object sender, EventArgs e)
+        private void textBox1_TextChanged(object sender, EventArgs e)
         {
+            errorProvider1.Clear();
+            if (!ValidadorHelper.ValidarLetrasGuiones(textBox1.Text))
+            {
+                errorProvider1.SetError(textBox1, "El nombre de rol no es correcto");
+                button1.Enabled = false;
+                return;
+            }
 
+            button1.Enabled = true;
         }
     }
 }

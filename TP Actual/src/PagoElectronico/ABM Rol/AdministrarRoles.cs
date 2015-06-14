@@ -58,6 +58,8 @@ namespace PagoElectronico.ABM_Rol
         private void comboBox1_SelectionChangeCommitted(object sender, EventArgs e)
         {
             DataRow[] rowRol = rolesActuales.Select("Id_rol = " + comboBox1.SelectedValue);
+
+            resetear();
             try 
             { 
                 if(rowRol[0][2].ToString() == "A")
@@ -76,11 +78,11 @@ namespace PagoElectronico.ABM_Rol
 
             if (ConexionDB.Procedure("funcionesdelrol", parametros.get(), out funcsActivas))
             {
-
+                /*
                 for (int i = 0; i < checkedListBox1.Items.Count; i++)
                 {
                     checkedListBox1.SetItemChecked(i, false);
-                }
+                }*/
 
                 foreach (DataRow funcAct in funcsActivas.Rows)
                 {
@@ -113,11 +115,22 @@ namespace PagoElectronico.ABM_Rol
         {
             NuevoNombreRol nvorol = new NuevoNombreRol();
             nvorol.ShowDialog(this);
+
+            resetear();
+
             this.ActualizarRoles();
          }
 
         private void button1_Click(object sender, EventArgs e)
         {
+            errorProvider1.Clear();
+
+            if (!ValidadorHelper.ValidarLetrasGuiones(comboBox1.Text))
+            {
+                errorProvider1.SetError(comboBox1, "Elija un Rol");
+                return;
+            }
+            
             string funciones = "";
             string estado = "N";
 
@@ -131,6 +144,8 @@ namespace PagoElectronico.ABM_Rol
                 funciones = funciones + "," + itemChecked.ToString();
                
             }
+
+            resetear();
 
             SQLParametros parametros = new SQLParametros();
 
@@ -148,6 +163,18 @@ namespace PagoElectronico.ABM_Rol
         {
             Owner.Show();
             this.Close();
+        }
+
+        private void resetear()
+        {
+            for (int i = 0; i < checkedListBox1.Items.Count; i++)
+            {
+                checkedListBox1.SetItemChecked(i, false);
+            }
+
+            checkBox1.Checked = false;
+
+            errorProvider1.Clear();
         }
     }
 }

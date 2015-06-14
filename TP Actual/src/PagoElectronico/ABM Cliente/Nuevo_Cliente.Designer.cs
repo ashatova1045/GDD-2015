@@ -62,13 +62,12 @@
             this.errorProvider1 = new System.Windows.Forms.ErrorProvider(this.components);
             this.button2 = new System.Windows.Forms.Button();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.buttonTarjetas = new System.Windows.Forms.Button();
             this.TXT_RepetirPassword = new System.Windows.Forms.TextBox();
             this.LB_RepetirPassword = new System.Windows.Forms.Label();
             this.comboBoxPreg = new System.Windows.Forms.ComboBox();
             this.checkBoxEstado = new System.Windows.Forms.CheckBox();
             this.labelEstado = new System.Windows.Forms.Label();
-            this.buttonLimpiar = new System.Windows.Forms.Button();
-            this.button3 = new System.Windows.Forms.Button();
             this.label17 = new System.Windows.Forms.Label();
             this.textBoxRes = new System.Windows.Forms.TextBox();
             this.label16 = new System.Windows.Forms.Label();
@@ -76,7 +75,8 @@
             this.label15 = new System.Windows.Forms.Label();
             this.textBoxUser = new System.Windows.Forms.TextBox();
             this.label14 = new System.Windows.Forms.Label();
-            this.buttonTarjetas = new System.Windows.Forms.Button();
+            this.buttonLimpiar = new System.Windows.Forms.Button();
+            this.button3 = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).BeginInit();
             this.groupBox2.SuspendLayout();
@@ -400,6 +400,17 @@
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Datos de la cuenta";
             // 
+            // buttonTarjetas
+            // 
+            this.buttonTarjetas.Enabled = false;
+            this.buttonTarjetas.Location = new System.Drawing.Point(278, 66);
+            this.buttonTarjetas.Name = "buttonTarjetas";
+            this.buttonTarjetas.Size = new System.Drawing.Size(118, 41);
+            this.buttonTarjetas.TabIndex = 23;
+            this.buttonTarjetas.Text = "Asociar/Desasociar tarjeta";
+            this.buttonTarjetas.UseVisualStyleBackColor = true;
+            this.buttonTarjetas.Click += new System.EventHandler(this.buttonTarjetas_Click);
+            // 
             // TXT_RepetirPassword
             // 
             this.TXT_RepetirPassword.Location = new System.Drawing.Point(68, 69);
@@ -443,26 +454,6 @@
             this.labelEstado.Size = new System.Drawing.Size(96, 13);
             this.labelEstado.TabIndex = 10;
             this.labelEstado.Text = "Estado del Usuario";
-            // 
-            // buttonLimpiar
-            // 
-            this.buttonLimpiar.Location = new System.Drawing.Point(426, 264);
-            this.buttonLimpiar.Name = "buttonLimpiar";
-            this.buttonLimpiar.Size = new System.Drawing.Size(118, 23);
-            this.buttonLimpiar.TabIndex = 22;
-            this.buttonLimpiar.Text = "Limpiar Campos";
-            this.buttonLimpiar.UseVisualStyleBackColor = true;
-            this.buttonLimpiar.Click += new System.EventHandler(this.button4_Click);
-            // 
-            // button3
-            // 
-            this.button3.Location = new System.Drawing.Point(426, 235);
-            this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(118, 23);
-            this.button3.TabIndex = 21;
-            this.button3.Text = "Buscar Cliente";
-            this.button3.UseVisualStyleBackColor = true;
-            this.button3.Click += new System.EventHandler(this.button3_Click);
             // 
             // label17
             // 
@@ -523,16 +514,25 @@
             this.label14.TabIndex = 0;
             this.label14.Text = "Username";
             // 
-            // buttonTarjetas
+            // buttonLimpiar
             // 
-            this.buttonTarjetas.Enabled = false;
-            this.buttonTarjetas.Location = new System.Drawing.Point(278, 66);
-            this.buttonTarjetas.Name = "buttonTarjetas";
-            this.buttonTarjetas.Size = new System.Drawing.Size(118, 41);
-            this.buttonTarjetas.TabIndex = 23;
-            this.buttonTarjetas.Text = "Asociar Desasociar tarjeta";
-            this.buttonTarjetas.UseVisualStyleBackColor = true;
-            this.buttonTarjetas.Click += new System.EventHandler(this.buttonTarjetas_Click);
+            this.buttonLimpiar.Location = new System.Drawing.Point(426, 264);
+            this.buttonLimpiar.Name = "buttonLimpiar";
+            this.buttonLimpiar.Size = new System.Drawing.Size(118, 23);
+            this.buttonLimpiar.TabIndex = 22;
+            this.buttonLimpiar.Text = "Limpiar Campos";
+            this.buttonLimpiar.UseVisualStyleBackColor = true;
+            this.buttonLimpiar.Click += new System.EventHandler(this.button4_Click);
+            // 
+            // button3
+            // 
+            this.button3.Location = new System.Drawing.Point(426, 235);
+            this.button3.Name = "button3";
+            this.button3.Size = new System.Drawing.Size(118, 23);
+            this.button3.TabIndex = 21;
+            this.button3.Text = "Buscar Cliente";
+            this.button3.UseVisualStyleBackColor = true;
+            this.button3.Click += new System.EventHandler(this.button3_Click);
             // 
             // Nuevo_Cliente
             // 
