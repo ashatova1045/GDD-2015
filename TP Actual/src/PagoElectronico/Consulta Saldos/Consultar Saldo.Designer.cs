@@ -100,7 +100,7 @@
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.ReadOnly = true;
             this.dataGridView1.RowHeadersVisible = false;
-            this.dataGridView1.Size = new System.Drawing.Size(501, 133);
+            this.dataGridView1.Size = new System.Drawing.Size(555, 133);
             this.dataGridView1.TabIndex = 4;
             // 
             // label3
@@ -124,7 +124,7 @@
             this.groupBox1.Controls.Add(this.comboBox2);
             this.groupBox1.Location = new System.Drawing.Point(9, 3);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(504, 54);
+            this.groupBox1.Size = new System.Drawing.Size(558, 54);
             this.groupBox1.TabIndex = 6;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Datos Cliente";
@@ -179,7 +179,7 @@
             this.dataGridView2.Name = "dataGridView2";
             this.dataGridView2.ReadOnly = true;
             this.dataGridView2.RowHeadersVisible = false;
-            this.dataGridView2.Size = new System.Drawing.Size(501, 133);
+            this.dataGridView2.Size = new System.Drawing.Size(555, 133);
             this.dataGridView2.TabIndex = 8;
             // 
             // label5
@@ -202,14 +202,14 @@
             this.dataGridView3.Name = "dataGridView3";
             this.dataGridView3.ReadOnly = true;
             this.dataGridView3.RowHeadersVisible = false;
-            this.dataGridView3.Size = new System.Drawing.Size(504, 150);
+            this.dataGridView3.Size = new System.Drawing.Size(558, 150);
             this.dataGridView3.TabIndex = 10;
             // 
             // button1
             // 
             this.button1.BackColor = System.Drawing.Color.Moccasin;
             this.button1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button1.Location = new System.Drawing.Point(434, 558);
+            this.button1.Location = new System.Drawing.Point(488, 557);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(79, 27);
             this.button1.TabIndex = 11;
@@ -222,7 +222,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.PaleGoldenrod;
-            this.ClientSize = new System.Drawing.Size(526, 596);
+            this.ClientSize = new System.Drawing.Size(579, 596);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.dataGridView3);
             this.Controls.Add(this.label5);

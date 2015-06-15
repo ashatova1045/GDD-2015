@@ -1609,8 +1609,10 @@ CREATE PROCEDURE HHHH.ObtenerCuentasDeCliente
 AS
 	BEGIN
 
-		SELECT cue.* 
+		SELECT cue.*, MON.Descripcion
 		FROM HHHH.cuentas cue, HHHH.clientes cli 
+		JOIN HHHH.Monedas mon
+		ON mon.Id_moneda = cue.Id_moneda
 		WHERE cli.Id_cliente = cue.Id_cliente and 
 			  cli.Id_cliente = @Id_cliente
 	END
