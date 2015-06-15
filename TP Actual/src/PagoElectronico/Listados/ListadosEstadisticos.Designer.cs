@@ -90,22 +90,26 @@
             // 
             // generarB
             // 
+            this.generarB.BackColor = System.Drawing.Color.Moccasin;
+            this.generarB.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.generarB.Location = new System.Drawing.Point(457, 195);
             this.generarB.Name = "generarB";
             this.generarB.Size = new System.Drawing.Size(132, 44);
             this.generarB.TabIndex = 6;
             this.generarB.Text = "Generar Listado";
-            this.generarB.UseVisualStyleBackColor = true;
+            this.generarB.UseVisualStyleBackColor = false;
             this.generarB.Click += new System.EventHandler(this.generarB_Click);
             // 
             // volverFuncionalidades
             // 
+            this.volverFuncionalidades.BackColor = System.Drawing.Color.Moccasin;
+            this.volverFuncionalidades.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.volverFuncionalidades.Location = new System.Drawing.Point(113, 195);
             this.volverFuncionalidades.Name = "volverFuncionalidades";
             this.volverFuncionalidades.Size = new System.Drawing.Size(132, 43);
             this.volverFuncionalidades.TabIndex = 7;
             this.volverFuncionalidades.Text = "<<Volver";
-            this.volverFuncionalidades.UseVisualStyleBackColor = true;
+            this.volverFuncionalidades.UseVisualStyleBackColor = false;
             this.volverFuncionalidades.Click += new System.EventHandler(this.volverFuncionalidades_Click_1);
             // 
             // AnioTextBox
@@ -126,7 +130,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackColor = System.Drawing.Color.Lavender;
+            this.BackColor = System.Drawing.Color.PaleGoldenrod;
             this.ClientSize = new System.Drawing.Size(855, 284);
             this.Controls.Add(this.AnioTextBox);
             this.Controls.Add(this.volverFuncionalidades);
@@ -139,6 +143,7 @@
             this.Name = "ListadosEstadisticos";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Listados";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.ListadosEstadisticos_FormClosing);
             ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();

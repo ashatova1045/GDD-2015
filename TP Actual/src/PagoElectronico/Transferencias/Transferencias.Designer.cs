@@ -54,7 +54,7 @@
             // 
             this.cbOrigen.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbOrigen.FormattingEnabled = true;
-            this.cbOrigen.Location = new System.Drawing.Point(123, 12);
+            this.cbOrigen.Location = new System.Drawing.Point(142, 12);
             this.cbOrigen.MaxLength = 18;
             this.cbOrigen.Name = "cbOrigen";
             this.cbOrigen.Size = new System.Drawing.Size(133, 21);
@@ -64,34 +64,37 @@
             // label1
             // 
             this.label1.AutoSize = true;
+            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Underline))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label1.Location = new System.Drawing.Point(22, 15);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(78, 13);
+            this.label1.Size = new System.Drawing.Size(92, 13);
             this.label1.TabIndex = 1;
             this.label1.Text = "Cuenta Origen:";
             // 
             // label2
             // 
             this.label2.AutoSize = true;
+            this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Underline))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label2.Location = new System.Drawing.Point(22, 52);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(83, 13);
+            this.label2.Size = new System.Drawing.Size(98, 13);
             this.label2.TabIndex = 3;
             this.label2.Text = "Cuenta Destino:";
             // 
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(263, 17);
+            this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Underline))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label3.Location = new System.Drawing.Point(279, 17);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(37, 13);
+            this.label3.Size = new System.Drawing.Size(43, 13);
             this.label3.TabIndex = 5;
             this.label3.Text = "Saldo:";
             // 
             // txtSaldo
             // 
             this.txtSaldo.Enabled = false;
-            this.txtSaldo.Location = new System.Drawing.Point(306, 15);
+            this.txtSaldo.Location = new System.Drawing.Point(322, 15);
             this.txtSaldo.MaxLength = 99999;
             this.txtSaldo.Name = "txtSaldo";
             this.txtSaldo.Size = new System.Drawing.Size(117, 20);
@@ -100,16 +103,17 @@
             // label4
             // 
             this.label4.AutoSize = true;
+            this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Underline))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label4.Location = new System.Drawing.Point(22, 86);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(97, 13);
+            this.label4.Size = new System.Drawing.Size(118, 13);
             this.label4.TabIndex = 7;
             this.label4.Text = "Importe a transferir:";
             // 
             // nImporte
             // 
             this.nImporte.DecimalPlaces = 2;
-            this.nImporte.Location = new System.Drawing.Point(123, 84);
+            this.nImporte.Location = new System.Drawing.Point(143, 84);
             this.nImporte.Maximum = new decimal(new int[] {
             -1486618625,
             232830643,
@@ -131,29 +135,33 @@
             // 
             // btTransferir
             // 
+            this.btTransferir.BackColor = System.Drawing.Color.Moccasin;
+            this.btTransferir.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btTransferir.Location = new System.Drawing.Point(107, 141);
             this.btTransferir.Name = "btTransferir";
             this.btTransferir.Size = new System.Drawing.Size(103, 28);
             this.btTransferir.TabIndex = 9;
             this.btTransferir.Text = "Transferir";
-            this.btTransferir.UseVisualStyleBackColor = true;
+            this.btTransferir.UseVisualStyleBackColor = false;
             this.btTransferir.Click += new System.EventHandler(this.btTransferir_Click);
             // 
             // btVolver
             // 
+            this.btVolver.BackColor = System.Drawing.Color.Moccasin;
+            this.btVolver.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btVolver.Location = new System.Drawing.Point(227, 140);
             this.btVolver.Name = "btVolver";
             this.btVolver.Size = new System.Drawing.Size(90, 28);
             this.btVolver.TabIndex = 10;
-            this.btVolver.Text = "Volver";
-            this.btVolver.UseVisualStyleBackColor = true;
+            this.btVolver.Text = "<< Volver";
+            this.btVolver.UseVisualStyleBackColor = false;
             this.btVolver.Click += new System.EventHandler(this.btVolver_Click);
             // 
             // cbImporteMoneda
             // 
             this.cbImporteMoneda.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbImporteMoneda.FormattingEnabled = true;
-            this.cbImporteMoneda.Location = new System.Drawing.Point(262, 84);
+            this.cbImporteMoneda.Location = new System.Drawing.Point(281, 84);
             this.cbImporteMoneda.Name = "cbImporteMoneda";
             this.cbImporteMoneda.Size = new System.Drawing.Size(91, 21);
             this.cbImporteMoneda.TabIndex = 11;
@@ -162,7 +170,7 @@
             // txtMoneda
             // 
             this.txtMoneda.Enabled = false;
-            this.txtMoneda.Location = new System.Drawing.Point(429, 15);
+            this.txtMoneda.Location = new System.Drawing.Point(442, 15);
             this.txtMoneda.Name = "txtMoneda";
             this.txtMoneda.Size = new System.Drawing.Size(76, 20);
             this.txtMoneda.TabIndex = 12;
@@ -170,7 +178,7 @@
             // txtCosto
             // 
             this.txtCosto.Enabled = false;
-            this.txtCosto.Location = new System.Drawing.Point(306, 41);
+            this.txtCosto.Location = new System.Drawing.Point(322, 41);
             this.txtCosto.MaxLength = 99999;
             this.txtCosto.Name = "txtCosto";
             this.txtCosto.Size = new System.Drawing.Size(117, 20);
@@ -179,16 +187,17 @@
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(265, 43);
+            this.label5.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Underline))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label5.Location = new System.Drawing.Point(281, 43);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(37, 13);
+            this.label5.Size = new System.Drawing.Size(43, 13);
             this.label5.TabIndex = 13;
             this.label5.Text = "Costo:";
             // 
             // txtMoneda2
             // 
             this.txtMoneda2.Enabled = false;
-            this.txtMoneda2.Location = new System.Drawing.Point(429, 40);
+            this.txtMoneda2.Location = new System.Drawing.Point(442, 40);
             this.txtMoneda2.Name = "txtMoneda2";
             this.txtMoneda2.Size = new System.Drawing.Size(76, 20);
             this.txtMoneda2.TabIndex = 15;
@@ -197,7 +206,7 @@
             // 
             this.cbDestino.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbDestino.FormattingEnabled = true;
-            this.cbDestino.Location = new System.Drawing.Point(123, 46);
+            this.cbDestino.Location = new System.Drawing.Point(142, 46);
             this.cbDestino.MaxLength = 18;
             this.cbDestino.Name = "cbDestino";
             this.cbDestino.Size = new System.Drawing.Size(133, 21);
@@ -207,7 +216,7 @@
             // txtImporteConvertido
             // 
             this.txtImporteConvertido.Enabled = false;
-            this.txtImporteConvertido.Location = new System.Drawing.Point(378, 84);
+            this.txtImporteConvertido.Location = new System.Drawing.Point(397, 84);
             this.txtImporteConvertido.Name = "txtImporteConvertido";
             this.txtImporteConvertido.Size = new System.Drawing.Size(63, 20);
             this.txtImporteConvertido.TabIndex = 17;
@@ -216,7 +225,7 @@
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(359, 87);
+            this.label6.Location = new System.Drawing.Point(378, 87);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(13, 13);
             this.label6.TabIndex = 18;
@@ -224,18 +233,20 @@
             // 
             // btnCalc
             // 
-            this.btnCalc.Location = new System.Drawing.Point(378, 110);
+            this.btnCalc.BackColor = System.Drawing.Color.Moccasin;
+            this.btnCalc.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnCalc.Location = new System.Drawing.Point(397, 110);
             this.btnCalc.Name = "btnCalc";
             this.btnCalc.Size = new System.Drawing.Size(106, 21);
             this.btnCalc.TabIndex = 19;
             this.btnCalc.Text = "Calcular cambio";
-            this.btnCalc.UseVisualStyleBackColor = true;
+            this.btnCalc.UseVisualStyleBackColor = false;
             this.btnCalc.Click += new System.EventHandler(this.btnCalc_Click);
             // 
             // txtMonedaATransferir
             // 
             this.txtMonedaATransferir.Enabled = false;
-            this.txtMonedaATransferir.Location = new System.Drawing.Point(447, 84);
+            this.txtMonedaATransferir.Location = new System.Drawing.Point(445, 84);
             this.txtMonedaATransferir.Name = "txtMonedaATransferir";
             this.txtMonedaATransferir.Size = new System.Drawing.Size(49, 20);
             this.txtMonedaATransferir.TabIndex = 20;
@@ -244,7 +255,8 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(509, 178);
+            this.BackColor = System.Drawing.Color.PaleGoldenrod;
+            this.ClientSize = new System.Drawing.Size(539, 182);
             this.Controls.Add(this.txtMonedaATransferir);
             this.Controls.Add(this.btnCalc);
             this.Controls.Add(this.label6);
@@ -267,6 +279,7 @@
             this.Name = "Transferencias";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Transferencias";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Transferencias_FormClosing);
             ((System.ComponentModel.ISupportInitialize)(this.nImporte)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();

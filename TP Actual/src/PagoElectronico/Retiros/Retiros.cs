@@ -13,7 +13,8 @@ namespace PagoElectronico.Retiros
 {
     public partial class RetiroEfectivo_FRM : Form
     {
-        
+        private bool salir = true;
+
         readonly DataTable monedas;
         readonly DataTable cuentas;
         readonly DataTable bancos;// descripcion <> 'Banco migracion'"); //Traigo todos los bancos
@@ -119,6 +120,7 @@ namespace PagoElectronico.Retiros
 
         private void Cancelar_BTN_Click(object sender, EventArgs e)
         {
+            salir = false;
             Owner.Show();
             this.Close();
         }
@@ -197,6 +199,14 @@ namespace PagoElectronico.Retiros
             
 
             return correcto;
+        }
+
+        private void RetiroEfectivo_FRM_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (salir)
+            {
+                Application.Exit();
+            }
         }
     }
 }
