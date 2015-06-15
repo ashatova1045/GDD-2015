@@ -36,21 +36,23 @@
             // 
             // btVolver
             // 
-            this.btVolver.Location = new System.Drawing.Point(392, 80);
+            this.btVolver.BackColor = System.Drawing.Color.Moccasin;
+            this.btVolver.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btVolver.Location = new System.Drawing.Point(388, 80);
             this.btVolver.Name = "btVolver";
-            this.btVolver.Size = new System.Drawing.Size(92, 26);
+            this.btVolver.Size = new System.Drawing.Size(96, 32);
             this.btVolver.TabIndex = 7;
-            this.btVolver.Text = "Volver";
-            this.btVolver.UseVisualStyleBackColor = true;
+            this.btVolver.Text = "<< Volver";
+            this.btVolver.UseVisualStyleBackColor = false;
             this.btVolver.Click += new System.EventHandler(this.btVolver_Click);
             // 
             // lbFuncionalidad
             // 
             this.lbFuncionalidad.AutoSize = true;
-            this.lbFuncionalidad.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbFuncionalidad.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lbFuncionalidad.Location = new System.Drawing.Point(11, 15);
             this.lbFuncionalidad.Name = "lbFuncionalidad";
-            this.lbFuncionalidad.Size = new System.Drawing.Size(135, 24);
+            this.lbFuncionalidad.Size = new System.Drawing.Size(117, 18);
             this.lbFuncionalidad.TabIndex = 5;
             this.lbFuncionalidad.Text = "Funcionalidad:";
             // 
@@ -85,13 +87,15 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(496, 116);
+            this.BackColor = System.Drawing.Color.PaleGoldenrod;
+            this.ClientSize = new System.Drawing.Size(500, 124);
             this.Controls.Add(this.dataGridView1);
             this.Controls.Add(this.btVolver);
             this.Controls.Add(this.lbFuncionalidad);
             this.Name = "SeleccionarFuncionalidad";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "SeleccionarFuncionalidad";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.SeleccionarFuncionalidad_FormClosing);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();

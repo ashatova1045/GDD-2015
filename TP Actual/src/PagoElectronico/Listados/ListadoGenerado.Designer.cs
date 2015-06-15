@@ -45,24 +45,28 @@
             // 
             // volver
             // 
+            this.volver.BackColor = System.Drawing.Color.Moccasin;
+            this.volver.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.volver.Location = new System.Drawing.Point(703, 274);
             this.volver.Name = "volver";
             this.volver.Size = new System.Drawing.Size(129, 34);
             this.volver.TabIndex = 1;
             this.volver.Text = "<<Volver";
-            this.volver.UseVisualStyleBackColor = true;
+            this.volver.UseVisualStyleBackColor = false;
             this.volver.Click += new System.EventHandler(this.volver_Click);
             // 
             // ListadoGenerado
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.BackColor = System.Drawing.Color.PaleGoldenrod;
             this.ClientSize = new System.Drawing.Size(891, 317);
             this.Controls.Add(this.volver);
             this.Controls.Add(this.dataGridView1);
             this.Name = "ListadoGenerado";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Listado0";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.ListadoGenerado_FormClosing);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.ResumeLayout(false);
 

@@ -13,6 +13,8 @@ namespace PagoElectronico.Listados
 {
     public partial class ListadoGenerado : Form
     {
+        private bool salir = true;
+
         public ListadoGenerado(int anioIngresado, int tListado, int trimestre)
         {
             InitializeComponent();
@@ -36,8 +38,17 @@ namespace PagoElectronico.Listados
 
         private void volver_Click(object sender, EventArgs e)
         {
+            salir = false;
             Owner.Show();
             this.Close();
+        }
+
+        private void ListadoGenerado_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (salir)
+            {
+                Application.Exit();
+            }
         }
     }
 }

@@ -14,6 +14,8 @@ namespace PagoElectronico.Listados
     public partial class ListadosEstadisticos : Form
 
     {
+        private bool salir = true;
+
         int anioIngresado;
         int tListado;
         int trimestre;
@@ -73,6 +75,7 @@ namespace PagoElectronico.Listados
 
         private void volverFuncionalidades_Click_1(object sender, EventArgs e)
         {
+            salir = false;
             Owner.Show();
             this.Close();
         }
@@ -82,6 +85,14 @@ namespace PagoElectronico.Listados
         {
             this.Hide();
             new ListadoGenerado(anioIngresado, tListado, trimestre).Show(this);
+        }
+
+        private void ListadosEstadisticos_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (salir)
+            {
+                Application.Exit();
+            }
         }
 
 

@@ -13,6 +13,8 @@ namespace PagoElectronico.Login
 {
     public partial class SeleccionarRol : Form
     {
+        private bool salir = true;
+
         public SeleccionarRol()
         {
             InitializeComponent();
@@ -46,6 +48,7 @@ namespace PagoElectronico.Login
         {
             ((DataTable)(cbRoles.DataSource)).Dispose();
 
+            salir = false;
             Owner.Show();
             this.Close();
         }
@@ -57,6 +60,14 @@ namespace PagoElectronico.Login
 
             new SeleccionarFuncionalidad().Show(this);
             this.Hide();
+        }
+
+        private void SeleccionarRol_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (salir)
+            {
+                Application.Exit();
+            }
         }
     }
 }

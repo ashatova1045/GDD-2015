@@ -13,6 +13,8 @@ namespace PagoElectronico.Login
 {
     public partial class SeleccionarFuncionalidad : Form
     {
+        private bool salir = true;
+
         public SeleccionarFuncionalidad()
         {
             InitializeComponent();
@@ -47,6 +49,7 @@ namespace PagoElectronico.Login
         {
             ((DataTable)(dataGridView1.DataSource)).Dispose();
 
+            salir = false;
             Owner.Show();
             this.Close();
         }
@@ -95,6 +98,14 @@ namespace PagoElectronico.Login
             nuevoForm.Show(this);
             this.Hide();
 
+        }
+
+        private void SeleccionarFuncionalidad_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (salir)
+            {
+                Application.Exit();
+            }
         }
     }
 }

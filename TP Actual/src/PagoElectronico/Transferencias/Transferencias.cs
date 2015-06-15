@@ -9,6 +9,8 @@ namespace PagoElectronico.Transferencias
 {
     public partial class Transferencias : Form
     {
+        private bool salir = true;
+
         private DataTable cuentas;
         private DataRow cuentaSeleccionada;
         readonly DataTable monedas; //traigo todas las monedas, no solo las que tiene seteada alguna cuenta
@@ -43,6 +45,7 @@ namespace PagoElectronico.Transferencias
 
         private void btVolver_Click(object sender, EventArgs e)
         {
+            salir = false;
             Owner.Show();
             this.Close();
         }
@@ -121,6 +124,14 @@ namespace PagoElectronico.Transferencias
         private void cbImporteMoneda_SelectedIndexChanged(object sender, EventArgs e)
         {
 
+        }
+
+        private void Transferencias_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (salir)
+            {
+                Application.Exit();
+            }
         }
 
     }

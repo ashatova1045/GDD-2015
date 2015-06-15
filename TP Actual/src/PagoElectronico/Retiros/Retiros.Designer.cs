@@ -29,7 +29,6 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(RetiroEfectivo_FRM));
             this.Cuenta_CB = new System.Windows.Forms.ComboBox();
             this.Cuenta_LB = new System.Windows.Forms.Label();
             this.Importe_LB = new System.Windows.Forms.Label();
@@ -40,12 +39,10 @@
             this.Cancelar_BTN = new System.Windows.Forms.Button();
             this.NoDoc_LB = new System.Windows.Forms.Label();
             this.NoDoc_TXT = new System.Windows.Forms.TextBox();
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.Banco_LB = new System.Windows.Forms.Label();
             this.Banco_CB = new System.Windows.Forms.ComboBox();
             this.errorProvider1 = new System.Windows.Forms.ErrorProvider(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.Importe_NUD)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -117,9 +114,9 @@
             // 
             // RealizarCheque_BTN
             // 
-            this.RealizarCheque_BTN.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
+            this.RealizarCheque_BTN.BackColor = System.Drawing.Color.Moccasin;
             this.RealizarCheque_BTN.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.RealizarCheque_BTN.Location = new System.Drawing.Point(89, 263);
+            this.RealizarCheque_BTN.Location = new System.Drawing.Point(332, 82);
             this.RealizarCheque_BTN.Name = "RealizarCheque_BTN";
             this.RealizarCheque_BTN.Size = new System.Drawing.Size(161, 32);
             this.RealizarCheque_BTN.TabIndex = 9;
@@ -129,13 +126,13 @@
             // 
             // Cancelar_BTN
             // 
-            this.Cancelar_BTN.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(128)))));
+            this.Cancelar_BTN.BackColor = System.Drawing.Color.Moccasin;
             this.Cancelar_BTN.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.Cancelar_BTN.Location = new System.Drawing.Point(356, 263);
+            this.Cancelar_BTN.Location = new System.Drawing.Point(350, 149);
             this.Cancelar_BTN.Name = "Cancelar_BTN";
             this.Cancelar_BTN.Size = new System.Drawing.Size(117, 32);
             this.Cancelar_BTN.TabIndex = 10;
-            this.Cancelar_BTN.Text = "Cancelar";
+            this.Cancelar_BTN.Text = "<< Volver";
             this.Cancelar_BTN.UseVisualStyleBackColor = false;
             this.Cancelar_BTN.Click += new System.EventHandler(this.Cancelar_BTN_Click);
             // 
@@ -155,15 +152,6 @@
             this.NoDoc_TXT.Name = "NoDoc_TXT";
             this.NoDoc_TXT.Size = new System.Drawing.Size(121, 20);
             this.NoDoc_TXT.TabIndex = 12;
-            // 
-            // pictureBox1
-            // 
-            this.pictureBox1.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox1.Image")));
-            this.pictureBox1.Location = new System.Drawing.Point(341, 54);
-            this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(156, 140);
-            this.pictureBox1.TabIndex = 13;
-            this.pictureBox1.TabStop = false;
             // 
             // Banco_LB
             // 
@@ -193,11 +181,10 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(192)))), ((int)(((byte)(255)))));
-            this.ClientSize = new System.Drawing.Size(543, 316);
+            this.BackColor = System.Drawing.Color.PaleGoldenrod;
+            this.ClientSize = new System.Drawing.Size(543, 265);
             this.Controls.Add(this.Banco_CB);
             this.Controls.Add(this.Banco_LB);
-            this.Controls.Add(this.pictureBox1);
             this.Controls.Add(this.NoDoc_TXT);
             this.Controls.Add(this.NoDoc_LB);
             this.Controls.Add(this.Cancelar_BTN);
@@ -211,8 +198,8 @@
             this.Name = "RetiroEfectivo_FRM";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Retiro de Efectivo";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.RetiroEfectivo_FRM_FormClosing);
             ((System.ComponentModel.ISupportInitialize)(this.Importe_NUD)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -231,7 +218,6 @@
         private System.Windows.Forms.Button Cancelar_BTN;
         private System.Windows.Forms.Label NoDoc_LB;
         private System.Windows.Forms.TextBox NoDoc_TXT;
-        private System.Windows.Forms.PictureBox pictureBox1;
         private System.Windows.Forms.Label Banco_LB;
         private System.Windows.Forms.ComboBox Banco_CB;
         private System.Windows.Forms.ErrorProvider errorProvider1;
