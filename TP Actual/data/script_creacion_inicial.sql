@@ -785,8 +785,8 @@ CREATE PROCEDURE HHHH.validarDeposito
 		IF @estaHabilitadaCuenta != 'H'
 			BEGIN
 				RAISERROR ('La cuenta seleccionada no esta habilitada',16,1)
-			RETURN
-		END
+				RETURN
+			END
 				DECLARE @esValidaTarjeta numeric (18,0) 
 		SET @esValidaTarjeta = (SELECT Id_tarjeta FROM HHHH.tarjetas
 								WHERE Id_tarjeta = @idTarjeta AND (Id_cliente = (SElECT Id_cliente 
@@ -795,15 +795,17 @@ CREATE PROCEDURE HHHH.validarDeposito
 		IF @esValidaTarjeta IS NULL
 			BEGIN 
 				RAISERROR ('Tarjeta no valida', 16,1)
-			RETURN
-		END
+				RETURN
+			END
 		BEGIN TRANSACTION generarDeposito
+
 			INSERT INTO HHHH.depositos(Id_cuenta, Importe, Id_tipo_moneda, Id_tarjeta, Fecha_deposito)
 				VALUES (@nroCuenta, @importeIngresado, @tipoMoneda, @esValidaTarjeta, @fechaAhora)	
 				
 				UPDATE HHHH.cuentas
 					SET Saldo = Saldo + hhhh.convertirmoneda(@tipoMoneda,cuentas.Id_moneda,@importeIngresado)
 					WHERE Id_cuenta = @nroCuenta	
+					
 		COMMIT TRANSACTION generarDeposito						
 		END		
 		
@@ -1671,8 +1673,13 @@ CREATE PROCEDURE HHHH.Ultimos5Retiros
 @Id_cuenta numeric(18,0)
 AS
 	BEGIN
-		SELECT TOP 5 Fecha_retiro, HHHH.impconmoneda(Importe,Id_moneda) AS Importe, ban.Descripcion 
-		FROM HHHH.retiros, HHHH.bancos ban WHERE Id_cuenta = @Id_cuenta and Id_banco = ban.Id_banco
+		SELECT TOP 5 Fecha_retiro, HHHH.impconmoneda(ret.Importe,Id_moneda) AS Importe, ban.Descripcion 
+		FROM HHHH.retiros ret
+		JOIN HHHH.cheques che
+		ON che.Id_cheque = ret.Id_cheque
+		JOIN HHHH.bancos ban
+		ON che.Id_banco = ban.Id_banco
+		WHERE Id_cuenta = @Id_cuenta		
 		ORDER BY Fecha_retiro DESC
 	END
 GO

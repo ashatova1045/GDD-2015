@@ -79,7 +79,7 @@ namespace PagoElectronico.Depositos
         private void botonConfirmar_Click_1(object sender, EventArgs e)
         {
            
-            //importeIngresado = actualizarImporteATransferir();
+            importeIngresado = actualizarImporteATransferir();
             nroCuenta = (decimal)seleccionCuenta.SelectedValue;
             tipoMoneda =  (decimal)seleccionMoneda.SelectedValue;
             idTarjeta = (decimal)seleccionTarjeta.SelectedValue;
@@ -139,8 +139,6 @@ namespace PagoElectronico.Depositos
 
         }
 
-
-/* ======= commit de eli
         private decimal actualizarImporteATransferir()
         {
             int monedaCuenta =int.Parse(ConexionDB.correrQuery(Sesion.conexion, "SELECT id_moneda FROM HHHH.cuentas WHERE id_cuenta =" + seleccionCuenta.SelectedValue).Rows[0][0].ToString());
@@ -148,6 +146,5 @@ namespace PagoElectronico.Depositos
             var valorImporte = ConexionDB.correrQuery(Sesion.conexion, "SELECT HHHH.convertirmoneda(" + seleccionMoneda.SelectedValue + "," + monedaCuenta + "," + seleccionImporte.Text.Replace(',', '.') + ")").Rows[0][0];
             return Convert.ToDecimal(valorImporte);
         }
- */
     }
 }
