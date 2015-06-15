@@ -500,7 +500,7 @@ BEGIN /* *************** MIGRACION *************** */
 -------------------------------------------------------------------------------------------				
 	INSERT INTO HHHH.funcionalidades(Descripcion)
 		VALUES	('ABM Rol'),
-				('ABM Usuario'),
+				--('ABM Usuario'),
 				('ABM Cliente'),
 				('ABM Cuenta'),
 				('Asociar/Desasociar Tarjeta de Credito'),
@@ -512,8 +512,8 @@ BEGIN /* *************** MIGRACION *************** */
 				('Listado Estadistico')
 -------------------------------------------------------------------------------------------				
 	INSERT INTO HHHH.Rel_Rol_Funcionalidad(Id_rol, Id_funcionalidad)
-		VALUES (1,1), (1,2), (1,3), (1,4), (1,9), (1,10), (1,11),
-				(2,4), (2,5), (2,6), (2,7), (2,8), (2,9), (2,10)
+		VALUES (1,1), (1,2), (1,3), (1,8), (1,9), (1,10),
+				(2,3), (2,4), (2,5), (2,6), (2,7), (2,8), (2,9)
 -------------------------------------------------------------------------------------------	
 	INSERT INTO HHHH.preguntas(Pregunta)
 		VALUES('Nombre de la primer mascota')
@@ -1609,11 +1609,10 @@ CREATE PROCEDURE HHHH.ObtenerCuentasDeCliente
 AS
 	BEGIN
 
-		SELECT cue.*, MON.Descripcion
-		FROM HHHH.cuentas cue, HHHH.clientes cli 
-		JOIN HHHH.Monedas mon
-		ON mon.Id_moneda = cue.Id_moneda
+		SELECT cue.*, mon.Descripcion
+		FROM HHHH.cuentas cue, HHHH.clientes cli, HHHH.Monedas mon
 		WHERE cli.Id_cliente = cue.Id_cliente and 
+			  mon.Id_moneda = cue.Id_moneda and
 			  cli.Id_cliente = @Id_cliente
 	END
 GO
