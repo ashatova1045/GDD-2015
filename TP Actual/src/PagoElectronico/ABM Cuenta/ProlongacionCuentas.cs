@@ -23,9 +23,15 @@ namespace PagoElectronico.ABM_Cuenta
 
         private void cargarDatos(DataGridViewCellCollection cuenta)
         {
+            SQLParametros param = new SQLParametros();
+            param.add("@cuenta", cuenta["Tipo cuenta"].Value.ToString());
+            DataTable infoCuenta;
+            ConexionDB.Procedure("InformacionTipoCuenta", param.get(), out infoCuenta);
+            
             txtCuenta.Text = cuenta["Cuenta"].Value.ToString();
             txtEstado.Text = cuenta["Estado"].Value.ToString();
             txtTipo.Text = cuenta["Tipo cuenta"].Value.ToString();
+            txtDuracion.Text = infoCuenta.Rows[0]["duracion"].ToString();
         }
 
         private void btnVolver_Click(object sender, EventArgs e)
@@ -43,11 +49,12 @@ namespace PagoElectronico.ABM_Cuenta
         private void btnCalcular_Click(object sender, EventArgs e)
         {
             SQLParametros param = new SQLParametros();
-            param.add("@cantPeriodos", nuuSuscripciones.Value);
-            param.add("@cuenta", txtCuenta.Text);
-            param.add("@tipocuenta", cuentaG["Id_tipo_cuenta"].Value.ToString());
-            DataTable tipoCuentas;
-            ConexionDB.Procedure("ObtenerTipoCuentas", param.get(), out tipoCuentas);
+            param.add("@suscripciones", nuuSuscripciones.Value);
+            //param.add("@cuenta", txtCuenta.Text);
+            param.add("@tipoCuenta", cuentaG["Id_tipo_cuenta"].Value.ToString());
+            DataTable costo;
+            ConexionDB.Procedure("CalcularCostoProlongacion", param.get(), out costo);
+            txtPrecio.Text = costo.Rows[0][0].ToString();
         }
 
         private void ProlongacionCuentas_FormClosing(object sender, FormClosingEventArgs e)
@@ -56,6 +63,11 @@ namespace PagoElectronico.ABM_Cuenta
             {
                 Application.Exit();
             }
+        }
+
+        private void ProlongacionCuentas_Load(object sender, EventArgs e)
+        {
+
         }
     }
 }

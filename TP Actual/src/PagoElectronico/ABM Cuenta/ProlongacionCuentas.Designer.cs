@@ -225,6 +225,7 @@
             this.Name = "ProlongacionCuentas";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Prolongacion Cuentas";
+            this.Load += new System.EventHandler(this.ProlongacionCuentas_Load);
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.ProlongacionCuentas_FormClosing);
             ((System.ComponentModel.ISupportInitialize)(this.nuuSuscripciones)).EndInit();
             this.ResumeLayout(false);

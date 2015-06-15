@@ -1550,6 +1550,26 @@ AS
 	END
 GO
 
+CREATE PROCEDURE HHHH.InformacionTipoCuenta
+@cuenta varchar(250)
+AS
+	BEGIN
+		SELECT * 
+		FROM HHHH.tipo_cuenta
+		WHERE HHHH.tipo_cuenta.Descripcion=@cuenta;
+	END
+GO
+
+CREATE PROCEDURE HHHH.CalcularCostoProlongacion
+@tipoCuenta numeric(18,0),
+@suscripciones numeric (4,0)
+AS
+	BEGIN
+	declare @costo numeric (18,2)=((select t.costo_cuenta from HHHH.tipo_cuenta t WHERE t.Id_tipo_cuenta=@tipoCuenta)* @suscripciones )
+		select @costo
+	END
+GO
+
 CREATE PROCEDURE HHHH.ObtenerBancos
 @FiltMigracion bit 
 AS
