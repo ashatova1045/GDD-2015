@@ -970,13 +970,14 @@ AS
 			RETURN
 		END*/
 	BEGIN
-		select convert(date,Fecha) AS Fecha, HHHH.GenerarDescripcion (mov.Tipo_movimiento,mov.Id_transferencia,mov.Dias_comprados,mov.Cambio_tipo_cuenta) AS Descripcion,
+		select convert(date,Fecha) AS Fecha, mov.Id_cuenta AS 'Cuenta' ,HHHH.GenerarDescripcion (mov.Tipo_movimiento,mov.Id_transferencia,mov.Dias_comprados,mov.Cambio_tipo_cuenta) AS Descripcion,
 				HHHH.impconmoneda(tr.Importe,mov.Id_moneda) AS Importe,HHHH.impconmoneda(mov.Costo,mov.Id_moneda) AS Costo
 			from HHHH.movimientos mov
 			LEFT JOIN HHHH.transferencias tr
 			ON tr.Id_transferencia = mov.Id_transferencia
 			where Id_factura is null 
 			 and HHHH.obtenerUser(mov.Id_cuenta) = @user_id
+			order by mov.Id_cuenta, Fecha 
 	END
 GO
 
@@ -1047,12 +1048,13 @@ CREATE PROCEDURE HHHH.itemFactura(
 @id_factura numeric(18,0))
 AS
 	BEGIN
-		SELECT convert(date,mov.Fecha) AS Fecha, HHHH.GenerarDescripcion (mov.Tipo_movimiento,mov.Id_transferencia,mov.Dias_comprados,mov.Cambio_tipo_cuenta) AS Descripcion,
+		SELECT convert(date,mov.Fecha) AS Fecha, mov.Id_cuenta AS 'Cuenta' ,HHHH.GenerarDescripcion (mov.Tipo_movimiento,mov.Id_transferencia,mov.Dias_comprados,mov.Cambio_tipo_cuenta) AS Descripcion,
 				HHHH.impconmoneda(tr.Importe,mov.Id_moneda) AS Importe,HHHH.impconmoneda(mov.Costo,mov.Id_moneda) AS Costo_Final
 			FROM HHHH.movimientos mov
 			LEFT JOIN HHHH.transferencias tr
 			ON tr.Id_transferencia = mov.Id_transferencia
 			WHERE mov.Id_factura = @id_factura
+			order by mov.Id_cuenta, Fecha
 				  
 	END
 GO

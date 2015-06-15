@@ -114,7 +114,7 @@
             this.groupBox1.Controls.Add(this.label4);
             this.groupBox1.Location = new System.Drawing.Point(12, 12);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(488, 115);
+            this.groupBox1.Size = new System.Drawing.Size(623, 115);
             this.groupBox1.TabIndex = 6;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Datos de Factura";
@@ -148,14 +148,14 @@
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.ReadOnly = true;
             this.dataGridView1.RowHeadersVisible = false;
-            this.dataGridView1.Size = new System.Drawing.Size(487, 221);
+            this.dataGridView1.Size = new System.Drawing.Size(622, 221);
             this.dataGridView1.TabIndex = 7;
             // 
             // label9
             // 
             this.label9.AutoSize = true;
             this.label9.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label9.Location = new System.Drawing.Point(308, 358);
+            this.label9.Location = new System.Drawing.Point(414, 357);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(118, 24);
             this.label9.TabIndex = 8;
@@ -165,7 +165,7 @@
             // 
             this.label10.AutoSize = true;
             this.label10.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label10.Location = new System.Drawing.Point(432, 358);
+            this.label10.Location = new System.Drawing.Point(538, 357);
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(68, 24);
             this.label10.TabIndex = 9;
@@ -175,7 +175,7 @@
             // 
             this.button1.BackColor = System.Drawing.Color.Moccasin;
             this.button1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button1.Location = new System.Drawing.Point(419, 390);
+            this.button1.Location = new System.Drawing.Point(557, 389);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(78, 33);
             this.button1.TabIndex = 10;
@@ -188,7 +188,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.PaleGoldenrod;
-            this.ClientSize = new System.Drawing.Size(512, 434);
+            this.ClientSize = new System.Drawing.Size(647, 434);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.label10);
             this.Controls.Add(this.label9);
