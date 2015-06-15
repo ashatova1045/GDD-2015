@@ -50,7 +50,7 @@
             // 
             this.btnVolver.BackColor = System.Drawing.Color.Moccasin;
             this.btnVolver.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnVolver.Location = new System.Drawing.Point(165, 241);
+            this.btnVolver.Location = new System.Drawing.Point(178, 241);
             this.btnVolver.Name = "btnVolver";
             this.btnVolver.Size = new System.Drawing.Size(69, 33);
             this.btnVolver.TabIndex = 0;
@@ -119,7 +119,7 @@
             // 
             this.btnProlongar.BackColor = System.Drawing.Color.Moccasin;
             this.btnProlongar.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnProlongar.Location = new System.Drawing.Point(34, 241);
+            this.btnProlongar.Location = new System.Drawing.Point(47, 241);
             this.btnProlongar.Name = "btnProlongar";
             this.btnProlongar.Size = new System.Drawing.Size(71, 33);
             this.btnProlongar.TabIndex = 9;
@@ -223,6 +223,7 @@
             this.Controls.Add(this.txtCuenta);
             this.Controls.Add(this.btnVolver);
             this.Name = "ProlongacionCuentas";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Prolongacion Cuentas";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.ProlongacionCuentas_FormClosing);
             ((System.ComponentModel.ISupportInitialize)(this.nuuSuscripciones)).EndInit();
