@@ -14,7 +14,6 @@ namespace PagoElectronico.Consulta_Saldos
     public partial class Consultar_Saldo : Form
     {
         private bool salir = true;
-        private DataTable monedas;
 
         public Consultar_Saldo()
         {
@@ -28,8 +27,6 @@ namespace PagoElectronico.Consulta_Saldos
                 label6.Visible = false;
                 comboBox1.Visible = true;
                 DataTable usuarios;
-
-                ConexionDB.Procedure("ObtenerMonedas", null, out monedas);
 
                 if(ConexionDB.Procedure("ObtenerUsuariosClientes",null, out usuarios))
                 {
