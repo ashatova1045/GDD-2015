@@ -14,6 +14,7 @@ namespace PagoElectronico.Consulta_Saldos
     public partial class Consultar_Saldo : Form
     {
         private bool salir = true;
+        private DataTable monedas;
 
         public Consultar_Saldo()
         {
@@ -27,6 +28,8 @@ namespace PagoElectronico.Consulta_Saldos
                 label6.Visible = false;
                 comboBox1.Visible = true;
                 DataTable usuarios;
+
+                ConexionDB.Procedure("ObtenerMonedas", null, out monedas);
 
                 if(ConexionDB.Procedure("ObtenerUsuariosClientes",null, out usuarios))
                 {
@@ -125,7 +128,9 @@ namespace PagoElectronico.Consulta_Saldos
             actualizarTransferencias();
 
             DataRow[] rowSaldo = ((DataTable)comboBox2.DataSource).Select("Id_cuenta = "+comboBox2.SelectedValue );
-            try { label8.Text = rowSaldo[0][7].ToString(); }
+            try { label8.Text = rowSaldo[0]["Saldo"].ToString() + " " +
+                   rowSaldo[0]["Descripcion"].ToString();
+            }
             catch (IndexOutOfRangeException) { label8.Text = "Error"; }
         }
 
