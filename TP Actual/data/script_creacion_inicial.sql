@@ -708,20 +708,21 @@ AS
 			BEGIN
 				RAISERROR('Un cliete inhabilitado no puede realizar transferencias',16,1)
 			END
-	
-		INSERT INTO HHHH.transferencias(Cuenta_destino,Cuenta_origen,Fecha_transferencia,Id_moneda,Importe,Costo)
-			VALUES(@destino,@origen,@fecha,@moneda,@importe,@costo)
-		
-		INSERT INTO HHHH.movimientos(Id_cuenta,Fecha,Id_moneda,Id_transferencia,Tipo_movimiento,Costo)
-			VALUES (@origen,@fecha,@moneda,(SELECT IDENT_CURRENT('HHHH.transferencias')),'T',@costo)
-		
-		UPDATE HHHH.cuentas
-			SET Saldo -= hhhh.convertirmoneda(@moneda,Id_moneda,@importe)
-			WHERE Id_cuenta = @origen
-		
-		UPDATE HHHH.cuentas
-			SET Saldo += hhhh.convertirmoneda(@moneda,Id_moneda,@importe)
-			WHERE Id_cuenta = @destino
+		BEGIN TRANSACTION generarTransferencia
+			INSERT INTO HHHH.transferencias(Cuenta_destino,Cuenta_origen,Fecha_transferencia,Id_moneda,Importe,Costo)
+				VALUES(@destino,@origen,@fecha,@moneda,@importe,@costo)
+			
+			INSERT INTO HHHH.movimientos(Id_cuenta,Fecha,Id_moneda,Id_transferencia,Tipo_movimiento,Costo)
+				VALUES (@origen,@fecha,@moneda,(SELECT IDENT_CURRENT('HHHH.transferencias')),'T',@costo)
+			
+			UPDATE HHHH.cuentas
+				SET Saldo -= hhhh.convertirmoneda(@moneda,Id_moneda,@importe)
+				WHERE Id_cuenta = @origen
+			
+			UPDATE HHHH.cuentas
+				SET Saldo += hhhh.convertirmoneda(@moneda,Id_moneda,@importe)
+				WHERE Id_cuenta = @destino
+		COMMIT TRANSACTION generarTransferencia
     END				
 		
 GO
@@ -796,13 +797,14 @@ CREATE PROCEDURE HHHH.validarDeposito
 				RAISERROR ('Tarjeta no valida', 16,1)
 			RETURN
 		END
-		
-		INSERT INTO HHHH.depositos(Id_cuenta, Importe, Id_tipo_moneda, Id_tarjeta, Fecha_deposito)
-			VALUES (@nroCuenta, @importeIngresado, @tipoMoneda, @esValidaTarjeta, @fechaAhora)	
-			
-			UPDATE HHHH.cuentas
-				SET Saldo = Saldo + hhhh.convertirmoneda(@tipoMoneda,cuentas.Id_moneda,@importeIngresado)
-				WHERE Id_cuenta = @nroCuenta							
+		BEGIN TRANSACTION generarDeposito
+			INSERT INTO HHHH.depositos(Id_cuenta, Importe, Id_tipo_moneda, Id_tarjeta, Fecha_deposito)
+				VALUES (@nroCuenta, @importeIngresado, @tipoMoneda, @esValidaTarjeta, @fechaAhora)	
+				
+				UPDATE HHHH.cuentas
+					SET Saldo = Saldo + hhhh.convertirmoneda(@tipoMoneda,cuentas.Id_moneda,@importeIngresado)
+					WHERE Id_cuenta = @nroCuenta	
+		COMMIT TRANSACTION generarDeposito						
 		END		
 		
 
@@ -839,16 +841,17 @@ AS
 				RAISERROR('No tiene dinero suficiente en su cuenta.',16,1)
 				RETURN
 			END
-
-		INSERT INTO HHHH.cheques(Fecha_cheque, Importe, Destinatario, Id_banco)
-			VALUES(@fechaRetiro, @importe, @destinatarioApellido + ', ' + @destinatarioNombre, @banco)
-			
-		INSERT INTO HHHH.retiros(Id_cuenta, Importe, Id_cheque, Fecha_retiro, Id_moneda)
-			VALUES(@cuenta, @importe, (SELECT IDENT_CURRENT('HHHH.cheques')), @fechaRetiro, @moneda)
-	
-		UPDATE HHHH.cuentas
-			SET Saldo -= hhhh.convertirmoneda(@moneda,Id_moneda,@importe)
-			WHERE Id_cuenta = @cuenta
+		BEGIN TRANSACTION generarCheque
+			INSERT INTO HHHH.cheques(Fecha_cheque, Importe, Destinatario, Id_banco)
+				VALUES(@fechaRetiro, @importe, @destinatarioApellido + ', ' + @destinatarioNombre, @banco)
+				
+			INSERT INTO HHHH.retiros(Id_cuenta, Importe, Id_cheque, Fecha_retiro, Id_moneda)
+				VALUES(@cuenta, @importe, (SELECT IDENT_CURRENT('HHHH.cheques')), @fechaRetiro, @moneda)
+		
+			UPDATE HHHH.cuentas
+				SET Saldo -= hhhh.convertirmoneda(@moneda,Id_moneda,@importe)
+				WHERE Id_cuenta = @cuenta
+		COMMIT TRANSACTION generarCheque
 	END
 GO	
 	
@@ -982,12 +985,14 @@ AS
 		DECLARE @cliente_id int
 		SELECT @cliente_id = Id_cliente FROM HHHH.clientes WHERE Id_usuario = @user_id
 		
-		INSERT INTO HHHH.facturas(Fecha_factura,Id_cliente)
-		SELECT @fecha, @cliente_id
-		
-		
-		DECLARE @FacturaActual numeric(18,0)
-		SET @FacturaActual = (SELECT IDENT_CURRENT('HHHH.facturas'))
+		BEGIN TRANSACTiON generarIDFactura
+			INSERT INTO HHHH.facturas(Fecha_factura,Id_cliente)
+			SELECT @fecha, @cliente_id
+			
+			
+			DECLARE @FacturaActual numeric(18,0)
+			SET @FacturaActual = (SELECT IDENT_CURRENT('HHHH.facturas'))
+		COMMIT TRANSACTION generarIDFactura
 		
 		
 		UPDATE HHHH.movimientos
@@ -1040,7 +1045,7 @@ CREATE PROCEDURE HHHH.itemFactura(
 @id_factura numeric(18,0))
 AS
 	BEGIN
-		SELECT convert(date,tr.Fecha_transferencia) AS Fecha, HHHH.GenerarDescripcion (mov.Tipo_movimiento,mov.Id_transferencia,mov.Dias_comprados,mov.Cambio_tipo_cuenta) AS Descripcion,
+		SELECT convert(date,mov.Fecha) AS Fecha, HHHH.GenerarDescripcion (mov.Tipo_movimiento,mov.Id_transferencia,mov.Dias_comprados,mov.Cambio_tipo_cuenta) AS Descripcion,
 				HHHH.impconmoneda(tr.Importe,mov.Id_moneda) AS Importe,HHHH.impconmoneda(mov.Costo,mov.Id_moneda) AS Costo_Final
 			FROM HHHH.movimientos mov
 			LEFT JOIN HHHH.transferencias tr
