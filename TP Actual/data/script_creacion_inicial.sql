@@ -6,7 +6,7 @@ BEGIN /* *************** CREACION DEL SCHENMA *************** */
 END
 GO
 
-BEGIN /* *************** BORRADO DE CONSTRAINTS *************** */
+BEGIN /* *************** BORRADO *************** */
 DECLARE @sql nvarchar(max)
 SET @sql = ''
 
