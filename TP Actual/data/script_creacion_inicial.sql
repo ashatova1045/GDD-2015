@@ -1112,7 +1112,7 @@ CREATE PROCEDURE HHHH.ObtenerCuentas
 AS
 	BEGIN
 		SELECT cue.Id_cuenta as 'Cuenta', pa.Descripcion as 'Pais', cue.Id_pais,tp.Id_tipo_cuenta, tp.Descripcion as 'Tipo cuenta', cue.Id_moneda,
-				 cue.Fecha_apertura as 'Fecha apertura', mon.Descripcion as 'Moneda', cue.Saldo, cue.Estado
+				 cue.Fecha_apertura as 'Fecha apertura', mon.Descripcion as 'Moneda', cue.Saldo, cue.Estado, cue.Fecha_cierre
 		FROM HHHH.cuentas cue 
 		JOIN HHHH.clientes cli 
         ON cli.Id_cliente = cue.Id_cliente and 
@@ -1451,6 +1451,16 @@ AS
 	END
 GO
 
+CREATE PROCEDURE HHHH.ObtenerTipoCuentasDistintas
+@tipoCuenta varchar(250)
+AS
+	BEGIN
+		SELECT * 
+		FROM HHHH.tipo_cuenta
+		WHERE Descripcion<>@tipoCuenta
+	END
+GO
+
 CREATE PROCEDURE HHHH.InformacionTipoCuenta
 @cuenta varchar(250)
 AS
@@ -1642,4 +1652,14 @@ AS
 		INSERT INTO HHHH.movimientos(Tipo_movimiento,Costo,Id_moneda,Id_cuenta,Fecha,Dias_comprados,Cambio_tipo_cuenta)
 			VALUES('C',@Cant_suscripcones * @Costo, @Moneda, @Id_cuenta, @fechaActual, @Cant_suscripcones * @Duracion,@tipoCuenta)
 	END
+GO
+
+CREATE PROCEDURE HHHH.cambiarTipoCuenta
+@cuenta numeric(18,0),
+@tipocuenta numeric (18,0)
+AS
+	BEGIN
+		UPDATE HHHH.cuentas SET Id_tipo_cuenta = @tipocuenta
+		WHERE Id_cuenta=@cuenta
+    END
 GO

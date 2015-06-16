@@ -56,6 +56,7 @@
             this.Cuenta_CB.Name = "Cuenta_CB";
             this.Cuenta_CB.Size = new System.Drawing.Size(121, 21);
             this.Cuenta_CB.TabIndex = 0;
+            this.Cuenta_CB.SelectedIndexChanged += new System.EventHandler(this.Cuenta_CB_SelectedIndexChanged);
             this.Cuenta_CB.Click += new System.EventHandler(this.Cuenta_CB_Click);
             // 
             // Cuenta_LB

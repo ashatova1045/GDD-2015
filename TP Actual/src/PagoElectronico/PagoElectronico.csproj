@@ -66,6 +66,12 @@
     <Compile Include="ABM Cuenta\AdministrarCuentas.Designer.cs">
       <DependentUpon>AdministrarCuentas.cs</DependentUpon>
     </Compile>
+    <Compile Include="ABM Cuenta\CambiarTipoCuenta.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ABM Cuenta\CambiarTipoCuenta.Designer.cs">
+      <DependentUpon>CambiarTipoCuenta.cs</DependentUpon>
+    </Compile>
     <Compile Include="ABM Cuenta\EdicionCuenta.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -187,6 +193,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="ABM Cuenta\AdministrarCuentas.resx">
       <DependentUpon>AdministrarCuentas.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ABM Cuenta\CambiarTipoCuenta.resx">
+      <DependentUpon>CambiarTipoCuenta.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="ABM Cuenta\EdicionCuenta.resx">
       <DependentUpon>EdicionCuenta.cs</DependentUpon>
