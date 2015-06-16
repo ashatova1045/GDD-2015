@@ -43,7 +43,18 @@ namespace PagoElectronico.ABM_Cuenta
 
         private void btnProlongar_Click(object sender, EventArgs e)
         {
+            SQLParametros parametros = new SQLParametros();
 
+            parametros.add("@Id_cuenta", cuentaG["Cuenta"].Value.ToString());
+            parametros.add("@Cant_suscripcones", Convert.ToInt32(nuuSuscripciones.Value));
+            parametros.add("@fechaActual", Sesion.fecha);
+
+            if(ConexionDB.Procedure("prolongarCuenta", parametros.get()))
+            {
+                salir = false;
+                Owner.Show();
+                this.Close();
+            }
         }
 
         private void btnCalcular_Click(object sender, EventArgs e)

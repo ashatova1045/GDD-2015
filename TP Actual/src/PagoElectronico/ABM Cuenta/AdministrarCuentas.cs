@@ -98,7 +98,20 @@ namespace PagoElectronico.ABM_Cuenta
         private void dataGridView1_SelectionChanged(object sender, EventArgs e)
         {
             button3.Enabled = true;
-            button3.Enabled = true;
+            try
+            {
+                decimal tipoCuenta = Convert.ToDecimal(dataGridView1.SelectedRows[0].Cells["Id_tipo_cuenta"].Value);
+
+                if (tipoCuenta == 1)
+                    btnProlongar.Enabled = false;
+                else
+                    btnProlongar.Enabled = true;
+            }
+            catch (ArgumentOutOfRangeException)
+            {
+                btnProlongar.Enabled = false;
+            }
+
         }
 
         private void button3_Click(object sender, EventArgs e)

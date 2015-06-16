@@ -246,7 +246,7 @@ BEGIN /* *************** CREACION DE TABLAS *************** */
 	CREATE TABLE HHHH.cuentas(
 		Id_cuenta numeric(18,0) /*IDENTITY(1,1)*/ PRIMARY KEY,
 		Id_pais numeric(18,0) CONSTRAINT FK_cuentas_pais FOREIGN KEY REFERENCES HHHH.paises(Codigo),
-		Id_moneda numeric(18,0),
+		Id_moneda numeric(18,0) CONSTRAINT FK_cuentas_moneda FOREIGN KEY REFERENCES HHHH.Monedas(Id_moneda),
 		Fecha_apertura datetime,
 		Fecha_cierre datetime,
 		Id_tipo_cuenta numeric(18,0) CONSTRAINT FK_cuentas_tc FOREIGN KEY REFERENCES HHHH.tipo_cuenta(Id_tipo_cuenta),
@@ -963,12 +963,6 @@ GO
 CREATE PROCEDURE HHHH.movSinFacturar
 @user_id numeric(18,0)
 AS
-	/*IF  ((select COUNT(*) from HHHH.movimientos
-					where Id_factura is null and HHHH.obtenerUser(Id_cuenta) = @user_id) = 0)
-		BEGIN
-			RAISERROR ('No hay movimientos sin facturar',16,1)
-			RETURN
-		END*/
 	BEGIN
 		select convert(date,Fecha) AS Fecha, mov.Id_cuenta AS 'Cuenta' ,HHHH.GenerarDescripcion (mov.Tipo_movimiento,mov.Id_transferencia,mov.Dias_comprados,mov.Cambio_tipo_cuenta) AS Descripcion,
 				HHHH.impconmoneda(tr.Importe,mov.Id_moneda) AS Importe,HHHH.impconmoneda(mov.Costo,mov.Id_moneda) AS Costo
@@ -1710,4 +1704,44 @@ AS
 		declare @valorMiMon numeric (18,2)=(select HHHH.convertirmoneda(t.Id_moneda_cuenta,c.Id_moneda,@valorenusd) from HHHH.tipo_cuenta t,HHHH.cuentas c)
 		select @valorMiMon					
     END
+GO
+
+
+CREATE PROCEDURE HHHH.prolongarCuenta
+@Id_cuenta numeric(18,0),
+@Cant_suscripcones int,
+@fechaActual datetime
+AS
+	BEGIN
+		DECLARE @Duracion int
+		DECLARE @Costo numeric(18,2)
+		DECLARE @Moneda numeric(18,0)
+		DECLARE @tipoCuenta numeric(18,0)
+		
+		SELECT @Duracion = tc.Duracion, @Costo = tc.Costo_cuenta,
+				@Moneda = cue.Id_moneda, @tipoCuenta = cue.Id_tipo_cuenta
+		FROM HHHH.tipo_cuenta tc
+		JOIN HHHH.cuentas cue
+		ON tc.Id_tipo_cuenta = cue.Id_tipo_cuenta AND
+			cue.Id_cuenta = @Id_cuenta
+
+		
+		IF EXISTS (SELECT 1 FROM HHHH.cuentas
+					WHERE Id_cuenta = @Id_cuenta AND
+						   Fecha_cierre IS NULL)
+			BEGIN
+				UPDATE HHHH.cuentas
+				SET Fecha_cierre = DATEADD(day,@Cant_suscripcones * @Duracion,@fechaActual) 
+				WHERE Id_cuenta = @Id_cuenta
+			END
+		ELSE
+			BEGIN
+				UPDATE HHHH.cuentas
+				SET Fecha_cierre = DATEADD(day,@Cant_suscripcones * @Duracion,Fecha_cierre) 
+				WHERE Id_cuenta = @Id_cuenta
+			END
+			
+		INSERT INTO HHHH.movimientos(Tipo_movimiento,Costo,Id_moneda,Id_cuenta,Fecha,Dias_comprados,Cambio_tipo_cuenta)
+			VALUES('C',@Cant_suscripcones * @Costo, @Moneda, @Id_cuenta, @fechaActual, @Cant_suscripcones * @Duracion,@tipoCuenta)
+	END
 GO
