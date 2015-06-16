@@ -206,11 +206,11 @@ BEGIN /* *************** CREACION DE TABLAS *************** */
 	
 	CREATE TABLE HHHH.clientes( 
 		Id_cliente numeric(18,0) IDENTITY(1,1) PRIMARY KEY,
-		Id_usuario numeric(18,0) /*unique */CONSTRAINT FK_clientes_usuario FOREIGN KEY REFERENCES HHHH.usuarios(id_usuario),
+		Id_usuario numeric(18,0) /*unique*/ CONSTRAINT FK_clientes_usuario FOREIGN KEY REFERENCES HHHH.usuarios(id_usuario),
 		Nombre varchar(255)NOT NULL,
 		Apellido varchar(255)NOT NULL,
 		Nro_Documento numeric(18,0)NOT NULL,
-		Id_tipo_documento int NOT NULL,
+		Id_tipo_documento numeric(18,0) NOT NULL CONSTRAINT FK_clientes_TipoDoc FOREIGN KEY REFERENCES HHHH.tipos_documentos(id_tipo_documento),
 		Mail varchar(255) NOT NULL,
 		Id_pais numeric(18,0) NOT NULL CONSTRAINT FK_clientes_pais FOREIGN KEY REFERENCES HHHH.paises (Codigo),
 		Altura int,
@@ -1717,18 +1717,18 @@ AS
 		DECLARE @Costo numeric(18,2)
 		DECLARE @Moneda numeric(18,0)
 		DECLARE @tipoCuenta numeric(18,0)
+		DECLARE @FechaDeCierre datetime
 		
 		SELECT @Duracion = tc.Duracion, @Costo = tc.Costo_cuenta,
-				@Moneda = cue.Id_moneda, @tipoCuenta = cue.Id_tipo_cuenta
+				@Moneda = cue.Id_moneda, @tipoCuenta = cue.Id_tipo_cuenta,
+				@FechaDeCierre = cue.Fecha_cierre
 		FROM HHHH.tipo_cuenta tc
 		JOIN HHHH.cuentas cue
 		ON tc.Id_tipo_cuenta = cue.Id_tipo_cuenta AND
 			cue.Id_cuenta = @Id_cuenta
 
 		
-		IF EXISTS (SELECT 1 FROM HHHH.cuentas
-					WHERE Id_cuenta = @Id_cuenta AND
-						   Fecha_cierre IS NULL)
+		IF (@FechaDeCierre is null or @FechaDeCierre < @fechaActual)
 			BEGIN
 				UPDATE HHHH.cuentas
 				SET Fecha_cierre = DATEADD(day,@Cant_suscripcones * @Duracion,@fechaActual) 

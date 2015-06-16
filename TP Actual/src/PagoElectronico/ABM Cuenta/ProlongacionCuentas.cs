@@ -13,12 +13,13 @@ namespace PagoElectronico.ABM_Cuenta
     public partial class ProlongacionCuentas : Form
     {
         private bool salir = true;
-        DataGridViewCellCollection cuentaG;
+
+        private decimal costoCuenta;
+
         public ProlongacionCuentas(DataGridViewCellCollection cuenta)
         {
             InitializeComponent();
             cargarDatos(cuenta);
-            cuentaG = cuenta;
         }
 
         private void cargarDatos(DataGridViewCellCollection cuenta)
@@ -32,6 +33,11 @@ namespace PagoElectronico.ABM_Cuenta
             txtEstado.Text = cuenta["Estado"].Value.ToString();
             txtTipo.Text = cuenta["Tipo cuenta"].Value.ToString();
             txtDuracion.Text = infoCuenta.Rows[0]["duracion"].ToString();
+
+            costoCuenta = Convert.ToDecimal(infoCuenta.Rows[0]["Costo_cuenta"]);
+
+            txtPrecio.Text = costoCuenta.ToString();
+            textBoxPrecxSus.Text = costoCuenta.ToString();
         }
 
         private void btnVolver_Click(object sender, EventArgs e)
@@ -41,11 +47,21 @@ namespace PagoElectronico.ABM_Cuenta
             this.Close();
         }
 
+        private void nuuSuscripciones_ValueChanged(object sender, EventArgs e)
+        {
+            txtPrecio.Text = (nuuSuscripciones.Value * costoCuenta).ToString();
+        }
+
+        private void nuuSuscripciones_KeyUp(object sender, KeyEventArgs e)
+        {
+            txtPrecio.Text = (nuuSuscripciones.Value * costoCuenta).ToString();
+        }
+
         private void btnProlongar_Click(object sender, EventArgs e)
         {
             SQLParametros parametros = new SQLParametros();
 
-            parametros.add("@Id_cuenta", cuentaG["Cuenta"].Value.ToString());
+            parametros.add("@Id_cuenta", Convert.ToDecimal(txtCuenta.Text));
             parametros.add("@Cant_suscripcones", Convert.ToInt32(nuuSuscripciones.Value));
             parametros.add("@fechaActual", Sesion.fecha);
 
@@ -57,28 +73,12 @@ namespace PagoElectronico.ABM_Cuenta
             }
         }
 
-        private void btnCalcular_Click(object sender, EventArgs e)
-        {
-            SQLParametros param = new SQLParametros();
-            param.add("@suscripciones", nuuSuscripciones.Value);
-            //param.add("@cuenta", txtCuenta.Text);
-            param.add("@tipoCuenta", cuentaG["Id_tipo_cuenta"].Value.ToString());
-            DataTable costo;
-            ConexionDB.Procedure("CalcularCostoProlongacion", param.get(), out costo);
-            txtPrecio.Text = costo.Rows[0][0].ToString();
-        }
-
         private void ProlongacionCuentas_FormClosing(object sender, FormClosingEventArgs e)
         {
             if (salir)
             {
                 Application.Exit();
             }
-        }
-
-        private void ProlongacionCuentas_Load(object sender, EventArgs e)
-        {
-
         }
     }
 }

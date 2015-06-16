@@ -42,7 +42,8 @@
             this.label6 = new System.Windows.Forms.Label();
             this.txtPrecio = new System.Windows.Forms.TextBox();
             this.txtTipo = new System.Windows.Forms.TextBox();
-            this.btnCalcular = new System.Windows.Forms.Button();
+            this.label7 = new System.Windows.Forms.Label();
+            this.textBoxPrecxSus = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.nuuSuscripciones)).BeginInit();
             this.SuspendLayout();
             // 
@@ -50,7 +51,7 @@
             // 
             this.btnVolver.BackColor = System.Drawing.Color.Moccasin;
             this.btnVolver.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnVolver.Location = new System.Drawing.Point(178, 241);
+            this.btnVolver.Location = new System.Drawing.Point(176, 217);
             this.btnVolver.Name = "btnVolver";
             this.btnVolver.Size = new System.Drawing.Size(69, 33);
             this.btnVolver.TabIndex = 0;
@@ -91,7 +92,7 @@
             // 
             this.label3.AutoSize = true;
             this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Underline))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label3.Location = new System.Drawing.Point(12, 127);
+            this.label3.Location = new System.Drawing.Point(12, 143);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(146, 13);
             this.label3.TabIndex = 5;
@@ -119,7 +120,7 @@
             // 
             this.btnProlongar.BackColor = System.Drawing.Color.Moccasin;
             this.btnProlongar.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnProlongar.Location = new System.Drawing.Point(47, 241);
+            this.btnProlongar.Location = new System.Drawing.Point(45, 217);
             this.btnProlongar.Name = "btnProlongar";
             this.btnProlongar.Size = new System.Drawing.Size(71, 33);
             this.btnProlongar.TabIndex = 9;
@@ -139,7 +140,7 @@
             // 
             // nuuSuscripciones
             // 
-            this.nuuSuscripciones.Location = new System.Drawing.Point(165, 127);
+            this.nuuSuscripciones.Location = new System.Drawing.Point(165, 141);
             this.nuuSuscripciones.Minimum = new decimal(new int[] {
             1,
             0,
@@ -153,6 +154,8 @@
             0,
             0,
             0});
+            this.nuuSuscripciones.ValueChanged += new System.EventHandler(this.nuuSuscripciones_ValueChanged);
+            this.nuuSuscripciones.KeyUp += new System.Windows.Forms.KeyEventHandler(this.nuuSuscripciones_KeyUp);
             // 
             // txtDuracion
             // 
@@ -166,7 +169,7 @@
             // 
             this.label6.AutoSize = true;
             this.label6.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Underline))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label6.Location = new System.Drawing.Point(12, 202);
+            this.label6.Location = new System.Drawing.Point(13, 184);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(72, 13);
             this.label6.TabIndex = 12;
@@ -175,7 +178,7 @@
             // txtPrecio
             // 
             this.txtPrecio.Enabled = false;
-            this.txtPrecio.Location = new System.Drawing.Point(149, 195);
+            this.txtPrecio.Location = new System.Drawing.Point(165, 177);
             this.txtPrecio.Name = "txtPrecio";
             this.txtPrecio.Size = new System.Drawing.Size(121, 20);
             this.txtPrecio.TabIndex = 13;
@@ -188,26 +191,32 @@
             this.txtTipo.Size = new System.Drawing.Size(121, 20);
             this.txtTipo.TabIndex = 14;
             // 
-            // btnCalcular
+            // label7
             // 
-            this.btnCalcular.BackColor = System.Drawing.Color.Moccasin;
-            this.btnCalcular.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnCalcular.Location = new System.Drawing.Point(12, 165);
-            this.btnCalcular.Name = "btnCalcular";
-            this.btnCalcular.Size = new System.Drawing.Size(104, 27);
-            this.btnCalcular.TabIndex = 15;
-            this.btnCalcular.Text = "Calcular precio";
-            this.btnCalcular.UseCompatibleTextRendering = true;
-            this.btnCalcular.UseVisualStyleBackColor = false;
-            this.btnCalcular.Click += new System.EventHandler(this.btnCalcular_Click);
+            this.label7.AutoSize = true;
+            this.label7.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Underline))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label7.Location = new System.Drawing.Point(12, 122);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(133, 13);
+            this.label7.TabIndex = 15;
+            this.label7.Text = "Precio por suscripcion";
+            // 
+            // textBoxPrecxSus
+            // 
+            this.textBoxPrecxSus.Enabled = false;
+            this.textBoxPrecxSus.Location = new System.Drawing.Point(165, 115);
+            this.textBoxPrecxSus.Name = "textBoxPrecxSus";
+            this.textBoxPrecxSus.Size = new System.Drawing.Size(121, 20);
+            this.textBoxPrecxSus.TabIndex = 16;
             // 
             // ProlongacionCuentas
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.PaleGoldenrod;
-            this.ClientSize = new System.Drawing.Size(298, 296);
-            this.Controls.Add(this.btnCalcular);
+            this.ClientSize = new System.Drawing.Size(298, 262);
+            this.Controls.Add(this.textBoxPrecxSus);
+            this.Controls.Add(this.label7);
             this.Controls.Add(this.txtTipo);
             this.Controls.Add(this.txtPrecio);
             this.Controls.Add(this.label6);
@@ -225,7 +234,6 @@
             this.Name = "ProlongacionCuentas";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Prolongacion Cuentas";
-            this.Load += new System.EventHandler(this.ProlongacionCuentas_Load);
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.ProlongacionCuentas_FormClosing);
             ((System.ComponentModel.ISupportInitialize)(this.nuuSuscripciones)).EndInit();
             this.ResumeLayout(false);
@@ -249,6 +257,7 @@
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.TextBox txtPrecio;
         private System.Windows.Forms.TextBox txtTipo;
-        private System.Windows.Forms.Button btnCalcular;
+        private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.TextBox textBoxPrecxSus;
     }
 }
