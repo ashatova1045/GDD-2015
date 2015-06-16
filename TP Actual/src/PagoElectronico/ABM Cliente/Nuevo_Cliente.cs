@@ -80,7 +80,7 @@ namespace PagoElectronico.ABM_Cliente
                 correcto = false;
             }
 
-            if ((!ValidadorHelper.validarSoloLetras(textBoxDepto.Text) || textBoxDepto.Text.Length > 10) /*&& textBoxDepto.Text != ""*/)
+            if (((!ValidadorHelper.validarSoloLetras(textBoxDepto.Text) && (!ValidadorHelper.validarSoloNumeros(textBoxDepto.Text)) || textBoxDepto.Text.Length > 10)))
             {
                 errorProvider1.SetError(textBoxDepto, "Departamento no válido");
                 correcto = false;
