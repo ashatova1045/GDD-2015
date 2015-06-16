@@ -67,6 +67,7 @@ namespace PagoElectronico.ABM_Cuenta
             if(ConexionDB.Procedure("prolongarCuenta", parametros.get()))
             {
                 salir = false;
+                ((AdministrarCuentas)Owner).actualizarCuentas();
                 Owner.Show();
                 this.Close();
             }
