@@ -30,14 +30,14 @@
         {
             this.label1 = new System.Windows.Forms.Label();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.buttonCambiarTipo = new System.Windows.Forms.Button();
             this.btnProlongar = new System.Windows.Forms.Button();
             this.button4 = new System.Windows.Forms.Button();
-            this.button3 = new System.Windows.Forms.Button();
             this.button1 = new System.Windows.Forms.Button();
             this.comboBox1 = new System.Windows.Forms.ComboBox();
+            this.button3 = new System.Windows.Forms.Button();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
             this.button2 = new System.Windows.Forms.Button();
-            this.buttonCambiarTipo = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.SuspendLayout();
@@ -67,6 +67,19 @@
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Acciones";
             // 
+            // buttonCambiarTipo
+            // 
+            this.buttonCambiarTipo.BackColor = System.Drawing.Color.Moccasin;
+            this.buttonCambiarTipo.Enabled = false;
+            this.buttonCambiarTipo.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.buttonCambiarTipo.Location = new System.Drawing.Point(416, 14);
+            this.buttonCambiarTipo.Name = "buttonCambiarTipo";
+            this.buttonCambiarTipo.Size = new System.Drawing.Size(100, 25);
+            this.buttonCambiarTipo.TabIndex = 6;
+            this.buttonCambiarTipo.Text = "Cambiar tipo";
+            this.buttonCambiarTipo.UseVisualStyleBackColor = false;
+            this.buttonCambiarTipo.Click += new System.EventHandler(this.buttonCambiarTipo_Click);
+            // 
             // btnProlongar
             // 
             this.btnProlongar.BackColor = System.Drawing.Color.Moccasin;
@@ -93,18 +106,6 @@
             this.button4.UseVisualStyleBackColor = false;
             this.button4.Click += new System.EventHandler(this.button4_Click);
             // 
-            // button3
-            // 
-            this.button3.BackColor = System.Drawing.Color.Moccasin;
-            this.button3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button3.Location = new System.Drawing.Point(12, 292);
-            this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(111, 23);
-            this.button3.TabIndex = 3;
-            this.button3.Text = "Modificar cuenta";
-            this.button3.UseVisualStyleBackColor = false;
-            this.button3.Click += new System.EventHandler(this.button3_Click);
-            // 
             // button1
             // 
             this.button1.BackColor = System.Drawing.Color.Moccasin;
@@ -128,6 +129,18 @@
             this.comboBox1.SelectionChangeCommitted += new System.EventHandler(this.comboBox1_SelectionChangeCommitted);
             this.comboBox1.SelectedIndexChanged += new System.EventHandler(this.comboBox1_SelectedIndexChanged);
             // 
+            // button3
+            // 
+            this.button3.BackColor = System.Drawing.Color.Moccasin;
+            this.button3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button3.Location = new System.Drawing.Point(12, 292);
+            this.button3.Name = "button3";
+            this.button3.Size = new System.Drawing.Size(111, 23);
+            this.button3.TabIndex = 3;
+            this.button3.Text = "Modificar cuenta";
+            this.button3.UseVisualStyleBackColor = false;
+            this.button3.Click += new System.EventHandler(this.button3_Click);
+            // 
             // dataGridView1
             // 
             this.dataGridView1.AllowUserToAddRows = false;
@@ -143,6 +156,7 @@
             this.dataGridView1.Size = new System.Drawing.Size(641, 200);
             this.dataGridView1.TabIndex = 2;
             this.dataGridView1.SelectionChanged += new System.EventHandler(this.dataGridView1_SelectionChanged);
+            this.dataGridView1.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellContentClick);
             // 
             // button2
             // 
@@ -155,18 +169,6 @@
             this.button2.Text = "<< Volver";
             this.button2.UseVisualStyleBackColor = false;
             this.button2.Click += new System.EventHandler(this.button2_Click);
-            // 
-            // buttonCambiarTipo
-            // 
-            this.buttonCambiarTipo.BackColor = System.Drawing.Color.Moccasin;
-            this.buttonCambiarTipo.Enabled = false;
-            this.buttonCambiarTipo.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.buttonCambiarTipo.Location = new System.Drawing.Point(416, 14);
-            this.buttonCambiarTipo.Name = "buttonCambiarTipo";
-            this.buttonCambiarTipo.Size = new System.Drawing.Size(100, 25);
-            this.buttonCambiarTipo.TabIndex = 6;
-            this.buttonCambiarTipo.Text = "Cambiar tipo";
-            this.buttonCambiarTipo.UseVisualStyleBackColor = false;
             // 
             // AdministrarCuentas
             // 
@@ -182,6 +184,8 @@
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Administrar Cuentas";
             this.Load += new System.EventHandler(this.AdministrarCuentas_Load);
+            this.Shown += new System.EventHandler(this.AdministrarCuentas_Shown);
+            this.VisibleChanged += new System.EventHandler(this.AdministrarCuentas_VisibleChanged);
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.AdministrarCuentas_FormClosing);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();

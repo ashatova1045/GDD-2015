@@ -80,5 +80,10 @@ namespace PagoElectronico.ABM_Cuenta
         {
 
         }
+
+        private void txtCuenta_TextChanged(object sender, EventArgs e)
+        {
+
+        }
     }
 }

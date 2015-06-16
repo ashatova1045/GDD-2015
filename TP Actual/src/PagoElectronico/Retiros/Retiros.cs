@@ -208,5 +208,10 @@ namespace PagoElectronico.Retiros
                 Application.Exit();
             }
         }
+
+        private void Cuenta_CB_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
     }
 }

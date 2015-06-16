@@ -104,7 +104,12 @@ namespace PagoElectronico.ABM_Cuenta
             try
             {
                 decimal tipoCuenta = Convert.ToDecimal(dataGridView1.SelectedRows[0].Cells["Id_tipo_cuenta"].Value);
-
+              
+                if ((dataGridView1.SelectedRows[0].Cells["Fecha_cierre"].Value.ToString() != "") && (System.DateTime.Compare(System.DateTime.Now, Convert.ToDateTime(dataGridView1.SelectedRows[0].Cells["Fecha_cierre"].Value.ToString())) < 0))
+                {
+                    
+                    buttonCambiarTipo.Enabled = false;
+                }
                 if (tipoCuenta == 1)
                     btnProlongar.Enabled = false;
                 else
@@ -183,6 +188,41 @@ namespace PagoElectronico.ABM_Cuenta
             {
                 Application.Exit();
             }
+        }
+
+        private void buttonCambiarTipo_Click(object sender, EventArgs e)
+        {
+            if (!(dataGridView1.SelectedRows.Count > 0))
+            {
+                MessageBox.Show("Seleccione una cuenta para cambiarle el tipo.");
+                return;
+            }
+            char estado = Convert.ToChar(dataGridView1.SelectedRows[0].Cells["Estado"].Value);
+
+            if (estado == 'P')
+            {
+                MessageBox.Show("Pague la activacion de su cuenta antes de cambiarle el tipo.");
+                return;
+            }
+
+            new CambiarTipoCuenta(dataGridView1.SelectedRows[0].Cells).Show(this);
+            this.Hide();
+        }
+
+        private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+            
+        }
+
+        private void AdministrarCuentas_Shown(object sender, EventArgs e)
+        {
+            //actualizarCuentas();
+        }
+
+        private void AdministrarCuentas_VisibleChanged(object sender, EventArgs e)
+        {
+           
+           // actualizarCuentas();
         }
     }
 }
