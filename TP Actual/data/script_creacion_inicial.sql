@@ -7,134 +7,32 @@ END
 GO
 
 BEGIN /* *************** BORRADO DE CONSTRAINTS *************** */
+DECLARE @sql nvarchar(max)
+SET @sql = ''
 
-	--Creamos una tabla temporal para las FOREIGN KEY
-	CREATE TABLE temporal(
-	ID int IDENTITY(1,1),
-	nombre sysname,
-	tabla sysname,
-	schem nvarchar(128)
-	)
-	--Insertamos las CONSTRAINT de tipo FOREIGN KEY en la tabla
-	INSERT INTO temporal(nombre,tabla,schem)
-		(SELECT CONSTRAINT_NAME, TABLE_NAME, TABLE_SCHEMA
+DECLARE @Schemaa nvarchar(5)
+SET @Schemaa = 'HHHH'
+
+SELECT @sql += 'ALTER TABLE '+@schemaa+'.'+ TABLE_NAME+' DROP CONSTRAINT '+ CONSTRAINT_NAME+';'+CHAR(13)
 		FROM INFORMATION_SCHEMA.TABLE_CONSTRAINTS
 		WHERE CONSTRAINT_TYPE = 'FOREIGN KEY' AND
-		TABLE_SCHEMA = 'HHHH')
-
-
-	DECLARE @Contador INT           -- Variable contador
-	SET @Contador = 1   
-	DECLARE @Regs INT               -- Variable para el Numero de Registros a procesar
-	SET @Regs = (SELECT COUNT(*) FROM temporal) --Obtenemos la cantidad de registros a procesar
-								
-	DECLARE @nombre VARCHAR(50)
-	DECLARE @tabla VARCHAR(50)
-	DECLARE @schemaa VARCHAR(50)
- 
-	-- Hacemos el Loop
-	WHILE @Contador <= @Regs
-		BEGIN
-			SELECT @nombre= t.nombre, @tabla = t.tabla, @schemaa = t.schem
-			FROM temporal t
-			WHERE t.ID = @Contador
- 
-			-- Borramos el CONSTRAINT de la tabla
---			PRINT 'BorrANDo la CONSTRAINT '+@nombre+' de la tabla '+@schemaa+'.'+@tabla
-			EXEC('ALTER TABLE '+@schemaa+'.'+@tabla+' DROP CONSTRAINT '+@nombre);
-			SET @Contador = @Contador + 1
- 
-		END								
-	DROP TABLE temporal
+		TABLE_SCHEMA = @Schemaa
 		
-END
-GO
-
-BEGIN /* *************** BORRADO DE TABLAS *************** */
-
-	--Creamos una tabla temporal para las tablas de nuestro schema
-	CREATE TABLE temporal(
-	ID int IDENTITY(1,1),
-	tabla sysname,
-	schem nvarchar(128)
-	)
+exec sp_executesql @sql; SET @sql = ''
 	
-	--Insertamos las tablas que contiene el schema
-	INSERT INTO temporal(tabla,schem)
-		(SELECT DISTINCT TABLE_NAME, TABLE_SCHEMA
+SELECT @sql += 'DROP TABLE '+@schemaa+'.'+TABLE_NAME+';'+CHAR(13)
 		FROM INFORMATION_SCHEMA.TABLES
-		WHERE TABLE_SCHEMA = 'HHHH')
+		WHERE TABLE_SCHEMA = @Schemaa
 
+exec sp_executesql @sql; SET @sql = ''
 
-	DECLARE @Contador INT           -- Variable contador
-	SET @Contador = 1   
-	DECLARE @Regs INT               -- Variable para el Numero de Registros a procesar
-	SET @Regs = (SELECT COUNT(*) FROM temporal) --Obtenemos la cantidad de registros a procesar
-							
-	DECLARE @tabla VARCHAR(50)
-	DECLARE @schemaa VARCHAR(50)
- 
-	-- Hacemos el Loop
-	WHILE @Contador <= @Regs
-		BEGIN
-			SELECT @tabla = t.tabla, @schemaa = t.schem
-			FROM temporal t
-			WHERE t.ID = @Contador
- 
-			-- Borramos la tabla de schema
---			Print 'BorrANDo la tabla '+@schemaa+'.'+@tabla
-			EXEC('DROP TABLE '+@schemaa+'.'+@tabla);
-			SET @Contador = @Contador + 1
-		END
-										
-	DROP TABLE temporal
-END
-GO
-
-BEGIN /* *************** BORRADO DE STORED PROCEDURES *************** */
-
-	--Creamos una tabla temporal para los procedimientos y funciones de nuestro schema
-	CREATE TABLE temporal(
-	ID int IDENTITY(1,1),
-	nombre sysname,
-	schem nvarchar(128),
-	tipo nvarchar(20)
-	)
-	
-	--Insertamos los procedimientos o funciones del schema
-	INSERT INTO temporal(schem,nombre,tipo)
-		(SELECT ROUTINE_SCHEMA, ROUTINE_NAME, ROUTINE_TYPE
+SELECT @sql += 'DROP '+ROUTINE_TYPE+' '+@Schemaa+'.'+ROUTINE_NAME+';'+CHAR(13)
 		 FROM information_schema.routines
-		 WHERE routine_type = 'PROCEDURE' or 
-				routine_type = 'FUNCTION')
+		 WHERE (routine_type = 'PROCEDURE' or 
+				routine_type = 'FUNCTION') and
+				ROUTINE_SCHEMA =@Schemaa
 
-
-	DECLARE @Contador INT           -- Variable contador
-	SET @Contador = 1   
-	DECLARE @Regs INT               -- Variable para el Numero de Registros a procesar
-	SET @Regs = (SELECT COUNT(*) FROM temporal) --Obtenemos la cantidad de registros a procesar
-							
-	DECLARE @nombre VARCHAR(50)
-	DECLARE @tipo VARCHAR(20);
-	DECLARE @schemaa VARCHAR(50)
- 
-	-- Hacemos el Loop
-	WHILE @Contador <= @Regs
-		BEGIN
-			SELECT @nombre = t.nombre, @schemaa = t.schem, @tipo = t.tipo
-			FROM temporal t
-			WHERE t.ID = @Contador
- 
-			-- Borramos el procedimiento o funcion
---			Print 'Borrando '+@tipo+' '+@schemaa+'.'+@nombre
-			IF @tipo = 'PROCEDURE'
-				EXEC('DROP PROCEDURE '+@schemaa+'.'+@nombre)
-			IF @tipo = 'FUNCTION'
-				EXEC('DROP FUNCTION '+@schemaa+'.'+@nombre)
-			SET @Contador = @Contador + 1
-		END
-										
-	DROP TABLE temporal
+exec sp_executesql @Sql
 END
 GO
 
