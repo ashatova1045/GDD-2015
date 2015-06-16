@@ -74,7 +74,7 @@ namespace PagoElectronico.ABM_Cliente
                 correcto = false;
             }
 
-            if (!ValidadorHelper.validarSoloNumeros(textBoxPiso.Text) /*&& textBoxPiso.Text != ""*/)
+            if (!ValidadorHelper.validarSoloNumeros(textBoxPiso.Text))
             {
                 errorProvider1.SetError(textBoxPiso, "Piso no válido");
                 correcto = false;

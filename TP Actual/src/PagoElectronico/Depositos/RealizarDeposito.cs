@@ -43,29 +43,34 @@ namespace PagoElectronico.Depositos
                 {
                     MessageBox.Show("No tiene cuentas");
                     botonConfirmar.Enabled = false;
+                    bEquivalente.Enabled = false;
                 }
-                seleccionCuenta.DataSource = tablaCuentas.Select("Estado <> 'C'").CopyToDataTable();
-                seleccionCuenta.DisplayMember = "Id_cuenta";
-                seleccionCuenta.ValueMember = "Id_cuenta";
-                seleccionCuenta.SelectedIndex = -1;
-
-                if (ConexionDB.Procedure("seleccionarTarjetas", parametrosTarjetas.get(), out tablaTarjetas))
+                else
                 {
-                    if (tablaTarjetas.Rows.Count == 0)
-                    {
-                        MessageBox.Show("No tiene tarjetas");
-                        botonConfirmar.Enabled = false;
-                    }
+                    seleccionCuenta.DataSource = tablaCuentas.Select("Estado <> 'C'").CopyToDataTable();
+                    seleccionCuenta.DisplayMember = "Id_cuenta";
+                    seleccionCuenta.ValueMember = "Id_cuenta";
+                    seleccionCuenta.SelectedIndex = -1;
 
-                    seleccionTarjeta.DataSource = tablaTarjetas;
-                    seleccionTarjeta.DisplayMember = "finalnumero";
-                    seleccionTarjeta.ValueMember = "Id_tarjeta";
-
-                    if (ConexionDB.Procedure("ObtenerMonedas", null, out tablaMonedas))
+                    if (ConexionDB.Procedure("seleccionarTarjetas", parametrosTarjetas.get(), out tablaTarjetas))
                     {
-                        seleccionMoneda.DataSource = tablaMonedas;
-                        seleccionMoneda.DisplayMember = "Descripcion";
-                        seleccionMoneda.ValueMember = "Id_moneda";
+                        if (tablaTarjetas.Rows.Count == 0)
+                        {
+                            MessageBox.Show("No tiene tarjetas");
+                            botonConfirmar.Enabled = false;
+                            bEquivalente.Enabled = false;
+                        }
+
+                        seleccionTarjeta.DataSource = tablaTarjetas;
+                        seleccionTarjeta.DisplayMember = "finalnumero";
+                        seleccionTarjeta.ValueMember = "Id_tarjeta";
+
+                        if (ConexionDB.Procedure("ObtenerMonedas", null, out tablaMonedas))
+                        {
+                            seleccionMoneda.DataSource = tablaMonedas;
+                            seleccionMoneda.DisplayMember = "Descripcion";
+                            seleccionMoneda.ValueMember = "Id_moneda";
+                        }
                     }
                 }
             }
