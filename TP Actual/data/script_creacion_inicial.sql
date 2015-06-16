@@ -1178,15 +1178,15 @@ AS
 				
 				IF (@id_tipoCta = 1)
 					BEGIN
-						@fechaDecierre = now
+						SET @fechaDecierre = NULL
 					END
 				ELSE
 					BEGIN
-						@fechaDecierre = dateadd(day,@duracion,@FechaApert)
+						SET @fechaDecierre = dateadd(day,@duracion,@FechaApert)
 					END
 				
 				INSERT HHHH.cuentas(Id_cuenta,Id_cliente,Id_moneda,Id_pais,Id_tipo_cuenta,Fecha_apertura,Saldo,Estado,Fecha_cierre)
-					VALUES(@Id_cuenta,@Id_cliente,@Id_moneda,@Id_pais,@id_tipoCta,@FechaApert,0,'P',dateadd(day,@duracion,@FechaApert))
+					VALUES(@Id_cuenta,@Id_cliente,@Id_moneda,@Id_pais,@id_tipoCta,@FechaApert,0,'P',@fechaDecierre)
 				
 				INSERT HHHH.movimientos(Tipo_movimiento,Costo,Dias_comprados,Fecha,Id_cuenta,Id_moneda)
 					VALUES('P',@costoCuenta,@duracion,@FechaApert,@Id_cuenta,@Id_moneda) 
