@@ -99,20 +99,28 @@ namespace PagoElectronico.ABM_Cuenta
 
         private void bnCambiarTipoCuenta_Click(object sender, EventArgs e)
         {
-            SQLParametros parametros = new SQLParametros();
-
-            parametros.add("@Id_cuenta", Convert.ToDecimal(txtCuenta.Text));
-            parametros.add("@Cant_suscripcones", Convert.ToInt32(txtSuscripciones.Value));
-            parametros.add("@fechaActual", Sesion.fecha);
             SQLParametros paramAct = new SQLParametros();
+
             paramAct.add("@cuenta", Convert.ToDecimal(txtCuenta.Text));
-            paramAct.add("@tipocuenta",cbNuevoTipoCuenta.SelectedValue);
-            if ((ConexionDB.Procedure("prolongarCuenta", parametros.get())) && (ConexionDB.Procedure("cambiarTipoCuenta", paramAct.get())))
+            paramAct.add("@tipocuenta",Convert.ToInt32(cbNuevoTipoCuenta.SelectedValue));
+
+            if(ConexionDB.Procedure("cambiarTipoCuenta", paramAct.get()))
             {
-                salir = false;
-                Owner.Show();
-                this.Close();
+                if(Convert.ToInt32(cbNuevoTipoCuenta.SelectedValue) != 1)
+                {
+                    SQLParametros parametros = new SQLParametros();
+
+                    parametros.add("@Id_cuenta", Convert.ToDecimal(txtCuenta.Text));
+                    parametros.add("@Cant_suscripcones", Convert.ToInt32(txtSuscripciones.Value));
+                    parametros.add("@fechaActual", Sesion.fecha);
+
+                    ConexionDB.Procedure("prolongarCuenta", parametros.get()); 
+                }   
             }
+            salir = false;
+            ((AdministrarCuentas)Owner).actualizarCuentas();
+            Owner.Show();
+            this.Close();
         }
     }
 }

@@ -26,8 +26,8 @@ namespace PagoElectronico.ABM_Cuenta
             parametros.add("@Id_usuario", Convert.ToDecimal(comboBox1.SelectedValue));
 
             DataTable cuentas;
-
-            if (ConexionDB.Procedure("ObtenerCuentas", parametros.get(), out cuentas))
+            dataGridView1.DataSource = null;
+            if (ConexionDB.Procedure("ObtenerCuentas", parametros.get(), out cuentas) && cuentas.Rows.Count != 0)
             {
                 dataGridView1.DataSource = cuentas.Select("estado <> 'C'").CopyToDataTable();
 
@@ -104,12 +104,16 @@ namespace PagoElectronico.ABM_Cuenta
             try
             {
                 decimal tipoCuenta = Convert.ToDecimal(dataGridView1.SelectedRows[0].Cells["Id_tipo_cuenta"].Value);
-                MessageBox.Show(dataGridView1.SelectedRows[0].Cells["Fecha_cierre"].Value.ToString());
-                if ((dataGridView1.SelectedRows[0].Cells["Fecha_cierre"].Value.ToString() != "") || (System.DateTime.Compare(System.DateTime.Now, Convert.ToDateTime(dataGridView1.SelectedRows[0].Cells["Fecha_cierre"].Value.ToString())) < 0))
+                try
                 {
-                    
-                    buttonCambiarTipo.Enabled = false;
+                    if ((dataGridView1.SelectedRows[0].Cells["Fecha_cierre"].Value.ToString() != "") || (System.DateTime.Compare(Sesion.fecha, Convert.ToDateTime(dataGridView1.SelectedRows[0].Cells["Fecha_cierre"].Value)) < 0))
+                    {
+
+                        buttonCambiarTipo.Enabled = false;
+                    }
                 }
+                catch (InvalidCastException) { buttonCambiarTipo.Enabled = true; }
+
                 if (tipoCuenta == 1)
                     btnProlongar.Enabled = false;
                 else
@@ -141,19 +145,21 @@ namespace PagoElectronico.ABM_Cuenta
 
         private void button4_Click(object sender, EventArgs e)
         {
-            if(!(dataGridView1.SelectedRows.Count > 0))
+            if (!(dataGridView1.SelectedRows.Count > 0))
                 MessageBox.Show("Seleccione una cuenta para borrar");
-
-            decimal ncuenta = Convert.ToDecimal(dataGridView1.SelectedRows[0].Cells["Cuenta"].Value);
-
-            SQLParametros parametros = new SQLParametros();
-            parametros.add("@cuenta", ncuenta);
-            parametros.add("@fecha", Sesion.fecha);
-
-            if (ConexionDB.Procedure("bajaCuenta", parametros.get()))
+            else
             {
-                MessageBox.Show("Cuenta borrada");
-                actualizarCuentas();
+                decimal ncuenta = Convert.ToDecimal(dataGridView1.SelectedRows[0].Cells["Cuenta"].Value);
+
+                SQLParametros parametros = new SQLParametros();
+                parametros.add("@cuenta", ncuenta);
+                parametros.add("@fecha", Sesion.fecha);
+
+                if (ConexionDB.Procedure("bajaCuenta", parametros.get()))
+                {
+                    MessageBox.Show("Cuenta borrada");
+                    actualizarCuentas();
+                }
             }
         }
 

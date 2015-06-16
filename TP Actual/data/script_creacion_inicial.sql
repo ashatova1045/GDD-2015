@@ -969,7 +969,8 @@ CREATE PROCEDURE HHHH.nuevoCliente(
 @Contrasena nvarchar(255),
 @Id_Pregunta nvarchar(255),
 @Respuesta nvarchar(255),
-@Estado char)
+@EstadoUsuario char,
+@EstadoCliente char)
 AS
 	BEGIN
 	
@@ -995,20 +996,23 @@ AS
 				RAISERROR(@error,16,1)
 				RETURN
 			END
-			
-		INSERT INTO HHHH.usuarios(Usuario,Contrasena,IntentosFallidos,Estado,Id_pregunta)
-			VALUES(@Usuario,@Contrasena,0,'H',@Id_Pregunta)
-			
-		INSERT INTO HHHH.rel_rol_usuario(Id_rol,Id_usuario)
-			VALUES(2,IDENT_CURRENT('HHHH.usuarios'))
-			
-		INSERT INTO HHHH.clientes(Id_usuario,Nombre,Apellido,Nro_Documento,Id_tipo_documento,
-									Mail,Id_pais,Altura,Calle,Piso,Departamento,Localidad,
-									Id_nacionalidad,Fecha_nacimiento,Estado)
-			VALUES((SELECT IDENT_CURRENT('HHHH.usuarios')),@Nombre,@Apellido,@Documento,@TipoDoc,
-					@Mail,@Id_pais,@Altura,@Calle,@Piso,@Departamento,@Localidad,@Nacionalidad,
-					@FechaNac,@Estado)
-			
+		
+		BEGIN TRANSACTION nuevoUsuario	
+		
+			INSERT INTO HHHH.usuarios(Usuario,Contrasena,IntentosFallidos,Estado,Id_pregunta)
+				VALUES(@Usuario,@Contrasena,0,@EstadoUsuario,@Id_Pregunta)
+				
+			INSERT INTO HHHH.rel_rol_usuario(Id_rol,Id_usuario)
+				VALUES(2,IDENT_CURRENT('HHHH.usuarios'))
+				
+			INSERT INTO HHHH.clientes(Id_usuario,Nombre,Apellido,Nro_Documento,Id_tipo_documento,
+										Mail,Id_pais,Altura,Calle,Piso,Departamento,Localidad,
+										Id_nacionalidad,Fecha_nacimiento,Estado)
+				VALUES((SELECT IDENT_CURRENT('HHHH.usuarios')),@Nombre,@Apellido,@Documento,@TipoDoc,
+						@Mail,@Id_pais,@Altura,@Calle,@Piso,@Departamento,@Localidad,@Nacionalidad,
+						@FechaNac,@EstadoCliente)
+						
+		COMMIT TRANSACTION nuevoUsuario
 	END
 GO
  
@@ -1168,6 +1172,17 @@ AS
 				declare @duracion int
 				select @costoCuenta = hhhh.convertirmoneda(Id_moneda_cuenta,@Id_moneda,Costo_cuenta), @duracion = Duracion 
 					from HHHH.tipo_cuenta where Id_tipo_cuenta=@id_tipoCta
+				
+				declare @fechaDecierre datetime
+				
+				IF (@id_tipoCta = 1)
+					BEGIN
+						@fechaDecierre = now
+					END
+				ELSE
+					BEGIN
+						@fechaDecierre = dateadd(day,@duracion,@FechaApert)
+					END
 				
 				INSERT HHHH.cuentas(Id_cuenta,Id_cliente,Id_moneda,Id_pais,Id_tipo_cuenta,Fecha_apertura,Saldo,Estado,Fecha_cierre)
 					VALUES(@Id_cuenta,@Id_cliente,@Id_moneda,@Id_pais,@id_tipoCta,@FechaApert,0,'P',dateadd(day,@duracion,@FechaApert))
@@ -1659,7 +1674,7 @@ CREATE PROCEDURE HHHH.cambiarTipoCuenta
 @tipocuenta numeric (18,0)
 AS
 	BEGIN
-		UPDATE HHHH.cuentas SET Id_tipo_cuenta = @tipocuenta
+		UPDATE HHHH.cuentas SET Id_tipo_cuenta = @tipocuenta, Fecha_cierre = null
 		WHERE Id_cuenta=@cuenta
     END
 GO

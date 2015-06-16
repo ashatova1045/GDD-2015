@@ -154,7 +154,9 @@ namespace PagoElectronico.ABM_Cliente
                 parametros.add("@Contrasena", Cifrador.Cifrar(textBoxPW.Text));
                 parametros.add("@Id_pregunta", Convert.ToDecimal(comboBoxPreg.SelectedValue));
                 parametros.add("@Respuesta", Cifrador.Cifrar(textBoxRes.Text));
-                parametros.add("@Estado", checkBoxEstado.Checked ? "H" : "I");
+                parametros.add("@EstadoUsuario", checkBoxEstado.Checked ? "H" : "I");
+                parametros.add("@EstadoCliente", checkBoxCliente.Checked ? "H" : "I");
+                
 
                 if (ConexionDB.Procedure("nuevoCliente", parametros.get()))
                 {
