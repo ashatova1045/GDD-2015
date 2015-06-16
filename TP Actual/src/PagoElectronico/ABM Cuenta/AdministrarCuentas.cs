@@ -29,13 +29,20 @@ namespace PagoElectronico.ABM_Cuenta
             dataGridView1.DataSource = null;
             if (ConexionDB.Procedure("ObtenerCuentas", parametros.get(), out cuentas) && cuentas.Rows.Count != 0)
             {
-                dataGridView1.DataSource = cuentas.Select("estado <> 'C'").CopyToDataTable();
-
-                string[] ColOcultas = { "Id_pais", "Id_moneda", "Id_moneda","id_tipo_cuenta"};
-
-                foreach (string i in ColOcultas)
+                try
                 {
-                    dataGridView1.Columns[i].Visible = false;
+                    dataGridView1.DataSource = cuentas.Select("estado <> 'C'").CopyToDataTable();
+
+                    string[] ColOcultas = { "Id_pais", "Id_moneda", "Id_moneda", "id_tipo_cuenta" };
+
+                    foreach (string i in ColOcultas)
+                    {
+                        dataGridView1.Columns[i].Visible = false;
+                    }
+                }
+                catch(InvalidOperationException)
+                {
+
                 }
             }
             button1.Enabled = true;
