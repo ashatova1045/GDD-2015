@@ -37,8 +37,8 @@ namespace PagoElectronico.ABM_Cuenta
                 {
                     dataGridView1.Columns[i].Visible = false;
                 }
-                button1.Enabled = true;
             }
+            button1.Enabled = true;
         }
         private void comboBox1_SelectionChangeCommitted(object sender, EventArgs e)
         {

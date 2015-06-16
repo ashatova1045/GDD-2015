@@ -19,27 +19,36 @@ namespace PagoElectronico.Transferencias
         {
             InitializeComponent();
             ConexionDB.Procedure("ObtenerMonedas", null, out monedas);
-            actualizarCuentas();
         }
 
         private void actualizarCuentas()
         {
             if (ConexionDB.Procedure("ObtenerTodasCuentas_HoI",null, out cuentas))
             {
-                cbOrigen.DisplayMember = "Id_cuenta";
-                cbOrigen.ValueMember = "Id_cuenta";
-                cbOrigen.DataSource = cuentas.Select("estado = 'H' and Id_cliente = " + Sesion.cliente_id).CopyToDataTable();
-                cbOrigen.Update();
+                try
+                {
+                    cbOrigen.DisplayMember = "Id_cuenta";
+                    cbOrigen.ValueMember = "Id_cuenta";
+                    cbOrigen.DataSource = cuentas.Select("estado = 'H' and Id_cliente = " + Sesion.cliente_id).CopyToDataTable();
+                    cbOrigen.Update();
 
-                cbDestino.DisplayMember = "Id_cuenta";
-                cbDestino.ValueMember = "Id_cuenta";
-                cbDestino.DataSource = cuentas;
-                cbDestino.Update();
+                    cbDestino.DisplayMember = "Id_cuenta";
+                    cbDestino.ValueMember = "Id_cuenta";
+                    cbDestino.DataSource = cuentas;
+                    cbDestino.Update();
 
-                cbImporteMoneda.DisplayMember = "descripcion";
-                cbImporteMoneda.ValueMember = "id_moneda";
-                cbImporteMoneda.DataSource = monedas;
-                cbImporteMoneda.Update();
+                    cbImporteMoneda.DisplayMember = "descripcion";
+                    cbImporteMoneda.ValueMember = "id_moneda";
+                    cbImporteMoneda.DataSource = monedas;
+                    cbImporteMoneda.Update();
+                }
+                catch (InvalidOperationException) 
+                { 
+                    MessageBox.Show("No dispone de cuentas para realizar transferencias");
+                    btTransferir.Enabled = false;
+                    btnCalc.Enabled = false;
+                    //btVolver_Click(null, null); 
+                }
             }
         }
 
@@ -132,6 +141,11 @@ namespace PagoElectronico.Transferencias
             {
                 Application.Exit();
             }
+        }
+
+        private void Transferencias_Load(object sender, EventArgs e)
+        {
+            actualizarCuentas();
         }
 
     }

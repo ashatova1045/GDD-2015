@@ -279,6 +279,7 @@
             this.Name = "Transferencias";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Transferencias";
+            this.Load += new System.EventHandler(this.Transferencias_Load);
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Transferencias_FormClosing);
             ((System.ComponentModel.ISupportInitialize)(this.nImporte)).EndInit();
             this.ResumeLayout(false);
