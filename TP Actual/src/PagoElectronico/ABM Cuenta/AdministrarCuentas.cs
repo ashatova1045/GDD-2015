@@ -98,6 +98,9 @@ namespace PagoElectronico.ABM_Cuenta
         private void dataGridView1_SelectionChanged(object sender, EventArgs e)
         {
             button3.Enabled = true;
+            buttonCambiarTipo.Enabled = true;
+            button4.Enabled = true;
+
             try
             {
                 decimal tipoCuenta = Convert.ToDecimal(dataGridView1.SelectedRows[0].Cells["Id_tipo_cuenta"].Value);
