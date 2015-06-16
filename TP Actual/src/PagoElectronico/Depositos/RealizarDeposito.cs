@@ -44,7 +44,7 @@ namespace PagoElectronico.Depositos
                     MessageBox.Show("No tiene cuentas");
                     botonConfirmar.Enabled = false;
                 }
-                seleccionCuenta.DataSource = tablaCuentas.Select("Estado <> 'C'").CopyToDataTable();
+                seleccionCuenta.DataSource = tablaCuentas;
                 seleccionCuenta.DisplayMember = "Id_cuenta";
                 seleccionCuenta.ValueMember = "Id_cuenta";
                 seleccionCuenta.SelectedIndex = -1;
