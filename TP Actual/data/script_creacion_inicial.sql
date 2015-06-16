@@ -1211,6 +1211,7 @@ GO
 
 CREATE PROCEDURE HHHH.ObtenerCuentas
 @Id_usuario numeric(18,0)
+
 AS
 	BEGIN
 		SELECT cue.Id_cuenta as 'Cuenta', pa.Descripcion as 'Pais', cue.Id_pais,tp.Id_tipo_cuenta, tp.Descripcion as 'Tipo cuenta', cue.Id_moneda,
@@ -1301,7 +1302,7 @@ AS
 GO
 
 
------------------LISTADOS ANA------------------------
+-----------------LISTADOS ------------------------
 CREATE PROCEDURE HHHH.generarListado0
 
 @anio int,
@@ -1621,7 +1622,7 @@ CREATE PROCEDURE HHHH.ObtenerTarjetasDeCliente
 @Id_cliente numeric(18,0)
 AS
 	BEGIN
-		SELECT Id_tarjeta,finalnumero 
+		SELECT Id_tarjeta,'XXXX-XXXX-XXXX-'+convert(nvarchar(max),t.finalnumero) AS finalnumero 
 		FROM HHHH.tarjetas t 
 		WHERE t.estado = 1 and t.Id_cliente= @Id_cliente
 	END
