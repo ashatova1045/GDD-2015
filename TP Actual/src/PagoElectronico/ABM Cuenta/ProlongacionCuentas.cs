@@ -37,7 +37,6 @@ namespace PagoElectronico.ABM_Cuenta
             costoCuenta = Convert.ToDecimal(infoCuenta.Rows[0]["Costo_cuenta"]);
 
             txtPrecio.Text = costoCuenta.ToString();
-            textBoxPrecxSus.Text = costoCuenta.ToString();
         }
 
         private void btnVolver_Click(object sender, EventArgs e)

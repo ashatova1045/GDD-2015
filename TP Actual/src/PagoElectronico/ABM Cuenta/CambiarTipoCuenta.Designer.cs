@@ -41,7 +41,6 @@
             this.lbDuracionEnDias = new System.Windows.Forms.Label();
             this.lbSuscripciones = new System.Windows.Forms.Label();
             this.txtDuracion = new System.Windows.Forms.TextBox();
-            this.bnCalcularPrecio = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.txtPrecioTotal = new System.Windows.Forms.TextBox();
             this.bnCambiarTipoCuenta = new System.Windows.Forms.Button();
@@ -59,7 +58,6 @@
             this.lbCuenta.Size = new System.Drawing.Size(47, 13);
             this.lbCuenta.TabIndex = 0;
             this.lbCuenta.Text = "Cuenta";
-            this.lbCuenta.Click += new System.EventHandler(this.label1_Click);
             // 
             // txtCuenta
             // 
@@ -108,7 +106,6 @@
             this.lbCostoNuevoTipoCuenta.Size = new System.Drawing.Size(96, 26);
             this.lbCostoNuevoTipoCuenta.TabIndex = 5;
             this.lbCostoNuevoTipoCuenta.Text = "Costo de nuevo\r\n tipo de cuenta";
-            this.lbCostoNuevoTipoCuenta.Click += new System.EventHandler(this.label1_Click_1);
             // 
             // txtEstadoCuenta
             // 
@@ -173,23 +170,11 @@
             this.txtDuracion.Size = new System.Drawing.Size(100, 20);
             this.txtDuracion.TabIndex = 13;
             // 
-            // bnCalcularPrecio
-            // 
-            this.bnCalcularPrecio.BackColor = System.Drawing.Color.Moccasin;
-            this.bnCalcularPrecio.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.bnCalcularPrecio.Location = new System.Drawing.Point(28, 263);
-            this.bnCalcularPrecio.Name = "bnCalcularPrecio";
-            this.bnCalcularPrecio.Size = new System.Drawing.Size(109, 23);
-            this.bnCalcularPrecio.TabIndex = 16;
-            this.bnCalcularPrecio.Text = "Calcular Precio";
-            this.bnCalcularPrecio.UseVisualStyleBackColor = false;
-            this.bnCalcularPrecio.Click += new System.EventHandler(this.bnCalcularPrecio_Click);
-            // 
             // label1
             // 
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Underline))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(44, 294);
+            this.label1.Location = new System.Drawing.Point(26, 257);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(76, 13);
             this.label1.TabIndex = 17;
@@ -197,7 +182,7 @@
             // 
             // txtPrecioTotal
             // 
-            this.txtPrecioTotal.Location = new System.Drawing.Point(215, 287);
+            this.txtPrecioTotal.Location = new System.Drawing.Point(215, 257);
             this.txtPrecioTotal.Name = "txtPrecioTotal";
             this.txtPrecioTotal.Size = new System.Drawing.Size(100, 20);
             this.txtPrecioTotal.TabIndex = 18;
@@ -206,7 +191,7 @@
             // 
             this.bnCambiarTipoCuenta.BackColor = System.Drawing.Color.Moccasin;
             this.bnCambiarTipoCuenta.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.bnCambiarTipoCuenta.Location = new System.Drawing.Point(47, 328);
+            this.bnCambiarTipoCuenta.Location = new System.Drawing.Point(46, 301);
             this.bnCambiarTipoCuenta.Name = "bnCambiarTipoCuenta";
             this.bnCambiarTipoCuenta.Size = new System.Drawing.Size(112, 26);
             this.bnCambiarTipoCuenta.TabIndex = 19;
@@ -218,7 +203,7 @@
             // 
             this.bnVolver.BackColor = System.Drawing.Color.Moccasin;
             this.bnVolver.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.bnVolver.Location = new System.Drawing.Point(228, 328);
+            this.bnVolver.Location = new System.Drawing.Point(227, 301);
             this.bnVolver.Name = "bnVolver";
             this.bnVolver.Size = new System.Drawing.Size(85, 26);
             this.bnVolver.TabIndex = 20;
@@ -242,19 +227,20 @@
             0,
             0,
             0});
+            this.txtSuscripciones.ValueChanged += new System.EventHandler(this.calcularPrecio);
+            this.txtSuscripciones.KeyUp += new System.Windows.Forms.KeyEventHandler(this.txtSuscripciones_KeyUp);
             // 
             // CambiarTipoCuenta
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.PaleGoldenrod;
-            this.ClientSize = new System.Drawing.Size(371, 366);
+            this.ClientSize = new System.Drawing.Size(371, 338);
             this.Controls.Add(this.txtSuscripciones);
             this.Controls.Add(this.bnVolver);
             this.Controls.Add(this.bnCambiarTipoCuenta);
             this.Controls.Add(this.txtPrecioTotal);
             this.Controls.Add(this.label1);
-            this.Controls.Add(this.bnCalcularPrecio);
             this.Controls.Add(this.txtDuracion);
             this.Controls.Add(this.lbSuscripciones);
             this.Controls.Add(this.lbDuracionEnDias);
@@ -293,7 +279,6 @@
         private System.Windows.Forms.Label lbDuracionEnDias;
         private System.Windows.Forms.Label lbSuscripciones;
         private System.Windows.Forms.TextBox txtDuracion;
-        private System.Windows.Forms.Button bnCalcularPrecio;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.TextBox txtPrecioTotal;
         private System.Windows.Forms.Button bnCambiarTipoCuenta;

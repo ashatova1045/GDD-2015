@@ -12,13 +12,16 @@ namespace PagoElectronico.ABM_Cuenta
 {
     public partial class CambiarTipoCuenta : Form
     {
+
         private bool salir = true;
-        DataGridViewCellCollection cuentaG;
+
         private DataTable tipoCuentas;
+
+        decimal costoCuenta;
+
         public CambiarTipoCuenta(DataGridViewCellCollection cuenta)
         {
             InitializeComponent();
-            cuentaG = cuenta;
             cargarDatos(cuenta);
         }
 
@@ -42,17 +45,7 @@ namespace PagoElectronico.ABM_Cuenta
             cbNuevoTipoCuenta.DisplayMember = "Descripcion";
             cbNuevoTipoCuenta.ValueMember = "Id_tipo_cuenta";
             //cbNuevoTipoCuenta.SelectedIndex = -1;
-            cbNuevoTipoCuenta.Text = "";
-
-        }
-        private void label1_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void label1_Click_1(object sender, EventArgs e)
-        {
-
+            cbNuevoTipoCuenta.Text = "";          
         }
 
         private void bnVolver_Click(object sender, EventArgs e)
@@ -70,9 +63,16 @@ namespace PagoElectronico.ABM_Cuenta
             }
         }
 
-        private void bnCalcularPrecio_Click(object sender, EventArgs e)
+        private void calcularPrecio(object sender, EventArgs e)
         {
-            txtPrecioTotal.Text= (decimal.Parse(txtCosto.Text)*(txtSuscripciones.Value)).ToString();
+
+            txtPrecioTotal.Text = (txtSuscripciones.Value * costoCuenta).ToString();
+        }
+
+
+        private void txtSuscripciones_KeyUp(object sender, KeyEventArgs e)
+        {
+            calcularPrecio(null, null);
         }
 
         private void cbNuevoTipoCuenta_SelectedIndexChanged(object sender, EventArgs e)
@@ -83,8 +83,10 @@ namespace PagoElectronico.ABM_Cuenta
                SQLParametros parametro = new SQLParametros();
                 parametro.add("@cuenta", cbNuevoTipoCuenta.Text);
                 ConexionDB.Procedure("InformacionTipoCuenta", parametro.get(), out infoTipoCuenta);
-                txtCosto.Text = infoTipoCuenta.Rows[0]["costo_cuenta"].ToString();
+                costoCuenta = Convert.ToDecimal(infoTipoCuenta.Rows[0]["costo_cuenta"]);
+                txtCosto.Text = costoCuenta.ToString();
                 txtDuracion.Text = infoTipoCuenta.Rows[0]["duracion"].ToString();
+                txtPrecioTotal.Text = costoCuenta.ToString();
 
             }
         }
@@ -99,11 +101,11 @@ namespace PagoElectronico.ABM_Cuenta
         {
             SQLParametros parametros = new SQLParametros();
 
-            parametros.add("@Id_cuenta", cuentaG["Cuenta"].Value.ToString());
+            parametros.add("@Id_cuenta", Convert.ToDecimal(txtCuenta.Text));
             parametros.add("@Cant_suscripcones", Convert.ToInt32(txtSuscripciones.Value));
             parametros.add("@fechaActual", Sesion.fecha);
             SQLParametros paramAct = new SQLParametros();
-            paramAct.add("@cuenta",cuentaG["Cuenta"].Value.ToString());
+            paramAct.add("@cuenta", Convert.ToDecimal(txtCuenta.Text));
             paramAct.add("@tipocuenta",cbNuevoTipoCuenta.SelectedValue);
             if ((ConexionDB.Procedure("prolongarCuenta", parametros.get())) && (ConexionDB.Procedure("cambiarTipoCuenta", paramAct.get())))
             {
