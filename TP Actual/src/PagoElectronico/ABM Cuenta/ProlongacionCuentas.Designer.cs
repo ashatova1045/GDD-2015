@@ -67,7 +67,6 @@
             this.txtCuenta.Name = "txtCuenta";
             this.txtCuenta.Size = new System.Drawing.Size(121, 20);
             this.txtCuenta.TabIndex = 1;
-            this.txtCuenta.TextChanged += new System.EventHandler(this.txtCuenta_TextChanged);
             // 
             // label1
             // 

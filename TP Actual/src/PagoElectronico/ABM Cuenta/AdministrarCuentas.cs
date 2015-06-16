@@ -104,8 +104,8 @@ namespace PagoElectronico.ABM_Cuenta
             try
             {
                 decimal tipoCuenta = Convert.ToDecimal(dataGridView1.SelectedRows[0].Cells["Id_tipo_cuenta"].Value);
-              
-                if ((dataGridView1.SelectedRows[0].Cells["Fecha_cierre"].Value.ToString() != "") && (System.DateTime.Compare(System.DateTime.Now, Convert.ToDateTime(dataGridView1.SelectedRows[0].Cells["Fecha_cierre"].Value.ToString())) < 0))
+                MessageBox.Show(dataGridView1.SelectedRows[0].Cells["Fecha_cierre"].Value.ToString());
+                if ((dataGridView1.SelectedRows[0].Cells["Fecha_cierre"].Value.ToString() != "") || (System.DateTime.Compare(System.DateTime.Now, Convert.ToDateTime(dataGridView1.SelectedRows[0].Cells["Fecha_cierre"].Value.ToString())) < 0))
                 {
                     
                     buttonCambiarTipo.Enabled = false;
