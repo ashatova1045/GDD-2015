@@ -47,35 +47,31 @@ namespace PagoElectronico.Depositos
                 }
                 else
                 {
-                    try
+                    seleccionCuenta.DataSource = tablaCuentas.Select("Estado <> 'C'").CopyToDataTable();
+                    seleccionCuenta.DisplayMember = "Id_cuenta";
+                    seleccionCuenta.ValueMember = "Id_cuenta";
+                    seleccionCuenta.SelectedIndex = -1;
+
+                    if (ConexionDB.Procedure("seleccionarTarjetas", parametrosTarjetas.get(), out tablaTarjetas))
                     {
-                        seleccionCuenta.DataSource = tablaCuentas.Select("Estado <> 'C'").CopyToDataTable();
-                        seleccionCuenta.DisplayMember = "Id_cuenta";
-                        seleccionCuenta.ValueMember = "Id_cuenta";
-                        seleccionCuenta.SelectedIndex = -1;
-
-                        if (ConexionDB.Procedure("seleccionarTarjetas", parametrosTarjetas.get(), out tablaTarjetas))
+                        if (tablaTarjetas.Rows.Count == 0)
                         {
-                            if (tablaTarjetas.Rows.Count == 0)
-                            {
-                                MessageBox.Show("No tiene tarjetas");
-                                botonConfirmar.Enabled = false;
-                                bEquivalente.Enabled = false;
-                            }
+                            MessageBox.Show("No tiene tarjetas");
+                            botonConfirmar.Enabled = false;
+                            bEquivalente.Enabled = false;
+                        }
 
-                            seleccionTarjeta.DataSource = tablaTarjetas;
-                            seleccionTarjeta.DisplayMember = "finalnumero";
-                            seleccionTarjeta.ValueMember = "Id_tarjeta";
+                        seleccionTarjeta.DataSource = tablaTarjetas;
+                        seleccionTarjeta.DisplayMember = "finalnumero";
+                        seleccionTarjeta.ValueMember = "Id_tarjeta";
 
-                            if (ConexionDB.Procedure("ObtenerMonedas", null, out tablaMonedas))
-                            {
-                                seleccionMoneda.DataSource = tablaMonedas;
-                                seleccionMoneda.DisplayMember = "Descripcion";
-                                seleccionMoneda.ValueMember = "Id_moneda";
-                            }
+                        if (ConexionDB.Procedure("ObtenerMonedas", null, out tablaMonedas))
+                        {
+                            seleccionMoneda.DataSource = tablaMonedas;
+                            seleccionMoneda.DisplayMember = "Descripcion";
+                            seleccionMoneda.ValueMember = "Id_moneda";
                         }
                     }
-                    catch (InvalidOperationException) { bEquivalente.Enabled = false; }
                 }
             }
         }
