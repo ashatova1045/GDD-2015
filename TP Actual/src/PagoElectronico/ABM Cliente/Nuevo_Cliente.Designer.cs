@@ -452,6 +452,7 @@
             // 
             // comboBoxPreg
             // 
+            this.comboBoxPreg.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxPreg.FormattingEnabled = true;
             this.comboBoxPreg.Location = new System.Drawing.Point(68, 103);
             this.comboBoxPreg.Name = "comboBoxPreg";

@@ -74,18 +74,6 @@ namespace PagoElectronico.ABM_Cliente
                 correcto = false;
             }
 
-            if (!ValidadorHelper.validarSoloNumeros(textBoxPiso.Text))
-            {
-                errorProvider1.SetError(textBoxPiso, "Piso no válido");
-                correcto = false;
-            }
-
-            if (((!ValidadorHelper.validarSoloLetras(textBoxDepto.Text) && (!ValidadorHelper.validarSoloNumeros(textBoxDepto.Text)) || textBoxDepto.Text.Length > 10)))
-            {
-                errorProvider1.SetError(textBoxDepto, "Departamento no válido");
-                correcto = false;
-            }
-
             if (comboBoxNac.SelectedValue == null)
             {
                 errorProvider1.SetError(comboBoxNac, "Elija un pais");
@@ -136,7 +124,7 @@ namespace PagoElectronico.ABM_Cliente
             if (validacion())
             {
                 SQLParametros parametros = new SQLParametros();
-
+                
                 parametros.add("@Nombre", textBoxNombre.Text);
                 parametros.add("@Apellido", textBoxApellido.Text);
                 parametros.add("@Documento", Convert.ToDecimal(textBoxDocumento.Text));
@@ -145,7 +133,7 @@ namespace PagoElectronico.ABM_Cliente
                 parametros.add("@Id_pais", Convert.ToDecimal(comboBoxPais.SelectedValue));
                 parametros.add("@Calle", textBoxCalle.Text);
                 parametros.add("@Altura", Convert.ToInt32(textBoxAltura.Text));
-                parametros.add("@Piso", Convert.ToInt32(textBoxPiso.Text));
+                parametros.add("@Piso", (textBoxPiso.Text==String.Empty)? DBNull.Value : (object)Convert.ToInt32(textBoxPiso.Text));
                 parametros.add("@Departamento", textBoxDepto.Text);
                 parametros.add("@Localidad", textBox9.Text);
                 parametros.add("@Nacionalidad", Convert.ToDecimal(comboBoxNac.SelectedValue));
