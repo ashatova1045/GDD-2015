@@ -54,7 +54,7 @@ namespace PagoElectronico.ABM_Cuenta
 
         private void AdministrarCuentas_Load(object sender, EventArgs e)
         {
-            button3.Enabled = false;
+            buttonCambioDeEstado.Enabled = false;
             button1.Enabled = false;
 
             if (Sesion.rol_id == 1)
@@ -72,7 +72,7 @@ namespace PagoElectronico.ABM_Cuenta
             }
             else 
             {
-                button3.Visible = false;
+                buttonCambioDeEstado.Visible = false;
 
                 DataTable user = new DataTable();
                 user.Columns.Add("usuario");
@@ -104,12 +104,29 @@ namespace PagoElectronico.ABM_Cuenta
 
         private void dataGridView1_SelectionChanged(object sender, EventArgs e)
         {
-            button3.Enabled = true;
+            buttonCambioDeEstado.Enabled = true;
             buttonCambiarTipo.Enabled = true;
             button4.Enabled = true;
-
+            if (Sesion.rol_id == 1)
+            {
+                buttonCambioDeEstado.Visible = true;
+            }
             try
             {
+                switch (dataGridView1.SelectedRows[0].Cells["Estado"].Value.ToString())
+                {
+                    case "H":
+                        buttonCambioDeEstado.Text = "Deshabilitar";
+                        break;
+                    case "I":
+                        buttonCambioDeEstado.Text = "Habilitar";
+                        break;
+                    default:
+                        buttonCambioDeEstado.Visible = false;
+                        break;
+                }
+
+            
                 decimal tipoCuenta = Convert.ToDecimal(dataGridView1.SelectedRows[0].Cells["Id_tipo_cuenta"].Value);
                 try
                 {
@@ -119,7 +136,11 @@ namespace PagoElectronico.ABM_Cuenta
                         buttonCambiarTipo.Enabled = false;
                     }
                 }
-                catch (InvalidCastException) { buttonCambiarTipo.Enabled = true; }
+                catch (InvalidCastException) 
+                { 
+                    buttonCambiarTipo.Enabled = true; 
+                    //buttonCambioDeEstado.Visible = false; 
+                }
 
                 if (tipoCuenta == 1)
                     btnProlongar.Enabled = false;
@@ -135,13 +156,11 @@ namespace PagoElectronico.ABM_Cuenta
 
         private void button3_Click(object sender, EventArgs e)
         {
-            DataGridViewCellCollection cell;
-            if (dataGridView1.SelectedRows.Count > 0)
-            {
-                cell = dataGridView1.SelectedRows[0].Cells;
-                new EdicionCuenta(cell,Convert.ToDecimal(comboBox1.SelectedValue)).Show(this);
-                this.Hide();
-            }
+            SQLParametros parametros = new SQLParametros();
+            parametros.add("Id_cuenta",Convert.ToDecimal(dataGridView1.SelectedRows[0].Cells["Cuenta"].Value));
+            ConexionDB.Procedure("cambiarEstadoCuenta", parametros.get());
+            actualizarCuentas();
+            
         }
 
         private void button1_Click(object sender, EventArgs e)
