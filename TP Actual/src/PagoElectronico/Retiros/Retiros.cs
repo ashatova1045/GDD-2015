@@ -42,6 +42,7 @@ namespace PagoElectronico.Retiros
             parametros.add("@Id_cliente",Sesion.cliente_id);
             if (ConexionDB.Procedure("ObtenerCuentasDeCliente", parametros.get(), out cuentas))
             {
+                cuentas = cuentas.Select("Estado <> 'C'").CopyToDataTable();
                 Cuenta_CB.DisplayMember = "Id_cuenta";
                 Cuenta_CB.ValueMember = "id_cuenta";
             }
