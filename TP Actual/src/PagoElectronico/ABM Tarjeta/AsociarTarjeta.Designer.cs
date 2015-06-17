@@ -254,7 +254,7 @@
             this.Controls.Add(this.txttarjeta);
             this.Name = "AsociarTarjeta";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Tarjeta";
+            this.Text = "Asociar Tarjeta";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.AsociarTarjeta_FormClosing);
             ((System.ComponentModel.ISupportInitialize)(this.dgBanco)).EndInit();
             this.ResumeLayout(false);

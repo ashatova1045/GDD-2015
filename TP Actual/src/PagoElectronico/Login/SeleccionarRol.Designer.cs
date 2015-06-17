@@ -89,7 +89,7 @@
             this.Controls.Add(this.cbRoles);
             this.Name = "SeleccionarRol";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "SeleccionarRol";
+            this.Text = "Seleccionar Rol";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.SeleccionarRol_FormClosing);
             this.ResumeLayout(false);
             this.PerformLayout();

@@ -256,7 +256,7 @@
             this.Controls.Add(this.lbCuenta);
             this.Name = "CambiarTipoCuenta";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "CambiarTipoCuenta";
+            this.Text = "Cambiar Tipo Cuenta";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.CambiarTipoCuenta_FormClosing);
             ((System.ComponentModel.ISupportInitialize)(this.txtSuscripciones)).EndInit();
             this.ResumeLayout(false);

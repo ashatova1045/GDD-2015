@@ -233,7 +233,7 @@
             this.Controls.Add(this.dataGridView1);
             this.Name = "Consultar_Saldo";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Consultar_Saldo";
+            this.Text = "Consultar Saldo";
             this.Load += new System.EventHandler(this.Consultar_Saldo_Load);
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Consultar_Saldo_FormClosing);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();

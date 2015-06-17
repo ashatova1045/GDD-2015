@@ -65,7 +65,7 @@
             this.Controls.Add(this.dataGridView1);
             this.Name = "ListadoGenerado";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Listado0";
+            this.Text = "Resultado del Listado";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.ListadoGenerado_FormClosing);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.ResumeLayout(false);

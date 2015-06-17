@@ -94,7 +94,7 @@
             this.Controls.Add(this.lbFuncionalidad);
             this.Name = "SeleccionarFuncionalidad";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "SeleccionarFuncionalidad";
+            this.Text = "Seleccionar Funcionalidad";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.SeleccionarFuncionalidad_FormClosing);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.ResumeLayout(false);
