@@ -49,7 +49,7 @@ namespace PagoElectronico.Depositos
                 {
                     try
                     {
-                        seleccionCuenta.DataSource = tablaCuentas.Select("Estado <> 'C'").CopyToDataTable();
+                        seleccionCuenta.DataSource = tablaCuentas; //.Select("Estado <> 'C'").CopyToDataTable();
                         seleccionCuenta.DisplayMember = "Id_cuenta";
                         seleccionCuenta.ValueMember = "Id_cuenta";
                         seleccionCuenta.SelectedIndex = -1;
