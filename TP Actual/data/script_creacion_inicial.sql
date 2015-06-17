@@ -46,13 +46,13 @@ GO
 	go
 	
 	CREATE FUNCTION HHHH.convertirmoneda(@monedaOriginal numeric(18,0),@monedaConvertida numeric(18,0),@monto numeric(18,2))
-	RETURNS numeric(18,4)
+	RETURNS numeric(20,4)
 	AS
 	BEGIN
-		declare @valorEnUSD numeric(18,4)=	(select @monto*cambio
+		declare @valorEnUSD numeric(20,4)=	(select @monto*cambio
 												from hhhh.tipo_de_cambio
 												where id_moneda=@monedaOriginal)
-		declare @valorconvertido numeric(18,4) =(select @valorEnUSD/cambio
+		declare @valorconvertido numeric(20,4) =(select @valorEnUSD/cambio
 													from hhhh.tipo_de_cambio
 													where id_moneda = @monedaConvertida)
 		RETURN @valorconvertido 
