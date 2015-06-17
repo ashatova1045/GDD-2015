@@ -142,7 +142,7 @@ BEGIN /* *************** CREACION DE TABLAS *************** */
 	)
 	
 	CREATE TABLE HHHH.cuentas(
-		Id_cuenta numeric(18,0) /*IDENTITY(1,1)*/ PRIMARY KEY,
+		Id_cuenta numeric(18,0)  PRIMARY KEY,
 		Id_pais numeric(18,0) CONSTRAINT FK_cuentas_pais FOREIGN KEY REFERENCES HHHH.paises(Codigo),
 		Id_moneda numeric(18,0) CONSTRAINT FK_cuentas_moneda FOREIGN KEY REFERENCES HHHH.Monedas(Id_moneda),
 		Fecha_apertura datetime,
@@ -326,13 +326,13 @@ BEGIN /* *************** MIGRACION *************** */
 				('Plata', 1,1,15,1,2),
 				('Oro', 1,0,10,1,3)
 -------------------------------------------------------------------------------------------			
-	--SET IDENTITY_INSERT HHHH.cuentas ON
+	
 	INSERT INTO HHHH.cuentas(Id_cuenta, Id_pais, Fecha_apertura, Id_cliente,Id_moneda,Estado,Id_tipo_cuenta)
 		SELECT DISTINCT M.Cuenta_Numero, M.Cuenta_Pais_Codigo, M.Cuenta_Fecha_Creacion, 
 				C.Id_cliente,1,'H',1
 			FROM gd_esquema.Maestra M, HHHH.clientes C
 			WHERE C.Mail = M.Cli_Mail
-	--SET IDENTITY_INSERT HHHH.cuentas OFF
+	
 -------------------------------------------------------------------------------------------	
 	SET IDENTITY_INSERT HHHH.retiros ON
 	INSERT INTO HHHH.retiros(Id_retiro, Id_cuenta, importe, Id_cheque, fecha_retiro, Id_moneda)
@@ -408,7 +408,6 @@ BEGIN /* *************** MIGRACION *************** */
 -------------------------------------------------------------------------------------------				
 	INSERT INTO HHHH.funcionalidades(Descripcion)
 		VALUES	('ABM Rol'),
-				--('ABM Usuario'),
 				('ABM Cliente'),
 				('ABM Cuenta'),
 				('Asociar/Desasociar Tarjeta de Credito'),
@@ -658,8 +657,7 @@ CREATE PROCEDURE HHHH.seleccionarTarjetas
 		FROM HHHH.tarjetas tar, HHHH.clientes cli
 		WHERE tar.Id_cliente = cli.Id_cliente and cli.Id_usuario = @idUsuarioLogeado and tar.estado = 1
 
-		--SELECT tar.* FROM HHHH.tarjetas tar, HHHH.clientes cli
-		--WHERE tar.Id_cliente = cli.Id_cliente and cli.Id_usuario = @idUsuarioLogeado
+		
 		
 		END
 		

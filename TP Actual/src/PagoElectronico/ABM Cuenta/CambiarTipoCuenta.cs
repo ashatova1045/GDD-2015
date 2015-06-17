@@ -35,7 +35,7 @@ namespace PagoElectronico.ABM_Cuenta
             txtCuenta.Text = cuenta["Cuenta"].Value.ToString();
             txtEstadoCuenta.Text = cuenta["Estado"].Value.ToString();
             txtTipoCuentaActual.Text = cuenta["Tipo cuenta"].Value.ToString();
-            //txtDuracion.Text = infoCuenta.Rows[0]["duracion"].ToString();
+            
 
             param = new SQLParametros();
             param.add("@tipoCuenta", cuenta["Tipo cuenta"].Value.ToString());            
@@ -44,7 +44,6 @@ namespace PagoElectronico.ABM_Cuenta
             
             cbNuevoTipoCuenta.DisplayMember = "Descripcion";
             cbNuevoTipoCuenta.ValueMember = "Id_tipo_cuenta";
-            //cbNuevoTipoCuenta.SelectedIndex = -1;
             cbNuevoTipoCuenta.Text = "";          
         }
 

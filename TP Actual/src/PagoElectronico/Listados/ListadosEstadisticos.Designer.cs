@@ -92,7 +92,7 @@
             // 
             this.generarB.BackColor = System.Drawing.Color.Moccasin;
             this.generarB.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.generarB.Location = new System.Drawing.Point(457, 195);
+            this.generarB.Location = new System.Drawing.Point(533, 193);
             this.generarB.Name = "generarB";
             this.generarB.Size = new System.Drawing.Size(132, 44);
             this.generarB.TabIndex = 6;
@@ -104,7 +104,7 @@
             // 
             this.volverFuncionalidades.BackColor = System.Drawing.Color.Moccasin;
             this.volverFuncionalidades.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.volverFuncionalidades.Location = new System.Drawing.Point(113, 195);
+            this.volverFuncionalidades.Location = new System.Drawing.Point(189, 193);
             this.volverFuncionalidades.Name = "volverFuncionalidades";
             this.volverFuncionalidades.Size = new System.Drawing.Size(132, 43);
             this.volverFuncionalidades.TabIndex = 7;

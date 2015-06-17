@@ -139,7 +139,7 @@ namespace PagoElectronico.ABM_Cuenta
                 catch (InvalidCastException) 
                 { 
                     buttonCambiarTipo.Enabled = true; 
-                    //buttonCambioDeEstado.Visible = false; 
+                    
                 }
 
                 if (tipoCuenta == 1)

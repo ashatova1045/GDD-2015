@@ -142,7 +142,7 @@
             // volverFuncionalidades
             // 
             this.volverFuncionalidades.BackColor = System.Drawing.Color.NavajoWhite;
-            this.volverFuncionalidades.Location = new System.Drawing.Point(40, 281);
+            this.volverFuncionalidades.Location = new System.Drawing.Point(134, 269);
             this.volverFuncionalidades.Name = "volverFuncionalidades";
             this.volverFuncionalidades.Size = new System.Drawing.Size(93, 36);
             this.volverFuncionalidades.TabIndex = 12;
@@ -154,7 +154,7 @@
             // 
             this.botonConfirmar.BackColor = System.Drawing.Color.Moccasin;
             this.botonConfirmar.Enabled = false;
-            this.botonConfirmar.Location = new System.Drawing.Point(225, 280);
+            this.botonConfirmar.Location = new System.Drawing.Point(319, 268);
             this.botonConfirmar.Name = "botonConfirmar";
             this.botonConfirmar.Size = new System.Drawing.Size(204, 37);
             this.botonConfirmar.TabIndex = 13;

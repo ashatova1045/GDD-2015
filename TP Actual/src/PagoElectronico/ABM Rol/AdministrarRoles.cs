@@ -28,8 +28,6 @@ namespace PagoElectronico.ABM_Rol
                 comboBox1.SelectedIndex = -1;
             }
 
-
-
         }
 
         public AdministrarRoles()
@@ -47,11 +45,9 @@ namespace PagoElectronico.ABM_Rol
             {
                 foreach (DataRow row in funcionalidades.Rows)
                 {
-                    // foreach (DataColumn item in funcionalidades.Columns)
-                    //{
-                    //   if (item.ToString() == "Descripcion")
+                   
                     checkedListBox1.Items.Add(row["Descripcion"].ToString());
-                    //  }
+                    
                 }
                 comboBox1.SelectedIndex = -1;
             }
@@ -80,11 +76,7 @@ namespace PagoElectronico.ABM_Rol
 
             if (ConexionDB.Procedure("funcionesdelrol", parametros.get(), out funcsActivas))
             {
-                /*
-                for (int i = 0; i < checkedListBox1.Items.Count; i++)
-                {
-                    checkedListBox1.SetItemChecked(i, false);
-                }*/
+                
 
                 foreach (DataRow funcAct in funcsActivas.Rows)
                 {

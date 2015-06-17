@@ -47,7 +47,7 @@ namespace PagoElectronico.Transferencias
                     MessageBox.Show("No dispone de cuentas para realizar transferencias");
                     btTransferir.Enabled = false;
                     btnCalc.Enabled = false;
-                    //btVolver_Click(null, null); 
+                    
                 }
             }
         }
