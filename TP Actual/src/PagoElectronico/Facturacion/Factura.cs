@@ -32,7 +32,7 @@ namespace PagoElectronico.Facturacion
                 label4.Text = datosFactura.Rows[0][2].ToString();
                 label6.Text = datosFactura.Rows[0][1].ToString();
                 label8.Text = datosFactura.Rows[0][3].ToString();
-                label10.Text = datosFactura.Rows[0][4].ToString();
+                label10.Text = datosFactura.Rows[0][4].ToString() + " USD";
 
                 parametros.Clear();
                 parametros.add("@id_factura", datosFactura.Rows[0][0]);

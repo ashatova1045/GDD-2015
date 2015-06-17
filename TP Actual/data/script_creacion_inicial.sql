@@ -910,7 +910,7 @@ AS
 			  
 			 
 		UPDATE HHHH.facturas
-		SET Monto_total = (SELECT SUM(mov.Costo)
+		SET Monto_total = (SELECT SUM(HHHH.convertirmoneda(mov.Id_moneda,1,mov.Costo))
 						   FROM HHHH.movimientos mov
 						   WHERE mov.Id_factura = @FacturaActual
 								 and HHHH.obtenerUser(mov.Id_cuenta) = @user_id)
@@ -919,30 +919,21 @@ AS
 
 		UPDATE HHHH.cuentas
 		SET Estado = 'H'
-		where cuentas.Id_cuenta in(SELECT ID_cuenta from HHHH.movimientos
-									where Id_factura = @FacturaActual and Tipo_movimiento = 'P')
-/*
-		UPDATE HHHH.Cuentas
-		SET estado = 'I' FROM 
-			(SELECT * FROM
-				(SELECT id_cuenta ,COUNT(*) AS cant FROM HHHH.movimientos
-				 WHERE Id_factura = @FacturaActual AND
-					Tipo_movimiento = 'T' 
-				 GROUP BY Id_cuenta) CantMovXCuenta
-			WHERE CantMovXCuenta.cant > 5) cue
-		WHERE HHHH.Cuentas.Id_cuenta = cue.Id_cuenta */
+		WHERE cuentas.Id_cuenta in(SELECT ID_cuenta FROM HHHH.movimientos
+									WHERE Id_factura = @FacturaActual and Tipo_movimiento = 'P')
 		
-		update HHHH.cuentas
-		set estado = 'I'
+		UPDATE HHHH.cuentas
+		SET estado = 'I'
 		WHERE Id_cuenta in (SELECT id_cuenta FROM HHHH.movimientos
 								WHERE Id_factura = @FacturaActual AND Tipo_movimiento = 'T' 
 								GROUP BY Id_cuenta
 								having COUNT(*) > 5)
 
-		SELECT fac.Id_factura, cli.Nombre+' '+cli.Apellido as nombre, us.Usuario, fac.Fecha_factura, fac.Monto_total
+		SELECT fac.Id_factura, cli.Nombre+' '+cli.Apellido AS nombre, us.Usuario, fac.Fecha_factura, fac.Monto_total
+				
 		FROM HHHH.facturas fac, HHHH.clientes cli, HHHH.usuarios us
 		WHERE fac.Id_factura = @FacturaActual 
-			  and fac.Id_cliente = cli.Id_cliente and cli.Id_usuario = us.Id_usuario
+			  AND fac.Id_cliente = cli.Id_cliente AND cli.Id_usuario = us.Id_usuario
 
 GO
 
@@ -951,7 +942,7 @@ CREATE PROCEDURE HHHH.itemFactura(
 AS
 	BEGIN
 		SELECT convert(date,mov.Fecha) AS Fecha, mov.Id_cuenta AS 'Cuenta' ,HHHH.GenerarDescripcion (mov.Tipo_movimiento,mov.Id_transferencia,mov.Dias_comprados,mov.Cambio_tipo_cuenta) AS Descripcion,
-				HHHH.impconmoneda(tr.Importe,mov.Id_moneda) AS Importe,HHHH.impconmoneda(mov.Costo,mov.Id_moneda) AS Costo_Final
+				HHHH.impconmoneda(HHHH.convertirmoneda(tr.Id_moneda,1,tr.importe),1) AS Importe,HHHH.impconmoneda(HHHH.convertirmoneda(mov.Id_moneda,1,mov.Costo),1) AS Costo_Final
 			FROM HHHH.movimientos mov
 			LEFT JOIN HHHH.transferencias tr
 			ON tr.Id_transferencia = mov.Id_transferencia
