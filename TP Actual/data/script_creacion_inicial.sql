@@ -32,7 +32,15 @@ SELECT @sql += 'DROP '+ROUTINE_TYPE+' '+@Schemaa+'.'+ROUTINE_NAME+';'+CHAR(13)
 				routine_type = 'FUNCTION') and
 				ROUTINE_SCHEMA =@Schemaa
 
-exec sp_executesql @Sql
+exec sp_executesql @Sql; SET @sql = ''
+
+SELECT @sql += 'DROP '+ROUTINE_TYPE+' '+@Schemaa+'.'+ROUTINE_NAME+';'+CHAR(13)
+		 FROM information_schema.routines
+		 WHERE (routine_type = 'PROCEDURE' or 
+				routine_type = 'FUNCTION') and
+				ROUTINE_SCHEMA =@Schemaa
+
+exec sp_executesql @Sql; SET @sql = ''
 END
 GO
 
