@@ -132,7 +132,7 @@
             // 
             this.buttonCambioDeEstado.BackColor = System.Drawing.Color.Moccasin;
             this.buttonCambioDeEstado.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.buttonCambioDeEstado.Location = new System.Drawing.Point(12, 292);
+            this.buttonCambioDeEstado.Location = new System.Drawing.Point(16, 307);
             this.buttonCambioDeEstado.Name = "buttonCambioDeEstado";
             this.buttonCambioDeEstado.Size = new System.Drawing.Size(111, 23);
             this.buttonCambioDeEstado.TabIndex = 3;
