@@ -288,6 +288,14 @@ BEGIN /* *************** MIGRACION *************** */
 		SELECT DISTINCT Cli_Tipo_Doc_Cod, Cli_Tipo_Doc_Desc
 			FROM gd_esquema.Maestra
 	SET IDENTITY_INSERT HHHH.tipos_documentos OFF
+	INSERT INTO HHHH.tipos_documentos(Descripcion)
+-		VALUES('Documento Nacional Identidad')
+-	INSERT INTO HHHH.tipos_documentos(Descripcion)
+-		VALUES('Cedula Identidad')
+-	INSERT INTO HHHH.tipos_documentos(Descripcion)
+-		VALUES('Libreta Civica')
+-	INSERT INTO HHHH.tipos_documentos(Descripcion)
+-		VALUES('Libreta de Enrolamiento')
 -------------------------------------------------------------------------------------------			
 	INSERT INTO HHHH.clientes(Id_pais, Nombre, Apellido, Id_tipo_documento, Mail,
 				 Altura, Calle, Piso, Departamento, Fecha_nacimiento, Nro_Documento, Estado)
