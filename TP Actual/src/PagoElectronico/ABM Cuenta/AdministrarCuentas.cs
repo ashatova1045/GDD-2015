@@ -209,11 +209,6 @@ namespace PagoElectronico.ABM_Cuenta
 
         }
 
-        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
-        {
-
-        }
-
         private void AdministrarCuentas_FormClosing(object sender, FormClosingEventArgs e)
         {
             if (salir)
@@ -239,22 +234,6 @@ namespace PagoElectronico.ABM_Cuenta
 
             new CambiarTipoCuenta(dataGridView1.SelectedRows[0].Cells).Show(this);
             this.Hide();
-        }
-
-        private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
-        {
-            
-        }
-
-        private void AdministrarCuentas_Shown(object sender, EventArgs e)
-        {
-            //actualizarCuentas();
-        }
-
-        private void AdministrarCuentas_VisibleChanged(object sender, EventArgs e)
-        {
-           
-           // actualizarCuentas();
         }
     }
 }

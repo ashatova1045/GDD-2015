@@ -127,7 +127,6 @@
             this.comboBox1.Size = new System.Drawing.Size(144, 21);
             this.comboBox1.TabIndex = 1;
             this.comboBox1.SelectionChangeCommitted += new System.EventHandler(this.comboBox1_SelectionChangeCommitted);
-            this.comboBox1.SelectedIndexChanged += new System.EventHandler(this.comboBox1_SelectedIndexChanged);
             // 
             // buttonCambioDeEstado
             // 
@@ -156,7 +155,6 @@
             this.dataGridView1.Size = new System.Drawing.Size(641, 200);
             this.dataGridView1.TabIndex = 2;
             this.dataGridView1.SelectionChanged += new System.EventHandler(this.dataGridView1_SelectionChanged);
-            this.dataGridView1.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellContentClick);
             // 
             // button2
             // 
@@ -184,8 +182,6 @@
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Administrar Cuentas";
             this.Load += new System.EventHandler(this.AdministrarCuentas_Load);
-            this.Shown += new System.EventHandler(this.AdministrarCuentas_Shown);
-            this.VisibleChanged += new System.EventHandler(this.AdministrarCuentas_VisibleChanged);
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.AdministrarCuentas_FormClosing);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
