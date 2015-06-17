@@ -17,10 +17,9 @@ namespace PagoElectronico.Retiros
 
         readonly DataTable monedas;
         readonly DataTable cuentas;
-        readonly DataTable bancos;// descripcion <> 'Banco migracion'"); //Traigo todos los bancos
+        readonly DataTable bancos;
         DataTable cliente; 
-            //ConexionDB.correrQuery(Sesion.conexion, "SELECT DISTINCT Nombre, Apellido, Nro_Documento 
-            //FROM HHHH.clientes WHERE Id_cliente =" + Sesion.cliente_id);
+
 
 
         public RetiroEfectivo_FRM()
@@ -37,17 +36,25 @@ namespace PagoElectronico.Retiros
 
 
             //Se carga el CB "Cuentas"
-   
+
             SQLParametros parametros = new SQLParametros();
-            parametros.add("@Id_cliente",Sesion.cliente_id);
-            if (ConexionDB.Procedure("ObtenerCuentasDeCliente", parametros.get(), out cuentas))
+            parametros.add("@Id_cliente", Sesion.cliente_id);
+            
+            try
             {
-                cuentas = cuentas.Select("Estado <> 'C'").CopyToDataTable();
-                Cuenta_CB.DisplayMember = "Id_cuenta";
-                Cuenta_CB.ValueMember = "id_cuenta";
+                
+                if (ConexionDB.Procedure("ObtenerCuentasDeCliente", parametros.get(), out cuentas))
+                {
+                    cuentas = cuentas.Select("Estado <> 'C'").CopyToDataTable();
+                    Cuenta_CB.DisplayMember = "Id_cuenta";
+                    Cuenta_CB.ValueMember = "id_cuenta";
+                }
+
             }
+            catch(InvalidOperationException) { }
 
             //Se carga el CB "Bancos"
+
             parametros.Clear();
             parametros.add("@FiltMigracion", 1);
             if (ConexionDB.Procedure("ObtenerBancos", parametros.get(), out bancos))
@@ -185,13 +192,7 @@ namespace PagoElectronico.Retiros
                 correcto = false;
                 errorProvider1.SetError(Cuenta_CB, "La cuenta no tiene saldo");
             }
-/*
-            if ((Cuenta_CB.SelectedIndex != -1) && (decimal.Parse((cuentas.Rows[Cuenta_CB.SelectedIndex]["saldo"]).ToString())) < Importe_NUD.Value)//El importe debe ser menor al saldo de la cuenta
-            {
-                correcto = false;
-                errorProvider1.SetError(Importe_NUD, "La cuenta no tiene suficiente saldo");
-            }
-    lo comento porque la base de datos hace una validacion mejor con conversion de moneda        */
+
             if (Moneda_CB.Text != "USD")//El importe debe ser en dólares
             {
                 correcto = false;
