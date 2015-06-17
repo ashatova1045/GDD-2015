@@ -1679,3 +1679,19 @@ AS
 		WHERE Id_cuenta=@cuenta
     END
 GO
+
+CREATE PROCEDURE HHHH.cambiarEstadoCuenta
+@Id_cuenta numeric(18,0)
+AS
+	BEGIN
+		
+		UPDATE HHHH.cuentas
+		SET Estado = (select (case when Estado = 'I' then  'H'
+									when Estado = 'H' then  'I' 
+									else Estado
+									end) 
+					  from HHHH.cuentas
+					  where Id_cuenta = @Id_cuenta)
+        WHERE Id_cuenta = @Id_cuenta
+	END
+GO
